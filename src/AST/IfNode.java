@@ -1,5 +1,7 @@
 package AST;
 
+import FrontEnd.ASTVisitor;
+
 public class IfNode extends StmtNode {
 
     private ExprNode cond;
@@ -27,10 +29,10 @@ public class IfNode extends StmtNode {
         return elseBody;
     }
 
-    //@Override
-    //public <S,E> S accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-    //    return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }

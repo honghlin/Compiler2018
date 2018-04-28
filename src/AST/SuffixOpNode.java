@@ -1,5 +1,7 @@
 package AST;
 
+import FrontEnd.ASTVisitor;
+
 public class SuffixOpNode extends UnaryOpNode {
 
     public SuffixOpNode(UnaryOp op, ExprNode expr) {
@@ -7,10 +9,10 @@ public class SuffixOpNode extends UnaryOpNode {
         super(op, expr);
     }
 
-    //@Override
-    //public <S,E> E accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-    //    return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }

@@ -1,5 +1,6 @@
 package AST;
 
+import FrontEnd.ASTVisitor;
 import Type.Type;
 
 public class BinaryOpNode extends ExprNode{
@@ -79,10 +80,10 @@ public class BinaryOpNode extends ExprNode{
         return left.location();
     }
 
-    //@Override
-    //public <S, E> E accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-      //  return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }

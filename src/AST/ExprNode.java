@@ -1,5 +1,6 @@
 package AST;
 
+import FrontEnd.ASTVisitor;
 import Type.Type;
 
 abstract public class ExprNode extends Node{
@@ -22,6 +23,6 @@ abstract public class ExprNode extends Node{
         this.isLvalue = isLvalue;
     }
 
-    //abstract public <S,E> E accept(ASTVisitor<S,E> visitor);
+    abstract public void accept(ASTVisitor visitor);
 
 }

@@ -1,5 +1,7 @@
 package AST;
 
+import FrontEnd.ASTVisitor;
+
 public class LogicalOrNode extends BinaryOpNode {
 
     public LogicalOrNode(ExprNode left, ExprNode right) {
@@ -7,10 +9,10 @@ public class LogicalOrNode extends BinaryOpNode {
         super(BinaryOp.L_OR, left, right);
     }
 
-    //@Override
-    //public <S,E> E accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-    //    return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }

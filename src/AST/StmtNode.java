@@ -1,5 +1,7 @@
 package AST;
 
+import FrontEnd.ASTVisitor;
+
 abstract public class StmtNode extends Node {
 
     protected Location location;
@@ -15,6 +17,6 @@ abstract public class StmtNode extends Node {
         return location;
     }
 
-    //abstract public <S,E> S accept(ASTVisitor<S,E> visitor);
+    abstract public void accept(ASTVisitor visitor);
 
 }

@@ -1,6 +1,7 @@
 package AST;
 
 import Entity.StringConstantEntity;
+import FrontEnd.ASTVisitor;
 import Type.StringType;
 
 public class StringLiteralNode extends LiteralNode{
@@ -23,10 +24,10 @@ public class StringLiteralNode extends LiteralNode{
         this.entity = entity;
     }
 
-    //@Override
-    //public <S,E> E accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-    //    return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }

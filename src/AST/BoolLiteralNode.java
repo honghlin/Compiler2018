@@ -1,5 +1,6 @@
 package AST;
 
+import FrontEnd.ASTVisitor;
 import Type.BoolType;
 import Entity.BoolConstantEntity;
 
@@ -29,10 +30,10 @@ public class BoolLiteralNode extends LiteralNode {
         this.entity = entity;
     }
 
-    //@Override
-    //public <S,E> E accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-    //    return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }

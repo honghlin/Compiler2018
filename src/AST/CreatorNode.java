@@ -1,6 +1,8 @@
 package AST;
 
 import java.util.List;
+
+import FrontEnd.ASTVisitor;
 import Type.Type;
 
 public class CreatorNode extends ExprNode {
@@ -38,10 +40,10 @@ public class CreatorNode extends ExprNode {
         return location;
     }
 
-    //@Override
-    //public <S,E> E accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-    //    return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }

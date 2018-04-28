@@ -1,7 +1,7 @@
 package AST;
 
 import Type.Type;
-import FrontEnd.ASTVistor;
+import FrontEnd.ASTVisitor;
 
 public class ArefNode extends LHSNode {
 
@@ -35,9 +35,9 @@ public class ArefNode extends LHSNode {
         return expr.location();
     }
 
-    //public <S, E> E accept(ASTVisitor<S,E> visitor) {
+    public void accept(ASTVisitor visitor) {
 
-      //  return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }

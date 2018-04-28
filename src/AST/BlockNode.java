@@ -3,6 +3,7 @@ package AST;
 import java.util.LinkedList;
 import java.util.List;
 
+import FrontEnd.ASTVisitor;
 import Scope.Scope;
 import AST.Location;
 
@@ -33,11 +34,11 @@ public class BlockNode extends StmtNode {
         this.scope = scope;
     }
 
-    //@Override
-    //public <S,E> S accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-      //  return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
     public static BlockNode toBlockNode(StmtNode node) {
 

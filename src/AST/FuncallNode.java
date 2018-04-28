@@ -1,5 +1,6 @@
 package AST;
 
+import FrontEnd.ASTVisitor;
 import Type.Type;
 import Type.FunctionType;
 
@@ -48,11 +49,10 @@ public class FuncallNode extends ExprNode {
         return expr.location();
     }
 
-    //@Override
-    //public <S,E> E accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-    //    return visitor.visit(this);
-    //}
-
+        visitor.visit(this);
+    }
 
 }

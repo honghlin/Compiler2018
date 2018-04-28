@@ -1,6 +1,7 @@
 package AST;
 
 import Entity.FunctionEntity;
+import FrontEnd.ASTVisitor;
 
 public class FunctionDefinitionNode extends DefinitionNode {
 
@@ -17,10 +18,10 @@ public class FunctionDefinitionNode extends DefinitionNode {
         return entity;
     }
 
-    //@Override
-    //public <S,E> S accept(ASTVisitor<S,E> visitor) {
+    @Override
+    public void accept(ASTVisitor visitor) {
 
-    //    return visitor.visit(this);
-    //}
+        visitor.visit(this);
+    }
 
 }
