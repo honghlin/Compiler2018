@@ -1,4 +1,5 @@
-package parser;// Generated from C:/Users/80780/Compiler2018/src\Ms.g4 by ANTLR 4.7
+// Generated from C:/Users/80780/Compiler2018/src/parser\Ms.g4 by ANTLR 4.7
+package parser;
 import org.antlr.v4.runtime.tree.ParseTreeListener;
 
 /**
@@ -47,25 +48,15 @@ public interface MsListener extends ParseTreeListener {
 	 */
 	void exitClassDefinition(MsParser.ClassDefinitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MsParser#block}.
+	 * Enter a parse tree produced by {@link MsParser#parameter}.
 	 * @param ctx the parse tree
 	 */
-	void enterBlock(MsParser.BlockContext ctx);
+	void enterParameter(MsParser.ParameterContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MsParser#block}.
+	 * Exit a parse tree produced by {@link MsParser#parameter}.
 	 * @param ctx the parse tree
 	 */
-	void exitBlock(MsParser.BlockContext ctx);
-	/**
-	 * Enter a parse tree produced by {@link MsParser#typeType}.
-	 * @param ctx the parse tree
-	 */
-	void enterTypeType(MsParser.TypeTypeContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link MsParser#typeType}.
-	 * @param ctx the parse tree
-	 */
-	void exitTypeType(MsParser.TypeTypeContext ctx);
+	void exitParameter(MsParser.ParameterContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MsParser#primitiveType}.
 	 * @param ctx the parse tree
@@ -77,15 +68,25 @@ public interface MsListener extends ParseTreeListener {
 	 */
 	void exitPrimitiveType(MsParser.PrimitiveTypeContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MsParser#parameter}.
+	 * Enter a parse tree produced by {@link MsParser#typeType}.
 	 * @param ctx the parse tree
 	 */
-	void enterParameter(MsParser.ParameterContext ctx);
+	void enterTypeType(MsParser.TypeTypeContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MsParser#parameter}.
+	 * Exit a parse tree produced by {@link MsParser#typeType}.
 	 * @param ctx the parse tree
 	 */
-	void exitParameter(MsParser.ParameterContext ctx);
+	void exitTypeType(MsParser.TypeTypeContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link MsParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void enterBlock(MsParser.BlockContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link MsParser#block}.
+	 * @param ctx the parse tree
+	 */
+	void exitBlock(MsParser.BlockContext ctx);
 	/**
 	 * Enter a parse tree produced by the {@code blockStmt}
 	 * labeled alternative in {@link MsParser#statement}.

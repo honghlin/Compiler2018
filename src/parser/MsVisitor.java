@@ -1,4 +1,5 @@
-package parser;// Generated from C:/Users/80780/Compiler2018/src\Ms.g4 by ANTLR 4.7
+// Generated from C:/Users/80780/Compiler2018/src/parser\Ms.g4 by ANTLR 4.7
+package parser;
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -34,17 +35,11 @@ public interface MsVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitClassDefinition(MsParser.ClassDefinitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MsParser#block}.
+	 * Visit a parse tree produced by {@link MsParser#parameter}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBlock(MsParser.BlockContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MsParser#typeType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitTypeType(MsParser.TypeTypeContext ctx);
+	T visitParameter(MsParser.ParameterContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MsParser#primitiveType}.
 	 * @param ctx the parse tree
@@ -52,11 +47,17 @@ public interface MsVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitPrimitiveType(MsParser.PrimitiveTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MsParser#parameter}.
+	 * Visit a parse tree produced by {@link MsParser#typeType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParameter(MsParser.ParameterContext ctx);
+	T visitTypeType(MsParser.TypeTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MsParser#block}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitBlock(MsParser.BlockContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code blockStmt}
 	 * labeled alternative in {@link MsParser#statement}.

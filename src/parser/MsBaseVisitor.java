@@ -1,4 +1,5 @@
-package parser;// Generated from C:/Users/80780/Compiler2018/src\Ms.g4 by ANTLR 4.7
+// Generated from C:/Users/80780/Compiler2018/src/parser\Ms.g4 by ANTLR 4.7
+package parser;
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -44,14 +45,7 @@ public class MsBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MsV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBlock(MsParser.BlockContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitTypeType(MsParser.TypeTypeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitParameter(MsParser.ParameterContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -65,7 +59,14 @@ public class MsBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MsV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParameter(MsParser.ParameterContext ctx) { return visitChildren(ctx); }
+	@Override public T visitTypeType(MsParser.TypeTypeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitBlock(MsParser.BlockContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
