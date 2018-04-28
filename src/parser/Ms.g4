@@ -4,8 +4,8 @@ compilationUnit
     : (variableDefinition | functionDefinition | classDefinition)* EOF
     ;
 
-variableDefinition
-    : typeType Identifier ('=' expression)? ';'
+classDefinition
+    : 'class' name=Identifier '{' (functionDefinition | variableDefinition)* '}'
     ;
 
 functionDefinition
@@ -13,36 +13,36 @@ functionDefinition
                block
     ;
 
-classDefinition
-    : CLASS name=Identifier '{' (functionDefinition | variableDefinition)* '}'
-    ;
-
-block
-    : '{' statement* '}'
-    ;
-
-typeType
-    : (Identifier | primitiveType) ('[' ']')*
-    ;
-
-primitiveType
-    : type = (BOOL | INT | STRING | VOID)
+variableDefinition
+    : typeType Identifier ('=' expression)? ';'
     ;
 
 parameter
     : typeType Identifier
     ;
 
+primitiveType
+    : type = ('bool' | 'int' | 'string' | 'void')
+    ;
+
+typeType
+    : (Identifier | primitiveType) ('[' ']')*
+    ;
+
+block
+    : '{' statement* '}'
+    ;
+
 statement
     : block                                                              # blockStmt
     | variableDefinition                                                 # varDefStmt
-    | IF '(' expression ')' statement (ELSE statement)?                  # ifStmt
-    | FOR '(' init=expression? ';' cond=expression? ';'
+    | 'if' '(' expression ')' statement ('else' statement)?              # ifStmt
+    | 'for' '(' init=expression? ';' cond=expression? ';'
                                      incr=expression? ')' statement      # forStmt
-    | WHILE'(' expression ')' statement                                  # whileStmt
-    | RETURN expression? ';'                                             # returnStmt
-    | BREAK ';'                                                          # breakStmt
-    | CONTINUE ';'                                                       # continueStmt
+    | 'while' '(' expression ')' statement                               # whileStmt
+    | 'return' expression? ';'                                           # returnStmt
+    | 'break' ';'                                                        # breakStmt
+    | 'continue' ';'                                                     # continueStmt
     | expression ';'                                                     # exprStmt
     | ';'                                                                # blankStmt
     ;
@@ -54,7 +54,7 @@ expressionList
 expression
     : primary                                            # primaryExpr
     | expression '.' Identifier                          # memberExpr
-    | NEW creator                                        # newExpr
+    | 'new' creator                                      # newExpr
     | expression '[' expression ']'                      # arefExpr
     | expression '(' expressionList? ')'                 # funcallExpr
     | expression op=('++' | '--')                        # suffixExpr
@@ -75,7 +75,7 @@ expression
 
 primary
     : '(' expression ')'   # subExpr
-    | THIS                 # thisExpr
+    | 'this'               # thisExpr
     | Identifier           # variableExpr
     | literal              # literalExpr
     ;
@@ -124,18 +124,3 @@ BLOCK_COMMENT
 LINE_COMMENT
     : '//' ~[\r\n]* -> skip
     ;
-
-CLASS:  'class';
-IF:     'if';
-ELSE:   'else';
-WHILE:  'while';
-FOR:    'for';
-BREAK:  'break';
-CONTINUE:   'continue';
-RETURN: 'return';
-THIS:   'this';
-NEW:    'new';
-STRING: 'string';
-INT:    'int';
-BOOL:   'bool';
-VOID:   'void';
