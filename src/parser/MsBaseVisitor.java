@@ -1,5 +1,4 @@
-// Generated from C:/Users/80780/Compiler2018/src/parser\Ms.g4 by ANTLR 4.7
-package parser;
+package parser;// Generated from C:/Users/80780/Compiler2018/src\Ms.g4 by ANTLR 4.7
 import org.antlr.v4.runtime.tree.AbstractParseTreeVisitor;
 
 /**
@@ -24,7 +23,7 @@ public class MsBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MsV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitClassDefinition(MsParser.ClassDefinitionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVariableDefinition(MsParser.VariableDefinitionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -38,21 +37,14 @@ public class MsBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MsV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVariableDefinition(MsParser.VariableDefinitionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitClassDefinition(MsParser.ClassDefinitionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitParameter(MsParser.ParameterContext ctx) { return visitChildren(ctx); }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation returns the result of calling
-	 * {@link #visitChildren} on {@code ctx}.</p>
-	 */
-	@Override public T visitPrimitiveType(MsParser.PrimitiveTypeContext ctx) { return visitChildren(ctx); }
+	@Override public T visitBlock(MsParser.BlockContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -66,7 +58,14 @@ public class MsBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MsV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitBlock(MsParser.BlockContext ctx) { return visitChildren(ctx); }
+	@Override public T visitPrimitiveType(MsParser.PrimitiveTypeContext ctx) { return visitChildren(ctx); }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation returns the result of calling
+	 * {@link #visitChildren} on {@code ctx}.</p>
+	 */
+	@Override public T visitParameter(MsParser.ParameterContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *

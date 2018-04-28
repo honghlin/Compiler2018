@@ -1,5 +1,4 @@
-// Generated from C:/Users/80780/Compiler2018/src/parser\Ms.g4 by ANTLR 4.7
-package parser;
+package parser;// Generated from C:/Users/80780/Compiler2018/src\Ms.g4 by ANTLR 4.7
 import org.antlr.v4.runtime.tree.ParseTreeVisitor;
 
 /**
@@ -17,11 +16,11 @@ public interface MsVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompilationUnit(MsParser.CompilationUnitContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MsParser#classDefinition}.
+	 * Visit a parse tree produced by {@link MsParser#variableDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitClassDefinition(MsParser.ClassDefinitionContext ctx);
+	T visitVariableDefinition(MsParser.VariableDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MsParser#functionDefinition}.
 	 * @param ctx the parse tree
@@ -29,23 +28,17 @@ public interface MsVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionDefinition(MsParser.FunctionDefinitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MsParser#variableDefinition}.
+	 * Visit a parse tree produced by {@link MsParser#classDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVariableDefinition(MsParser.VariableDefinitionContext ctx);
+	T visitClassDefinition(MsParser.ClassDefinitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MsParser#parameter}.
+	 * Visit a parse tree produced by {@link MsParser#block}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitParameter(MsParser.ParameterContext ctx);
-	/**
-	 * Visit a parse tree produced by {@link MsParser#primitiveType}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitPrimitiveType(MsParser.PrimitiveTypeContext ctx);
+	T visitBlock(MsParser.BlockContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MsParser#typeType}.
 	 * @param ctx the parse tree
@@ -53,11 +46,17 @@ public interface MsVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitTypeType(MsParser.TypeTypeContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MsParser#block}.
+	 * Visit a parse tree produced by {@link MsParser#primitiveType}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitBlock(MsParser.BlockContext ctx);
+	T visitPrimitiveType(MsParser.PrimitiveTypeContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link MsParser#parameter}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitParameter(MsParser.ParameterContext ctx);
 	/**
 	 * Visit a parse tree produced by the {@code blockStmt}
 	 * labeled alternative in {@link MsParser#statement}.
