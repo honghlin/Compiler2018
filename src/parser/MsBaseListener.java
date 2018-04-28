@@ -1,5 +1,4 @@
-// Generated from C:/Users/80780/Compiler2018/src/parser\Ms.g4 by ANTLR 4.7
-package parser;
+package parser;// Generated from C:/Users/80780/Compiler2018/src\Ms.g4 by ANTLR 4.7
 
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.tree.ErrorNode;
@@ -28,13 +27,13 @@ public class MsBaseListener implements MsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClassDefinition(MsParser.ClassDefinitionContext ctx) { }
+	@Override public void enterVariableDefinition(MsParser.VariableDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClassDefinition(MsParser.ClassDefinitionContext ctx) { }
+	@Override public void exitVariableDefinition(MsParser.VariableDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -52,37 +51,25 @@ public class MsBaseListener implements MsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableDefinition(MsParser.VariableDefinitionContext ctx) { }
+	@Override public void enterClassDefinition(MsParser.ClassDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableDefinition(MsParser.VariableDefinitionContext ctx) { }
+	@Override public void exitClassDefinition(MsParser.ClassDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterParameter(MsParser.ParameterContext ctx) { }
+	@Override public void enterBlock(MsParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitParameter(MsParser.ParameterContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void enterPrimitiveType(MsParser.PrimitiveTypeContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitPrimitiveType(MsParser.PrimitiveTypeContext ctx) { }
+	@Override public void exitBlock(MsParser.BlockContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -100,13 +87,25 @@ public class MsBaseListener implements MsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterBlock(MsParser.BlockContext ctx) { }
+	@Override public void enterPrimitiveType(MsParser.PrimitiveTypeContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitBlock(MsParser.BlockContext ctx) { }
+	@Override public void exitPrimitiveType(MsParser.PrimitiveTypeContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterParameter(MsParser.ParameterContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitParameter(MsParser.ParameterContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
