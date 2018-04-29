@@ -27,7 +27,11 @@ public class ASTBuilder extends MsBaseListener {
     }
 
     private ExprNode getExprNode(MsParser.ExpressionContext ctx) {
-        if (ctx == null) return null;
+
+        if (ctx == null) {
+            //System.out.println(111);
+            return null;
+        }
         else return (ExprNode)mp.get(ctx);
     }
 
@@ -326,6 +330,12 @@ public class ASTBuilder extends MsBaseListener {
         Type type = new ClassType(ctx.Identifier().getText());
         CreatorNode creatorNode = new CreatorNode(new Location(ctx), type, null);
         mp.put(ctx, creatorNode);
+    }
+
+    @Override
+    public void exitDecIntegerConst(MsParser.DecIntegerConstContext ctx) {
+        IntegerLiteralNode integerLiteralNode =  new IntegerLiteralNode(new Location(ctx), Long.parseLong(ctx.DecimalInteger().getText()));
+        mp.put(ctx, integerLiteralNode);
     }
 
 }
