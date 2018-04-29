@@ -49,7 +49,7 @@ abstract public class Visitor implements ASTVisitor {
     @Override public void visit(FuncallNode node) {
 
         visitExpr(node.expr());
-        for(ExprNode e: node.varList()) visitExpr(e);
+        if(node.varList() != null) for(ExprNode e: node.varList()) visitExpr(e);
     }
 
     @Override public void visit(IntegerLiteralNode node) {
@@ -100,7 +100,7 @@ abstract public class Visitor implements ASTVisitor {
 
     @Override public void visit(BlockNode node) {
 
-        for(StmtNode s: node.stmts()) visitStmt(s);
+        if(node.stmts() != null) for(StmtNode s: node.stmts()) visitStmt(s);
     }
     @Override public void visit(BreakNode node) {
 

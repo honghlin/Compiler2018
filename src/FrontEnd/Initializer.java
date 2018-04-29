@@ -19,7 +19,7 @@ public class Initializer extends Visitor{
 
     public Initializer(Scope topScope) {
 
-        SymbolTable.push(currentScope);
+        SymbolTable.push(topScope);
         this.globalScope = topScope;
         currentScope = topScope;
     }
@@ -28,7 +28,7 @@ public class Initializer extends Visitor{
 
         enter();
         node.setScope(currentScope);
-        for(StmtNode s: node.stmts()) visitStmt(s);
+        if (node.stmts() != null) for(StmtNode s: node.stmts()) visitStmt(s);
         exit();
     }
 
