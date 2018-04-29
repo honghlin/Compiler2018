@@ -38,6 +38,7 @@ public class Main {
 
             walker.walk(listener, tree);
             AST ast = listener.getAST();
+            ast.Init();
             //ProgramAST.print();
         }
         catch (SemanticError e) {
