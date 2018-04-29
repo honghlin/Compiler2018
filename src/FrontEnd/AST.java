@@ -27,4 +27,12 @@ public class AST {
         this.scope = new Scope(true);
     }
 
+    public void Init() {
+
+        for (ClassEntity entity : classEntities) scope.insert(entity);
+        for (FunctionEntity entity : functionEntities) scope.insert(entity);
+        Initializer resolver = new Initializer(scope);
+        for (DefinitionNode d : definitionNodes) resolver.visitDefinition(d);
+    }
+
 }
