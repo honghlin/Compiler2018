@@ -14,6 +14,14 @@ public class VariableEntity extends Entity {
         Expr = expr;
     }
 
+
+    public VariableEntity(VariableEntity entity) {
+
+        super(entity.location(), entity.type(), entity.name());
+        Expr = entity.Expr();
+    }
+
+
     public ExprNode Expr() {
 
         return Expr;

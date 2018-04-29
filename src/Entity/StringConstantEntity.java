@@ -8,7 +8,8 @@ public class StringConstantEntity extends Entity{
 
     private String value;
 
-    public String Value() {
+    public String value() {
+
         return value;
     }
 
