@@ -26,6 +26,11 @@ public class Initializer extends Visitor{
 
     @Override public void visit(BlockNode node) {
 
+        if(enterFunction == true) {
+            enterFunction = false;
+            node.setScope(currentScope);
+            if (node.stmts() != null) for(StmtNode s: node.stmts()) visitStmt(s);
+        }
         enter();
         node.setScope(currentScope);
         if (node.stmts() != null) for(StmtNode s: node.stmts()) visitStmt(s);
@@ -87,6 +92,7 @@ public class Initializer extends Visitor{
             currentScope.insert(p);
             if (!resolveType(p.type())) throw new SemanticError(node.location(), "Error Type 4");
         }
+        enterFunction = true;
         visit(entity.body());
         exit();
     }
@@ -113,6 +119,8 @@ public class Initializer extends Visitor{
         exit();
         currentClass = null;
     }
+
+    private boolean enterFunction = false;
 
     private boolean resolveType(Type type) {
 
