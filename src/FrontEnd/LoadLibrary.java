@@ -13,6 +13,7 @@ public class LoadLibrary {
     //private static String LFP = "LF";
 
     LoadLibrary() {
+        
         List<Entity> varList1 = new LinkedList<>();
         List<Entity> varList2 = new LinkedList<>();
         List<Entity> varList3 = new LinkedList<>();
@@ -31,7 +32,6 @@ public class LoadLibrary {
         varList7.add(new Entity(new Location(0,0), new IntType(), "LFP8" + "right"));
         varList9.add(new Entity(new Location(0,0), new IntType(), "LFP10" + "pos"));
 
-
         LibFunction.add(new FunctionEntity(new Location(0,0),new VoidType(), "print", varList1, null));
         LibFunction.add(new FunctionEntity(new Location(0,0),new VoidType(), "println", varList2, null));
         LibFunction.add(new FunctionEntity(new Location(0,0),new StringType(), "getString", varList3, null));
@@ -42,7 +42,6 @@ public class LoadLibrary {
         LibFunction.add(new FunctionEntity(new Location(0,0),new IntType(), "parseInt", varList8, null));
         LibFunction.add(new FunctionEntity(new Location(0,0),new IntType(), "ord", varList9, null));
         LibFunction.add(new FunctionEntity(new Location(0,0),new IntType(), "size", varList10, null));
-
     }
 
     public static List<FunctionEntity>  LibFunc() {
