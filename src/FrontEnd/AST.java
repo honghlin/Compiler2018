@@ -29,6 +29,8 @@ public class AST {
 
     public void Init() {
 
+        LoadLibrary LibF = new LoadLibrary();
+        for(FunctionEntity entity : LoadLibrary.LibFunc()) scope.insert(entity);
         for (ClassEntity entity : classEntities) scope.insert(entity);
         for (FunctionEntity entity : functionEntities) scope.insert(entity);
         Initializer resolver = new Initializer(scope);
