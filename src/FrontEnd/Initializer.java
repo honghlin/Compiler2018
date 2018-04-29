@@ -70,8 +70,10 @@ public class Initializer extends Visitor{
 
         VariableEntity entity = node.entity();
         if (!resolveType(entity.type())) throw new SemanticError(node.location(), "Type Error");
-        if (entity.Expr() != null) visitExpr(entity.Expr());
-        currentScope.insert(entity);
+        if (currentClass == null || currentClass.scope() != currentScope) {
+            if (entity.Expr() != null) visitExpr(entity.Expr());
+            currentScope.insert(entity);
+        }
     }
 
     @Override public void visit(FunctionDefinitionNode node) {
