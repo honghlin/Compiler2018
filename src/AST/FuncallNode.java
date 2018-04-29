@@ -11,10 +11,10 @@ public class FuncallNode extends ExprNode {
     private ExprNode expr;
     private List<ExprNode> varList;
 
-    public FuncallNode(ExprNode expr, List<ExprNode> exprList) {
+    public FuncallNode(ExprNode expr, List<ExprNode> varrList) {
 
         this.expr = expr;
-        this.varList = exprList;
+        this.varList = varList;
     }
 
     public ExprNode expr() {
@@ -22,7 +22,7 @@ public class FuncallNode extends ExprNode {
         return expr;
     }
 
-    public List<ExprNode> exprList() {
+    public List<ExprNode> varList() {
 
         return varList;
     }
