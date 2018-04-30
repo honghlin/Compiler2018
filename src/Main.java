@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        File file = new File("program.txt");
+        File file = new File("C:\\Users\\80780\\Desktop\\testcase\\test17 x.mx");
         InputStream in = new FileInputStream(file);
         getAST(in);
 
@@ -39,6 +39,7 @@ public class Main {
             walker.walk(listener, tree);
             AST ast = listener.getAST();
             ast.Init();
+            ast.checkSemantic();
             //ProgramAST.print();
         }
         catch (SemanticError e) {
