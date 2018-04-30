@@ -27,10 +27,17 @@ public class ArrayType extends Type{
         this.baseType = baseType;
     }
 
-    public ArrayType(Type baseType, int dimension) {
+    /*public ArrayType(Type baseType, int dimension) {
 
         this.baseType = baseType;
         this.dimension = dimension;
+    }*/
+
+    // At first, I write like this, but then I found a wonderful way from others;
+
+    public ArrayType(Type baseType, int dimension) {
+
+        this.baseType = (dimension == 1) ? baseType : new ArrayType(baseType, dimension - 1);
     }
 
     public Type baseType() {
