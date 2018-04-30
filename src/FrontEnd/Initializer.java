@@ -54,11 +54,14 @@ public class Initializer extends Visitor{
     }
 
     @Override public void visit(VariableNode node) {
+
         Entity entity = currentScope.search(node.name());
         if (entity == null) throw new SemanticError(node.location(), "Error Type 2 ");
         node.setEntity(entity);
+        node.setType(entity.type());
         if (currentClass != null && currentClass.scope().searchCurrently(node.name()) != null) node.setThisPointer(currentThis);
     }
+
 
     @Override public void visit(ClassDefinitionNode node) {
 
