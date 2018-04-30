@@ -17,7 +17,7 @@ public class Main {
 
     public static void main(String[] args) throws Exception {
 
-        File file = new File("C:\\Users\\80780\\Desktop\\testcase\\test17 x.mx");
+        File file = new File("program.txt");
         InputStream in = new FileInputStream(file);
         getAST(in);
 
