@@ -21,6 +21,8 @@ public class ASTBuilder extends MsBaseListener {
 
     private ParseTreeProperty<Object> mp = new ParseTreeProperty<>();
 
+    static String Constructor_Pre = "_Constructor";
+
     private StmtNode getStmtNode(MsParser.StatementContext ctx) {
         if (ctx == null) return null;
         else return (StmtNode)mp.get(ctx);
@@ -67,7 +69,7 @@ public class ASTBuilder extends MsBaseListener {
         for(MsParser.ParameterContext pctx : ctx.parameter()) varList.add((Entity)mp.get(pctx));
         FunctionEntity entity;
         if(ctx.ret == null) {
-            entity = new FunctionEntity(new Location(ctx.name), new ClassType(ctx.name.getText()), ctx.name.getText(), varList, (BlockNode) mp.get(ctx.block()));
+            entity = new FunctionEntity(new Location(ctx.name), new ClassType(ctx.name.getText()), Constructor_Pre + ctx.name.getText(), varList, (BlockNode) mp.get(ctx.block()));
             entity.setIsConstructor(true);
         }
         else entity = new FunctionEntity(new Location(ctx.name), (Type) mp.get(ctx.ret), ctx.name.getText(), varList, (BlockNode) mp.get(ctx.block()));
@@ -86,7 +88,7 @@ public class ASTBuilder extends MsBaseListener {
             FunctionEntity entity = node.entity();
             if (entity.isConstructor()) {
                 constructor = entity;
-                if (!entity.name().equals(classname)) throw new SemanticError(new Location(ctx.name), "wrong constructor");
+                if (!entity.name().equals(Constructor_Pre + classname)) throw new SemanticError(new Location(ctx.name), "wrong constructor");
             }
         }
         ClassEntity entity = new ClassEntity(new Location(ctx.name), classname, vs, fs, constructor);
