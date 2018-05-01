@@ -11,7 +11,7 @@ public class FuncallNode extends ExprNode {
     private ExprNode expr;
     private List<ExprNode> varList;
 
-    public FuncallNode(ExprNode expr, List<ExprNode> varrList) {
+    public FuncallNode(ExprNode expr, List<ExprNode> varList) {
 
         this.expr = expr;
         this.varList = varList;
