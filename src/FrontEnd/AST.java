@@ -21,13 +21,13 @@ public class AST {
     private List<FunctionEntity> functionEntities;
     private List<VariableEntity> variableEntities;
 
-    public AST(List<DefinitionNode> definitionNodes, List<ClassEntity> definedClass, List<FunctionEntity> definedFunction, List<VariableEntity> definedVariable) {
+    public AST(List<DefinitionNode> definitionNodes, List<ClassEntity> Class, List<FunctionEntity> Function, List<VariableEntity> Variable) {
 
         super();
         this.definitionNodes  = definitionNodes;
-        this.classEntities    = definedClass;
-        this.functionEntities = definedFunction;
-        this.variableEntities = definedVariable;
+        this.classEntities    = Class;
+        this.functionEntities = Function;
+        this.variableEntities = Variable;
         this.scope = new Scope(true);
     }
 
