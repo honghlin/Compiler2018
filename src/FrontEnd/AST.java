@@ -30,14 +30,14 @@ public class AST {
         this.scope = new Scope(true);
     }
 
-    public void Init() {
+    public void BulidScope() {
 
         scope.insert(new Entity(new Location(0,0), new NullType(), "null"));
         LoadLibrary LibF = new LoadLibrary();
         for(FunctionEntity entity : LoadLibrary.LibFunc()) scope.insert(entity);
         for (ClassEntity entity : classEntities) scope.insert(entity);
         for (FunctionEntity entity : functionEntities) scope.insert(entity);
-        Initializer resolver = new Initializer(scope);
+        ScopeBulider resolver = new ScopeBulider(scope);
         for (DefinitionNode d : definitionNodes) resolver.visitDefinition(d);
     }
 
