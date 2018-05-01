@@ -31,10 +31,12 @@ public class ScopeBulider extends Visitor{
             node.setScope(currentScope);
             if (node.stmts() != null) for(StmtNode s: node.stmts()) visitStmt(s);
         }
-        enter();
-        node.setScope(currentScope);
-        if (node.stmts() != null) for(StmtNode s: node.stmts()) visitStmt(s);
-        exit();
+        else {
+            enter();
+            node.setScope(currentScope);
+            if (node.stmts() != null) for(StmtNode s: node.stmts()) visitStmt(s);
+            exit();
+        }
     }
 
     @Override public void visit(CreatorNode node) {
