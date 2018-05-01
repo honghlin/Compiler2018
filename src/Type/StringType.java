@@ -26,6 +26,12 @@ public class StringType extends Type {
         varList2.add(new Entity(new Location(0,0), new IntType(), "LFP2" + "right"));
         varList4.add(new Entity(new Location(0,0), new IntType(), "LFP4" + "pos"));
 
+        Entity thisPointer = new Entity(new Location(0, 0), null, "this");
+        varList1.add(0, thisPointer);
+        varList2.add(0, thisPointer);
+        varList3.add(0, thisPointer);
+        varList4.add(0, thisPointer);
+
         scope.insert(new FunctionEntity(new Location(0,0),new IntType(), "length", varList1, null));
         scope.insert(new FunctionEntity(new Location(0,0),new StringType(), "subString", varList2, null));
         scope.insert(new FunctionEntity(new Location(0,0),new IntType(), "parseInt", varList3, null));

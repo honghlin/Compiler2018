@@ -19,6 +19,8 @@ public class ArrayType extends Type{
 
         scope = new Scope(true);
         List<Entity> varList = new LinkedList<>();
+        Entity thisPointer = new Entity(new Location(0, 0), null, "this");
+        varList.add(0, thisPointer);
         scope.insert(new FunctionEntity(new Location(0,0),new IntType(), "size", varList, null));
     }
 
