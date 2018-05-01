@@ -5,6 +5,8 @@ import AST.*;
 import Scope.Scope;
 import Error.SemanticError;
 
+import java.util.List;
+
 public class SemanticChecker extends Visitor {
 
     private int Depth = 0;
@@ -253,6 +255,24 @@ public class SemanticChecker extends Visitor {
         }
         else throw new SemanticError(node.location(), "Error Member");
 
+    }
+
+    @Override public void visit(FuncallNode node) {
+
+        visitExpr(node.expr());
+        Type t = node.expr().type();
+        if (!t.isFunction()) throw new SemanticError(node.location(), "Not Function");
+        FunctionEntity entity = ((FunctionType)t).entity();
+        List<Entity> pars = entity.varList();
+        List<ExprNode> exprs = node.varList();
+        int f = 0;
+        if ((node.expr() instanceof MemberNode) || (node.expr() instanceof VariableNode && ((VariableNode)node.expr()).isMember())) f = 1;
+        if (pars.size() - f != exprs.size()) throw new SemanticError(node.location(), "parameter Error");
+        for (int i = f; i < pars.size(); ++i) {
+            ExprNode expr = exprs.get(i - f);
+            visitExpr(expr);
+            typeChecker.checkType(expr.location(), expr.type(), pars.get(i).type());
+        }
     }
 
 }

@@ -5,6 +5,7 @@ import Entity.ClassEntity;
 import Entity.FunctionEntity;
 import Entity.VariableEntity;
 import AST.*;
+import Error.SemanticError;
 import AST.DefinitionNode;
 import Scope.Scope;
 import Type.NullType;
@@ -45,6 +46,8 @@ public class AST {
 
         SemanticChecker semanticChecker = new SemanticChecker(scope);
         for (DefinitionNode d : definitionNodes) semanticChecker.visitDefinition(d);
+        FunctionEntity MainFunction = (FunctionEntity)scope.search("main");
+        if (MainFunction == null || !MainFunction.returnType().isInt()) throw new SemanticError(new Location(0,0), "main Error");
     }
 
 }
