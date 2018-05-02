@@ -17,6 +17,7 @@ public class ScopeBulider extends Visitor{
     private ClassEntity currentClass = null;
     private Entity currentThis = null;
 
+
     public ScopeBulider(Scope topScope) {
 
         SymbolTable.push(topScope);
@@ -48,6 +49,7 @@ public class ScopeBulider extends Visitor{
     @Override public void visit(StringLiteralNode node) {
 
         Entity entity = globalScope.searchCurrently(node.value());
+        //System.out.println(entity.name());
         if (entity == null) {
             entity = new StringConstantEntity(node.location(), new StringType(), node.value());
             globalScope.insert(entity);
@@ -79,6 +81,7 @@ public class ScopeBulider extends Visitor{
     @Override public void visit(VariableDefinitionNode node) {
 
         VariableEntity entity = node.entity();
+        //if (entity.type().isVoid()) throw new SemanticError(node.location(), "Void VarDef");
         if (!resolveType(entity.type())) throw new SemanticError(node.location(), "Type Error");
         if (currentClass == null || currentClass.scope() != currentScope) {
             if (entity.Expr() != null) visitExpr(entity.Expr());
@@ -143,9 +146,11 @@ public class ScopeBulider extends Visitor{
         }
         else if (type instanceof ArrayType) {
             ArrayType t = (ArrayType) type;
+            if(t.baseType().isVoid()) throw new SemanticError(new Location(0, 0), "Void Array");
             return resolveType(t.baseType());
         }
         return true;
     }
+
 
 }
