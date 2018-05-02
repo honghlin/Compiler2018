@@ -22,6 +22,7 @@ public class ASTBuilder extends MsBaseListener {
     private ParseTreeProperty<Object> mp = new ParseTreeProperty<>();
 
     static String Constructor_Pre = "_Constructor";
+    static public String StringLiteral_Pre = "_StringLiteral";
 
     private StmtNode getStmtNode(MsParser.StatementContext ctx) {
         if (ctx == null) return null;
@@ -300,7 +301,7 @@ public class ASTBuilder extends MsBaseListener {
     @Override public void exitStringConst(MsParser.StringConstContext ctx) {
         String s = ctx.StringLiteral().getText();
         s = s.substring(1, s.length()-1); //""
-        StringLiteralNode stringLiteralNode = new StringLiteralNode(new Location(ctx), s);
+        StringLiteralNode stringLiteralNode = new StringLiteralNode(new Location(ctx), StringLiteral_Pre + s);
         mp.put(ctx, stringLiteralNode);
     }
 
