@@ -8,6 +8,8 @@ public class StringConstantEntity extends Entity{
 
     private String value;
 
+    static public String Pre = "_StringLiteral";
+
     public String value() {
 
         return value;
