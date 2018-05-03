@@ -17,11 +17,11 @@ public interface MsVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitCompilationUnit(MsParser.CompilationUnitContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MsParser#variableDefinition}.
+	 * Visit a parse tree produced by {@link MsParser#classDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitVariableDefinition(MsParser.VariableDefinitionContext ctx);
+	T visitClassDefinition(MsParser.ClassDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MsParser#functionDefinition}.
 	 * @param ctx the parse tree
@@ -29,11 +29,11 @@ public interface MsVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitFunctionDefinition(MsParser.FunctionDefinitionContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link MsParser#classDefinition}.
+	 * Visit a parse tree produced by {@link MsParser#variableDefinition}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
 	 */
-	T visitClassDefinition(MsParser.ClassDefinitionContext ctx);
+	T visitVariableDefinition(MsParser.VariableDefinitionContext ctx);
 	/**
 	 * Visit a parse tree produced by {@link MsParser#parameter}.
 	 * @param ctx the parse tree

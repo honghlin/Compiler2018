@@ -28,13 +28,13 @@ public class MsBaseListener implements MsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterVariableDefinition(MsParser.VariableDefinitionContext ctx) { }
+	@Override public void enterClassDefinition(MsParser.ClassDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitVariableDefinition(MsParser.VariableDefinitionContext ctx) { }
+	@Override public void exitClassDefinition(MsParser.ClassDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -52,13 +52,13 @@ public class MsBaseListener implements MsListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterClassDefinition(MsParser.ClassDefinitionContext ctx) { }
+	@Override public void enterVariableDefinition(MsParser.VariableDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void exitClassDefinition(MsParser.ClassDefinitionContext ctx) { }
+	@Override public void exitVariableDefinition(MsParser.VariableDefinitionContext ctx) { }
 	/**
 	 * {@inheritDoc}
 	 *

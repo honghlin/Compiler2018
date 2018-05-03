@@ -18,15 +18,15 @@ public interface MsListener extends ParseTreeListener {
 	 */
 	void exitCompilationUnit(MsParser.CompilationUnitContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MsParser#variableDefinition}.
+	 * Enter a parse tree produced by {@link MsParser#classDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void enterVariableDefinition(MsParser.VariableDefinitionContext ctx);
+	void enterClassDefinition(MsParser.ClassDefinitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MsParser#variableDefinition}.
+	 * Exit a parse tree produced by {@link MsParser#classDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void exitVariableDefinition(MsParser.VariableDefinitionContext ctx);
+	void exitClassDefinition(MsParser.ClassDefinitionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MsParser#functionDefinition}.
 	 * @param ctx the parse tree
@@ -38,15 +38,15 @@ public interface MsListener extends ParseTreeListener {
 	 */
 	void exitFunctionDefinition(MsParser.FunctionDefinitionContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link MsParser#classDefinition}.
+	 * Enter a parse tree produced by {@link MsParser#variableDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void enterClassDefinition(MsParser.ClassDefinitionContext ctx);
+	void enterVariableDefinition(MsParser.VariableDefinitionContext ctx);
 	/**
-	 * Exit a parse tree produced by {@link MsParser#classDefinition}.
+	 * Exit a parse tree produced by {@link MsParser#variableDefinition}.
 	 * @param ctx the parse tree
 	 */
-	void exitClassDefinition(MsParser.ClassDefinitionContext ctx);
+	void exitVariableDefinition(MsParser.VariableDefinitionContext ctx);
 	/**
 	 * Enter a parse tree produced by {@link MsParser#parameter}.
 	 * @param ctx the parse tree

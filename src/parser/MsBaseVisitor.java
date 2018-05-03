@@ -24,7 +24,7 @@ public class MsBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MsV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitVariableDefinition(MsParser.VariableDefinitionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitClassDefinition(MsParser.ClassDefinitionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
@@ -38,7 +38,7 @@ public class MsBaseVisitor<T> extends AbstractParseTreeVisitor<T> implements MsV
 	 * <p>The default implementation returns the result of calling
 	 * {@link #visitChildren} on {@code ctx}.</p>
 	 */
-	@Override public T visitClassDefinition(MsParser.ClassDefinitionContext ctx) { return visitChildren(ctx); }
+	@Override public T visitVariableDefinition(MsParser.VariableDefinitionContext ctx) { return visitChildren(ctx); }
 	/**
 	 * {@inheritDoc}
 	 *
