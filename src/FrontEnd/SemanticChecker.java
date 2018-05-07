@@ -17,6 +17,7 @@ public class SemanticChecker extends Visitor {
     static final Type intType = new IntType();
     static final Type stringType = new StringType();
 
+
     public SemanticChecker (Scope scope) {
 
         this.scope = scope;
@@ -272,6 +273,10 @@ public class SemanticChecker extends Visitor {
             ExprNode expr = exprs.get(i - f);
             visitExpr(expr);
             typeChecker.checkType(expr.location(), expr.type(), pars.get(i).type());
+        }
+        if (f != 0) {
+            if (node.expr() instanceof MemberNode) node.addThisPointer(((MemberNode)node.expr()).expr());
+            else node.addThisPointer(new VariableNode(currentFunction.varList().get(0)));
         }
     }
 
