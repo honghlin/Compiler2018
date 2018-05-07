@@ -3,6 +3,7 @@ package AST;
 import Entity.Entity;
 import FrontEnd.ASTVisitor;
 import Type.Type;
+import Error.SemanticError;
 
 public class VariableNode extends LHSNode {
 
@@ -15,6 +16,7 @@ public class VariableNode extends LHSNode {
 
         this.location = loc;
         this.name = name;
+        if(name.equals("this")) throw new SemanticError(loc, "This");
     }
 
     public VariableNode(Entity entity) {
