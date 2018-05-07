@@ -2,6 +2,7 @@ package AST;
 
 import FrontEnd.ASTVisitor;
 import Type.Type;
+import Error.SemanticError;
 
 public class AssignNode extends ExprNode{
 
@@ -12,6 +13,7 @@ public class AssignNode extends ExprNode{
         super();
         this.lhs = lhs;
         this.rhs = rhs;
+        if(lhs instanceof VariableNode && ((VariableNode)lhs).name().equals("this")) throw new SemanticError(new Location(0,0), "This");
     }
 
     public ExprNode lhs() {
