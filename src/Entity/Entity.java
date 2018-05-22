@@ -1,6 +1,7 @@
 package Entity;
 
 import AST.Location;
+import IR.Operand.Operand;
 import Type.Type;
 
 public class Entity {
@@ -8,6 +9,7 @@ public class Entity {
     protected Location location;
     protected String name;
     protected Type type;
+    private Operand pos;
 
     public Entity(Location loc, Type type, String name) {
 
@@ -27,7 +29,18 @@ public class Entity {
     }
 
     public Location location() {
+
         return location;
+    }
+
+    public void setPos(Operand pos) {//private
+
+        this.pos = pos;
+    }
+
+    public Operand pos() {
+
+        return pos;
     }
 
 }

@@ -2,11 +2,16 @@ package Entity;
 
 import AST.ExprNode;
 import AST.Location;
+import IR.Operand.GlobalAddr;
+import IR.Operand.Operand;
 import Type.Type;
 
 public class VariableEntity extends Entity {
 
     private ExprNode Expr;
+    private int offset;//just for class
+    private Operand pos;
+    private boolean IsGlobal = false;
 
     public VariableEntity(Location loc, Type type, String name, ExprNode expr) {
 
@@ -31,6 +36,34 @@ public class VariableEntity extends Entity {
     public String toString() {
 
         return "variable entity : " + name;
+    }
+
+    public void SetOffset(int offect) {
+
+        this.offset = offect;
+    }
+
+    public int Offset() {
+
+        return offset;
+    }
+
+    public void setPos(Operand pos) {//private
+
+       this.pos = pos;
+    }
+
+    public Operand pos() {
+
+        return pos;
+    }
+
+    public boolean isGlobal() {
+        return IsGlobal;
+    }
+
+    public void setIsGlobal(boolean IsGlobal) {
+        IsGlobal = IsGlobal;
     }
 
 }

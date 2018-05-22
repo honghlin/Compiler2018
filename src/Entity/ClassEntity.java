@@ -5,7 +5,7 @@ package Entity;
 import AST.Location;
 import AST.VariableDefinitionNode;
 import AST.FunctionDefinitionNode;
-import Type.ClassType;
+import Type.*;
 import Scope.Scope;
 
 import java.util.List;
@@ -16,6 +16,8 @@ public class ClassEntity extends Entity {
     private List<FunctionDefinitionNode> memberFuncs;
 
     private Scope scope;
+
+    private int size;
 
     private FunctionEntity constructor;// constructor funtion
     private ClassType classType;
@@ -74,6 +76,26 @@ public class ClassEntity extends Entity {
     public String toString() {
 
         return "class entity : " + name;
+    }
+
+    public void setOffset() {
+
+        int offset = 0;
+        for(VariableDefinitionNode item : memberVars) {
+            item.entity().SetOffset(offset);
+            offset += getSize(item.entity().type());
+        }
+        size = offset;
+    }
+
+    private int getSize(Type type) {
+
+        return 8;
+    }
+
+    public int size() {
+
+        return size;
     }
 
 }
