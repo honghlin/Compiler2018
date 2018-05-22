@@ -2,6 +2,7 @@ import FrontEnd.ASTBuilder;
 import FrontEnd.SyntaxErrorListener;
 import FrontEnd.AST;
 import Error.SemanticError;
+import backend.IRBuilder;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -20,6 +21,7 @@ public class Main {
         File file = new File("program.txt");
         InputStream in = new FileInputStream(file);
         getAST(in);
+
 
     }
 
@@ -40,6 +42,9 @@ public class Main {
             AST ast = listener.getAST();
             ast.BulidScope();
             ast.checkSemantic();
+            IRBuilder irBuilder = new IRBuilder(ast);
+            irBuilder.generateIR();
+            irBuilder.print();
             //ProgramAST.print();
         }
         catch (SemanticError e) {
