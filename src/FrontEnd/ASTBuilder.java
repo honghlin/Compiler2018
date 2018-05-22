@@ -23,6 +23,7 @@ public class ASTBuilder extends MsBaseListener {
 
     static String Constructor_Pre = "_Constructor";
     static public String StringLiteral_Pre = "_StringLiteral";
+    //static public String Class_Pre = "_Class";
 
     private StmtNode getStmtNode(MsParser.StatementContext ctx) {
         if (ctx == null) return null;
@@ -30,7 +31,6 @@ public class ASTBuilder extends MsBaseListener {
     }
 
     private ExprNode getExprNode(MsParser.ExpressionContext ctx) {
-
         if (ctx == null) {
             //System.out.println(111);
             return null;

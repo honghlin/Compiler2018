@@ -7,6 +7,7 @@ import Entity.VariableEntity;
 import AST.*;
 import Error.SemanticError;
 import AST.DefinitionNode;
+import IR.Operand.Imm;
 import Scope.Scope;
 import Type.NullType;
 
@@ -31,9 +32,31 @@ public class AST {
         this.scope = new Scope(true);
     }
 
+    public List<DefinitionNode> definitionNodes() {
+
+        return definitionNodes;
+    }
+
+    public List<ClassEntity> classEntities() {
+
+        return classEntities;
+    }
+
+    public List<FunctionEntity> functionEntities() {
+
+        return functionEntities;
+    }
+
+    public List<VariableEntity> variableEntities() {
+
+        return variableEntities;
+    }
+
     public void BulidScope() {
 
-        scope.insert(new Entity(new Location(0,0), new NullType(), "null"));
+        VariableEntity Null = new VariableEntity(new Location(0,0), new NullType(), "null", null);
+        Null.setPos(new Imm(0));
+        scope.insert(Null);
         LoadLibrary LibF = new LoadLibrary();
         for(FunctionEntity entity : LoadLibrary.LibFunc()) scope.insert(entity);
         for (ClassEntity entity : classEntities) scope.insert(entity);
@@ -48,6 +71,11 @@ public class AST {
         for (DefinitionNode d : definitionNodes) semanticChecker.visitDefinition(d);
         FunctionEntity MainFunction = (FunctionEntity)scope.search("main");
         if (MainFunction == null || !MainFunction.returnType().isInt()) throw new SemanticError(new Location(0,0), "main Error");
+    }
+
+    public Scope scope() {
+
+        return scope;
     }
 
 }

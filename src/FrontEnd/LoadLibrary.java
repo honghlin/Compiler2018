@@ -47,6 +47,54 @@ public class LoadLibrary {
         StringType St = new StringType();
         At.Load();
         St.Load();
+
+        List<Entity> varList = new LinkedList<>();
+        varList.add(new Entity(new Location(0,0), new IntType(), "malloc" + "i"));
+        FunctionEntity malloc = new FunctionEntity(new Location(0,0),new IntType(), "malloc", varList, null);
+        LibFunction.add(malloc);
+
+        List<Entity> varList_add = new LinkedList<>();
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_i"));
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_j"));
+        FunctionEntity Str_ADD = new FunctionEntity(new Location(0,0),new IntType(), "Str_ADD", varList_add, null);
+        LibFunction.add(Str_ADD);
+
+        List<Entity> varList_eq = new LinkedList<>();
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_i"));
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_j"));
+        FunctionEntity Str_EQ = new FunctionEntity(new Location(0,0),new IntType(), "Str_EQ", varList_eq, null);
+        LibFunction.add(Str_EQ);
+
+        List<Entity> varList_ne = new LinkedList<>();
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_i"));
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_j"));
+        FunctionEntity Str_NE = new FunctionEntity(new Location(0,0),new IntType(), "Str_NE", varList_ne, null);
+        LibFunction.add(Str_NE);
+
+        List<Entity> varList_lt = new LinkedList<>();
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_i"));
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_j"));
+        FunctionEntity Str_LT = new FunctionEntity(new Location(0,0),new IntType(), "Str_LT", varList_lt, null);
+        LibFunction.add(Str_LT);
+
+        List<Entity> varList_gt = new LinkedList<>();
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_i"));
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_j"));
+        FunctionEntity Str_GT = new FunctionEntity(new Location(0,0),new IntType(), "Str_GT", varList_gt, null);
+        LibFunction.add(Str_GT);
+
+        List<Entity> varList_le = new LinkedList<>();
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_i"));
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_j"));
+        FunctionEntity Str_LE = new FunctionEntity(new Location(0,0),new IntType(), "Str_LE", varList_le, null);
+        LibFunction.add(Str_LE);
+
+        List<Entity> varList_ge = new LinkedList<>();
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_i"));
+        varList_add.add(new Entity(new Location(0,0), new StringType(), "str_j"));
+        FunctionEntity Str_GE = new FunctionEntity(new Location(0,0),new IntType(), "Str_GE", varList_ge, null);
+        LibFunction.add(Str_GE);
+
     }
 
     public static List<FunctionEntity>  LibFunc() {
