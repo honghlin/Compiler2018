@@ -87,7 +87,7 @@ public class IRBuilder extends Visitor {
 
         }
         visit(entity.body());
-        if (!(currentFunction.insList().get(currentFunction.insList().size() - 1) instanceof Jump)) {  // add return
+        if (currentFunction.insList().size() == 0 || !(currentFunction.insList().get(currentFunction.insList().size() - 1) instanceof Jump)) {  // add return
             currentFunction.addIns(new Jump(end));
         }
         currentFunction.addIns(end);
