@@ -18,4 +18,9 @@ public class IntegerLiteralNode extends LiteralNode{
         visitor.visit(this);
     }
 
+    public long value() {
+
+        return value;
+    }
+
 }

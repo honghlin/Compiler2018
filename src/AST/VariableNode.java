@@ -77,4 +77,5 @@ public class VariableNode extends LHSNode {
 
         visitor.visit(this);
     }
+
 }

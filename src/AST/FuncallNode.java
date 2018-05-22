@@ -3,6 +3,7 @@ package AST;
 import FrontEnd.ASTVisitor;
 import Type.Type;
 import Type.FunctionType;
+import IR.Label;
 
 import java.util.List;
 
@@ -10,6 +11,7 @@ public class FuncallNode extends ExprNode {
 
     private ExprNode expr;
     private List<ExprNode> varList;
+    private Label label;
 
     public FuncallNode(ExprNode expr, List<ExprNode> varList) {
 
@@ -54,5 +56,20 @@ public class FuncallNode extends ExprNode {
 
         visitor.visit(this);
     }
+
+    public Label label() {
+
+        return label;
+    }
+
+    public void setLabel(Label label) {
+
+        this.label = label;
+    }
+
+ /*   public FunctionType functionType() {
+
+        return (FunctionType)expr.type();
+    }*/
 
 }
