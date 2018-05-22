@@ -44,7 +44,7 @@ public class Main {
             ast.checkSemantic();
             IRBuilder irBuilder = new IRBuilder(ast);
             irBuilder.generateIR();
-            irBuilder.print();
+            //irBuilder.print();
             //ProgramAST.print();
         }
         catch (SemanticError e) {
