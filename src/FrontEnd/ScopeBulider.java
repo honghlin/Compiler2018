@@ -63,7 +63,7 @@ public class ScopeBulider extends Visitor{
         if (entity == null) throw new SemanticError(node.location(), "Error Type 2 ");
         node.setEntity(entity);
         node.setType(entity.type());
-        if (currentClass != null && currentClass.scope().searchCurrently(node.name()) != null) node.setThisPointer(currentThis);
+        if (currentClass != null && currentClass.scope().searchCurrently(node.name()) != null && currentScope.search(node.name()) == currentClass.scope().searchCurrently(node.name())) node.setThisPointer(currentThis);
     }
 
 
