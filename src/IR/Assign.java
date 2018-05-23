@@ -1,6 +1,7 @@
 package IR;
 
 import IR.Operand.Operand;
+import backend.IRVisitor;
 
 public class Assign extends Ins{
 
@@ -28,6 +29,11 @@ public class Assign extends Ins{
         t += (lhs.toString() + " ");
         t += (rhs.toString() + "\n");
         return t;
+    }
+
+    @Override public void accept(IRVisitor visitor) {
+
+        visitor.visit(this);
     }
 
 }

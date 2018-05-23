@@ -1,5 +1,7 @@
 package IR;
 
+import backend.IRVisitor;
+
 public class Jump extends Ins {
 
     private Label Label;
@@ -15,5 +17,9 @@ public class Jump extends Ins {
     public String toString() {
         String t = "Jump " + Label.toString();
         return t;
+    }
+    @Override public void accept(IRVisitor visitor) {
+
+        visitor.visit(this);
     }
 }

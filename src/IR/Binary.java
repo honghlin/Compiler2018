@@ -1,6 +1,7 @@
 package IR;
 
 import IR.Operand.Operand;
+import backend.IRVisitor;
 
 public class Binary extends Ins {
 
@@ -44,6 +45,11 @@ public class Binary extends Ins {
         //if(right != null) t += right.toString() + "\n";
         //t += "\n";
         return t;
+    }
+
+    @Override public void accept(IRVisitor visitor) {
+
+        visitor.visit(this);
     }
 
 }

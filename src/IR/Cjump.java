@@ -3,23 +3,20 @@ package IR;
 //import IR.Ins;
 
 import IR.Operand.Operand;
-
+import backend.IRVisitor;
 
 
 public class Cjump extends Ins {
 
-    public enum BinaryOp {
-        ADD, SUB, MUL, DIV, MOD,
-        LSHIFT, RSHIFT, LT, GT, LE, GE, EQ, NE,
-        B_AND, B_XOR, B_OR,
-        L_AND, L_OR
+    public enum Type {
+        EQ, NE, GT, GE, LT, LE, BOOL
     }
 
     private Operand left, right;
-    private BinaryOp op;
+    private Type op;
     private Label TrueLabel;
 
-    public Cjump(Operand left, Operand right, BinaryOp op, Label TrueLabel) {
+    public Cjump(Operand left, Operand right, Type op, Label TrueLabel) {
 
         this.left = left;
         this.right = right;
@@ -36,7 +33,7 @@ public class Cjump extends Ins {
         return right;
     }
 
-    public BinaryOp Op() {
+    public Type Op() {
         return op;
     }
 
@@ -51,4 +48,8 @@ public class Cjump extends Ins {
         return t;
     }
 
+    @Override public void accept(IRVisitor visitor) {
+
+        visitor.visit(this);
+    }
 }

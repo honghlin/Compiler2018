@@ -1,6 +1,7 @@
 package IR;
 
 import Entity.FunctionEntity;
+import backend.IRVisitor;
 
 public class Funcall extends Ins {
 
@@ -26,4 +27,8 @@ public class Funcall extends Ins {
         return t;
     }
 
+    @Override public void accept(IRVisitor visitor) {
+
+        visitor.visit(this);
+    }
 }

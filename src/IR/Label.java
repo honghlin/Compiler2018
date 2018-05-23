@@ -1,5 +1,7 @@
 package IR;
 
+import backend.IRVisitor;
+
 public class Label extends Ins {
 
     private String name;
@@ -22,4 +24,8 @@ public class Label extends Ins {
         return t;
     }
 
+    @Override public void accept(IRVisitor visitor) {
+
+        visitor.visit(this);
+    }
 }

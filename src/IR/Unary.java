@@ -1,6 +1,7 @@
 package IR;
 
 import IR.Operand.Operand;
+import backend.IRVisitor;
 
 public class Unary extends Ins {
 
@@ -29,4 +30,8 @@ public class Unary extends Ins {
         return t;
     }
 
+    @Override public void accept(IRVisitor visitor) {
+
+        visitor.visit(this);
+    }
 }

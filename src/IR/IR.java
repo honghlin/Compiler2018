@@ -1,6 +1,6 @@
 package IR;
 
-import AST.DefinitionNode;
+import FrontEnd.AST;
 import Entity.*;
 import IR.Operand.GlobalAddr;
 //import Entity.FunctionEntity;
@@ -18,6 +18,8 @@ public class IR {
 
     //public List<Function> functions = new ArrayList<>();
     //public List<VarDec> globalVariables = new ArrayList<>();
+    public AST ast;
+    public List<VariableEntity> globalInitializer = new ArrayList<>();
     public List<StringConstantEntity> stringConstants = new ArrayList<>();
 
     public GlobalAddr add(StringConstantEntity t) {
