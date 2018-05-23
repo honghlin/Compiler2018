@@ -21,7 +21,6 @@ public class IRBuilder extends Visitor {
     private AST ast;
     private IR Ir = new IR();
     private FunctionEntity currentFunction = null;
-    private List<VariableEntity> globalInitializer = new ArrayList<>();
     private Label continueLabel, breakLabel, returnLabel;
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
@@ -41,9 +40,11 @@ public class IRBuilder extends Visitor {
     }
 
     public IR generateIR() {
+        Ir.ast = ast;
         for (ClassEntity entity : ast.classEntities()) entity.setOffset();
         for (VariableEntity entity : ast.variableEntities()) {
-            globalInitializer.add(entity);
+            if(entity.type() instanceof StringType) continue;
+            Ir.globalInitializer.add(entity);
             entity.setIsGlobal(true);
             entity.setPos(new GlobalAddr(entity.name() + "__", false));
         }
@@ -133,7 +134,7 @@ public class IRBuilder extends Visitor {
         Label thenLabel = new Label();
         Label elseLabel = new Label();
         Label endLabel  = new Label();
-        currentFunction.addIns(new Cjump(node.cond().operand(), new Imm(1), Cjump.BinaryOp.GE, thenLabel));
+        currentFunction.addIns(new Cjump(node.cond().operand(), new Imm(1), Cjump.Type.GE, thenLabel));
         currentFunction.addIns(new Jump(elseLabel));
         currentFunction.addIns(thenLabel);
         if (node.thenBody() != null) visitStmt(node.thenBody());
@@ -155,7 +156,7 @@ public class IRBuilder extends Visitor {
         currentFunction.addIns(startLabel);
         if (cond != null) {
             visitExpr(cond);
-            currentFunction.addIns(new Cjump(cond.operand(), new Imm(1),Cjump.BinaryOp.GE, trueLabel));
+            currentFunction.addIns(new Cjump(cond.operand(), new Imm(1),Cjump.Type.GE, trueLabel));
             currentFunction.addIns(new Jump(breakLabel));
         }
         else currentFunction.addIns(new Jump(trueLabel));
@@ -269,7 +270,7 @@ public class IRBuilder extends Visitor {
         visitExpr(node.left());
         Label FaiLabel = new Label();
         Label OutLabel = new Label();
-        currentFunction.addIns(new Cjump(node.left().operand(), new Imm(1), Cjump.BinaryOp.GE, FaiLabel));
+        currentFunction.addIns(new Cjump(node.left().operand(), new Imm(1), Cjump.Type.GE, FaiLabel));
         currentFunction.addIns(new Assign(node.operand(), new Imm(0)));
         currentFunction.addIns(new Jump(OutLabel));
         currentFunction.addIns(FaiLabel);
@@ -283,7 +284,7 @@ public class IRBuilder extends Visitor {
         visitExpr(node.left());
         Label SucLabel = new Label();
         Label OutLabel = new Label();
-        currentFunction.addIns(new Cjump(node.left().operand(), new Imm(1), Cjump.BinaryOp.GE, SucLabel));
+        currentFunction.addIns(new Cjump(node.left().operand(), new Imm(1), Cjump.Type.GE, SucLabel));
         visitExpr(node.right());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(new Jump(OutLabel));
@@ -386,7 +387,7 @@ public class IRBuilder extends Visitor {
             currentFunction.addIns(creator);
             currentFunction.addIns(new Binary(s, SUB, s, new Imm(1)));
             currentFunction.addIns(new Assign(new Mem(d, s, 8, 0), newArray(node, now + 1)));
-            currentFunction.addIns(new Cjump(s, new Imm(0), Cjump.BinaryOp.NE, creator));
+            currentFunction.addIns(new Cjump(s, new Imm(0), Cjump.Type.NE, creator));
         }
         else if (node.exprs().size() == now + 1 && node.type() instanceof ClassType) {
             currentFunction.addIns(new Assign(s, node.exprs().get(now).operand()));
@@ -394,7 +395,7 @@ public class IRBuilder extends Visitor {
             currentFunction.addIns(creator);
             currentFunction.addIns(new Binary(s, SUB, s, new Imm(1)));
             currentFunction.addIns(new Assign(new Mem(d, s, 8, 0), newClass((ClassType)node.type())));
-            currentFunction.addIns(new Cjump(s, new Imm(0), Cjump.BinaryOp.NE, creator));
+            currentFunction.addIns(new Cjump(s, new Imm(0), Cjump.Type.NE, creator));
         }
 
         return d;
@@ -455,6 +456,7 @@ public class IRBuilder extends Visitor {
 
     }
 
+
     @Override public void visit(VariableNode node) {
 
         if (node.isMember()) {
@@ -462,7 +464,15 @@ public class IRBuilder extends Visitor {
             int offset = ((VariableEntity)node.entity()).Offset();
             node.setOperand(new Mem(base, null, 0, offset));
         }
+     /*   else if(node.isMember()) {
+            node.setOperand(node.getThisPointer().pos());
+        } && node.getThisPointer() instanceof  ClassEntity*/
         else node.setOperand((node.entity()).pos());
+    }
+
+    public IR Ir() {
+
+        return Ir;
     }
 
 }
