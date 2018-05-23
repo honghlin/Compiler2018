@@ -22,6 +22,7 @@ public class FunctionEntity extends Entity{
     private int numOfVirtualReg = 16;
     private List<Reg> regList = new ArrayList<>();
     private List<Ins> insList =  new ArrayList<>();
+    public int v; // varSize
 
     private boolean isConstructor = false;
 
