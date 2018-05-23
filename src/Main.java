@@ -3,6 +3,7 @@ import FrontEnd.SyntaxErrorListener;
 import FrontEnd.AST;
 import Error.SemanticError;
 import backend.IRBuilder;
+import backend.Translator;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -45,6 +46,8 @@ public class Main {
             IRBuilder irBuilder = new IRBuilder(ast);
             irBuilder.generateIR();
             //irBuilder.print();
+            Translator translator = new Translator();
+            System.out.print(translator.Translate(irBuilder.Ir()));
             //ProgramAST.print();
         }
         catch (SemanticError e) {
