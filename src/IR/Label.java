@@ -20,7 +20,7 @@ public class Label extends Ins {
     }
 
     @Override public String toString() {
-        String t = name + ":\n";
+        String t = name + "\n";
         return t;
     }
 
