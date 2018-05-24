@@ -497,6 +497,10 @@ public class Translator implements IRVisitor {
                 ins.dest = prepare(rcx, ins.dest);
                 ins.left = prepare(rdx, ins.left);
                 ins.right = prepare(rax, ins.right);
+                if (ins.dest instanceof Reg && ins.left instanceof Reg && (ins.right instanceof Reg || ins.right instanceof Imm)){
+                    add("\t" + "lea" + "\t\t" + ins.dest.toString() + ", [" + ins.left.toString()+ " + " + ins.right.toString() + "]" + "\n");
+                    return;
+                }
                 if(ins.left != rdx) {
                     add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
                     ins.left = rdx;
