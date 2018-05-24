@@ -33,8 +33,8 @@ public class Translator implements IRVisitor {
     public StringBuffer Translate(IR ir) {
 
         add("global main\n\n");
-        add("section .data\n");
         String s = "extern scanf\n" + "extern printf\n" + "extern puts\n" + "extern strlen\n" + "extern memcpy\n" + "extern sscanf\n" + "extern sprintf\n" + "extern malloc\n" + "extern strcmp\n" + "\n";
+        add("section .data\n");
         add(s);
 
         for(VariableEntity entity : ir.globalInitializer) initVariable(entity);
@@ -159,6 +159,9 @@ public class Translator implements IRVisitor {
         if(!(lhs instanceof Reg) && !(rhs instanceof Reg)) {
             add("\t" + "mov" + "\t\t" + "rax, " + rhs.toString() + "\n");
             rhs = rax;
+        }
+        if(lhs == null || rhs == null) {
+            int zky = 0;
         }
         add("\t" + "mov" + "\t\t" + lhs.toString() + ", " + rhs.toString() + "\n");
     }
