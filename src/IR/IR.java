@@ -24,7 +24,7 @@ public class IR {
 
     public GlobalAddr add(StringConstantEntity t) {
         stringConstants.add(t);
-        return new GlobalAddr("__string" + Integer.toString(stringConstants.size() - 1), true);
+        return new GlobalAddr("string__" + Integer.toString(stringConstants.size() - 1), true);
     }
 
 }
