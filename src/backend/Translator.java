@@ -575,7 +575,7 @@ public class Translator implements IRVisitor {
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
                 break;
-                
+
             case NE :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -594,7 +594,7 @@ public class Translator implements IRVisitor {
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
                 break;
-                
+
             case LT :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -613,7 +613,7 @@ public class Translator implements IRVisitor {
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
                 break;
-                
+
             case LE :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -632,7 +632,7 @@ public class Translator implements IRVisitor {
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
                 break;
-                
+
             case GT :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -651,7 +651,7 @@ public class Translator implements IRVisitor {
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
                 break;
-                
+
             case GE :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -670,7 +670,89 @@ public class Translator implements IRVisitor {
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
                 break;
-                
+
+            case DIV :
+
+                ins.dest = prepare(null, ins.dest);
+                ins.left = prepare(rax, ins.left);
+                if(ins.left != rax) {
+                    add("\t" + "mov" + "\t\t" + "rax, " + ins.left.toString() + "\n");
+                    ins.left = rax;
+                }
+                ins.right = prepare(rcx, ins.right);
+                if(ins.right != rcx) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.right.toString() + "\n");
+                    ins.right = rcx;
+                }
+                add("\t" + "cqo" + "\n");
+                add("\t" + "idiv" + "\t" + "ecx" + "\n");
+                add("\t" + "mov" + "\t\t" +  ins.dest.toString() +  ", rax\n");
+                break;
+
+            case MOD :
+
+                ins.dest = prepare(null, ins.dest);
+                ins.left = prepare(rax, ins.left);
+                if(ins.left != rax) {
+                    add("\t" + "mov" + "\t\t" + "rax, " + ins.left.toString() + "\n");
+                    ins.left = rax;
+                }
+                ins.right = prepare(rcx, ins.right);
+                if(ins.right != rcx) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.right.toString() + "\n");
+                    ins.right = rcx;
+                }
+                add("\t" + "cqo" + "\n");
+                add("\t" + "idiv" + "\t" + "ecx" + "\n");
+                add("\t" + "mov" + "\t\t" +  ins.dest.toString() +  ", rdx\n");
+                break;
+
+            case LSHIFT :
+
+                if(ins.dest instanceof Imm && ins.right instanceof Imm) { //
+                    int t = 0;
+                    t = (int)((Imm)ins.dest).value() << (int)((Imm)ins.dest).value();//
+                    add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", " + Integer.toString(t) + "\n");
+                    return;
+                }
+                ins.right = prepare(rcx, ins.right);
+                if(ins.right != rcx) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " +  ins.right.toString() +  "\n");
+                    ins.right = rcx;
+                }
+                ins.left = prepare(rax, ins.left);
+                if(ins.left != rax) {
+                    add("\t" + "mov" + "\t\t" + "rax, " +  ins.left.toString() +  "\n");
+                    ins.left = rax;
+                }
+                add("\t" + "shl" + "\t\t" + "eax, cl" + "\n");
+                ins.dest = prepare(rcx, ins.dest);
+                add("\t" + "mov" + "\t\t" + ins.dest + ", rax" + "\n");
+                break;
+
+            case RSHIFT :
+
+                if(ins.dest instanceof Imm && ins.right instanceof Imm) { //
+                    int t = 0;
+                    t = (int)((Imm)ins.dest).value() >> (int)((Imm)ins.dest).value();//
+                    add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", " + Integer.toString(t) + "\n");
+                    return;
+                }
+                ins.right = prepare(rcx, ins.right);
+                if(ins.right != rcx) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " +  ins.right.toString() +  "\n");
+                    ins.right = rcx;
+                }
+                ins.left = prepare(rax, ins.left);
+                if(ins.left != rax) {
+                    add("\t" + "mov" + "\t\t" + "rax, " +  ins.left.toString() +  "\n");
+                    ins.left = rax;
+                }
+                add("\t" + "sar" + "\t\t" + "eax, cl" + "\n");
+                ins.dest = prepare(rcx, ins.dest);
+                add("\t" + "mov" + "\t\t" + ins.dest + ", rax" + "\n");
+                break;
+
             default:
         }
     }
