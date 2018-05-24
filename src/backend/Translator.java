@@ -67,7 +67,7 @@ public class Translator implements IRVisitor {
         add("\t" + "dq" + "\t" + entity.value().length() + "\n");
         add("string__" + Integer.toString(id++) + ":\n");
         add("\t" + "db" + "\t");
-        for(int i = 0; i < entity.value().length(); ++i) {
+        for(int i = 14; i < entity.value().length(); ++i) {
             add(Integer.toString((int)entity.value().charAt(i)) + ", ");
         }
         add("0" + "\n");
