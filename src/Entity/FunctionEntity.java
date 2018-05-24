@@ -19,7 +19,7 @@ public class FunctionEntity extends Entity{
     private BlockNode body;
     private Scope scope;
     private Label beginLabel, endLabel;
-    private int numOfVirtualReg = 16;
+    static private int numOfVirtualReg = 16;
     private List<Reg> regList = new ArrayList<>();
     private List<Ins> insList =  new ArrayList<>();
     public int v; // varSize
