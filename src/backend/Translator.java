@@ -504,6 +504,32 @@ public class Translator implements IRVisitor {
                 add("\t"+ "add" +"\t" + "rdx, " + ins.right.toString() + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
                 break;
+
+            case SUB :
+
+                ins.dest = prepare(rcx, ins.dest);
+                ins.left = prepare(rdx, ins.left);
+                ins.right = prepare(rax, ins.right);
+                if(ins.left != rdx) {
+                    add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
+                    ins.left = rdx;
+                }
+                add("\t"+ "sub" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
+                break;
+
+            case MUL :
+
+                ins.dest = prepare(rcx, ins.dest);
+                ins.left = prepare(rdx, ins.left);
+                ins.right = prepare(rax, ins.right);
+                if(ins.left != rdx) {
+                    add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
+                    ins.left = rdx;
+                }
+                add("\t"+ "imul" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
+                break;
             default:
         }
     }
