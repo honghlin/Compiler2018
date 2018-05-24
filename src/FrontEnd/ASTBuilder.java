@@ -300,8 +300,25 @@ public class ASTBuilder extends MsBaseListener {
 
     @Override public void exitStringConst(MsParser.StringConstContext ctx) {
         String s = ctx.StringLiteral().getText();
-        s = s.substring(1, s.length()-1); //""
-        StringLiteralNode stringLiteralNode = new StringLiteralNode(new Location(ctx), StringLiteral_Pre + s);
+        s = s.substring(1, s.length() - 1); //""
+        String f = "";
+        for(int i = 0; i < s.length(); ++i) {
+            if(s.charAt(i) == '\\') {
+                ++i;
+                switch (s.charAt(i)) {
+                    case 'n': f += '\n'; break;
+                    case '\\': f += '\\'; break;
+                    case 't': f += '\t'; break;
+                    case 'r': f += '\r'; break;
+                    case '\"': f += '\"'; break;
+                    default:
+                        throw new RuntimeException("???");
+                }
+            } else {
+                f += s.charAt(i);
+            }
+        }
+        StringLiteralNode stringLiteralNode = new StringLiteralNode(new Location(ctx), StringLiteral_Pre + f);
         mp.put(ctx, stringLiteralNode);
     }
 
