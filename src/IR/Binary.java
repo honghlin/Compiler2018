@@ -12,7 +12,7 @@ public class Binary extends Ins {
         L_AND, L_OR
     }
 
-    private Operand dest, left, right;
+    public Operand dest, left, right;//private
     BinaryOp op;
 
     public Binary(Operand dest, BinaryOp op,Operand left, Operand right) {
