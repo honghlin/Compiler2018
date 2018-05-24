@@ -63,7 +63,8 @@ public class VariableEntity extends Entity {
     }
 
     public void setIsGlobal(boolean IsGlobal) {
-        IsGlobal = IsGlobal;
+
+        this.IsGlobal = IsGlobal;
     }
 
 }
