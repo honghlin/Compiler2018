@@ -348,6 +348,12 @@ public class IRBuilder extends Visitor {
     @Override public void visit(FuncallNode node) {
 
         FunctionEntity entity = node.functionType().entity();
+        if(entity.name().equals("length") || entity.name().equals("size")) {
+            visitExpr(node.varList().get(0));
+            Reg t = toReg(node.varList().get(0).operand());
+            node.setOperand(new Mem(t, null, 0, -8));
+            return ;
+        }
         node.setLabel(new Label(entity.name()));
         //currentFunction = entity;
         List<Operand> args = new ArrayList<>();

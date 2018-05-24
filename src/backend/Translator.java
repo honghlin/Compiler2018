@@ -262,7 +262,7 @@ public class Translator implements IRVisitor {
                 "\tpop rbp\n" +
                 "\tret\n" +
                 "\n" +
-                "Array_size:\n" +
+                "size:\n" +
                 "\tmov rax,[rdi-8]\n" +
                 "\tret\n" +
                 "\n" +
@@ -337,12 +337,12 @@ public class Translator implements IRVisitor {
                 "\tpop rbp\n" +
                 "\tret\n" +
                 "\n" +
-                "String_length:\n" +
+                "length:\n" +
                 "\n" +
                 "\tmov rax,[rdi-8]\n" +
                 "\tret\n" +
                 "\n" +
-                "String_substring:\n" +
+                "substring:\n" +
                 "\n" +
                 "\tpush rbp\n" +
                 "\tmov rbp,rsp\n" +
@@ -371,7 +371,7 @@ public class Translator implements IRVisitor {
                 "\tpop rbp\n" +
                 "\tret\n" +
                 "\n" +
-                "String_parseInt:\n" +
+                "parseInt:\n" +
                 "\n" +
                 "\tmov rsi,format1\n" +
                 "\tmov rdx,intbuffer\n" +
@@ -380,7 +380,7 @@ public class Translator implements IRVisitor {
                 "\tmov rax,[intbuffer]\n" +
                 "\tret\n" +
                 "\n" +
-                "String_ord:\n" +
+                "ord:\n" +
                 "\n" +
                 "\tmov rax,0\n" +
                 "\tmov al,byte[rdi+rsi]\n" +
