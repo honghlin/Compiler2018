@@ -574,7 +574,8 @@ public class Translator implements IRVisitor {
                 add("\t" + "sete" + "\t" + "cl" + "\n");
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
-
+                break;
+                
             case NE :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -592,7 +593,8 @@ public class Translator implements IRVisitor {
                 add("\t" + "setne" + "\t" + "cl" + "\n");
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
-
+                break;
+                
             case LT :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -610,7 +612,8 @@ public class Translator implements IRVisitor {
                 add("\t" + "setl" + "\t" + "cl" + "\n");
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
-
+                break;
+                
             case LE :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -628,7 +631,8 @@ public class Translator implements IRVisitor {
                 add("\t" + "setle" + "\t" + "cl" + "\n");
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
-
+                break;
+                
             case GT :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -646,7 +650,8 @@ public class Translator implements IRVisitor {
                 add("\t" + "setg" + "\t" + "cl" + "\n");
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
-
+                break;
+                
             case GE :
 
                 ins.dest = prepare(rax, ins.dest);
@@ -664,7 +669,8 @@ public class Translator implements IRVisitor {
                 add("\t" + "setge" + "\t" + "cl" + "\n");
                 add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
-
+                break;
+                
             default:
         }
     }
