@@ -518,7 +518,7 @@ public class Translator implements IRVisitor {
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
                 break;
 
-            case MUL :
+            case B_XOR :
 
                 ins.dest = prepare(rcx, ins.dest);
                 ins.left = prepare(rdx, ins.left);
@@ -527,9 +527,144 @@ public class Translator implements IRVisitor {
                     add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
                     ins.left = rdx;
                 }
-                add("\t"+ "imul" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t"+ "xor" +"\t" + "rdx, " + ins.right.toString() + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
                 break;
+
+            case B_AND :
+
+                ins.dest = prepare(rcx, ins.dest);
+                ins.left = prepare(rdx, ins.left);
+                ins.right = prepare(rax, ins.right);
+                if(ins.left != rdx) {
+                    add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
+                    ins.left = rdx;
+                }
+                add("\t"+ "and" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
+                break;
+
+            case B_OR :
+
+                ins.dest = prepare(rcx, ins.dest);
+                ins.left = prepare(rdx, ins.left);
+                ins.right = prepare(rax, ins.right);
+                if(ins.left != rdx) {
+                    add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
+                    ins.left = rdx;
+                }
+                add("\t"+ "or" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
+                break;
+
+            case EQ :
+
+                ins.dest = prepare(rax, ins.dest);
+                ins.left = prepare(rcx, ins.left);//
+                ins.right = prepare(rdx, ins.right);//
+                if(!(ins.left instanceof Reg) && !(ins.right instanceof Reg)) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                if(ins.left instanceof Imm) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                add("\t" + "cmp" + "\t\t" + ins.left.toString() + ", " + ins.right.toString() + "\n");
+                add("\t" + "sete" + "\t" + "cl" + "\n");
+                add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
+
+            case NE :
+
+                ins.dest = prepare(rax, ins.dest);
+                ins.left = prepare(rcx, ins.left);//
+                ins.right = prepare(rdx, ins.right);//
+                if(!(ins.left instanceof Reg) && !(ins.right instanceof Reg)) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                if(ins.left instanceof Imm) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                add("\t" + "cmp" + "\t\t" + ins.left.toString() + ", " + ins.right.toString() + "\n");
+                add("\t" + "setne" + "\t" + "cl" + "\n");
+                add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
+
+            case LT :
+
+                ins.dest = prepare(rax, ins.dest);
+                ins.left = prepare(rcx, ins.left);//
+                ins.right = prepare(rdx, ins.right);//
+                if(!(ins.left instanceof Reg) && !(ins.right instanceof Reg)) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                if(ins.left instanceof Imm) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                add("\t" + "cmp" + "\t\t" + ins.left.toString() + ", " + ins.right.toString() + "\n");
+                add("\t" + "setl" + "\t" + "cl" + "\n");
+                add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
+
+            case LE :
+
+                ins.dest = prepare(rax, ins.dest);
+                ins.left = prepare(rcx, ins.left);//
+                ins.right = prepare(rdx, ins.right);//
+                if(!(ins.left instanceof Reg) && !(ins.right instanceof Reg)) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                if(ins.left instanceof Imm) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                add("\t" + "cmp" + "\t\t" + ins.left.toString() + ", " + ins.right.toString() + "\n");
+                add("\t" + "setle" + "\t" + "cl" + "\n");
+                add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
+
+            case GT :
+
+                ins.dest = prepare(rax, ins.dest);
+                ins.left = prepare(rcx, ins.left);//
+                ins.right = prepare(rdx, ins.right);//
+                if(!(ins.left instanceof Reg) && !(ins.right instanceof Reg)) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                if(ins.left instanceof Imm) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                add("\t" + "cmp" + "\t\t" + ins.left.toString() + ", " + ins.right.toString() + "\n");
+                add("\t" + "setg" + "\t" + "cl" + "\n");
+                add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
+
+            case GE :
+
+                ins.dest = prepare(rax, ins.dest);
+                ins.left = prepare(rcx, ins.left);//
+                ins.right = prepare(rdx, ins.right);//
+                if(!(ins.left instanceof Reg) && !(ins.right instanceof Reg)) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                if(ins.left instanceof Imm) {
+                    add("\t" + "mov" + "\t\t" + "rcx, " + ins.left.toString() + "\n");
+                    ins.left = rcx;
+                }
+                add("\t" + "cmp" + "\t\t" + ins.left.toString() + ", " + ins.right.toString() + "\n");
+                add("\t" + "setge" + "\t" + "cl" + "\n");
+                add("\t" + "movzx" + "\t" + "rcx," + "cl" + "\n");
+                add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rcx" + "\n");
+
             default:
         }
     }

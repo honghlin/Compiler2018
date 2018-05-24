@@ -234,8 +234,8 @@ public class IRBuilder extends Visitor {
             case B_AND: op = B_AND; break;
             case B_XOR: op = B_XOR; break;
             case B_OR:  op = B_OR;  break;
-            case L_AND: op = B_AND; break;
-            case L_OR:  op = B_OR;  break;
+            case L_AND: op = L_AND; break;
+            case L_OR:  op = L_OR;  break;
             case GT: op = GT; break;
             case LT: op = LT; break;
             case GE: op = GE; break;
