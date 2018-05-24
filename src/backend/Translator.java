@@ -11,7 +11,7 @@ import IR.Operand.*;
 
 public class Translator implements IRVisitor {
 
-    String code = "";
+    StringBuffer code = new StringBuffer("");
     FunctionEntity currentFunction;
     private int id = 0;
 
@@ -22,14 +22,15 @@ public class Translator implements IRVisitor {
     PhiReg rsp = PhiReg.rsp;
 
     private void add(String s) {
-        code += s;
+
+        code.append(s);
     }
 
     public void visitIns(Ins ins) {
         ins.accept(this);
     }
 
-    public String Translate(IR ir) {
+    public StringBuffer Translate(IR ir) {
 
         add("global main\n\n");
         add("section .data\n");
@@ -220,6 +221,54 @@ public class Translator implements IRVisitor {
 
     private void LoadLibrary() {
 
+
+        String a = "ALIGN   16\n" +
+                "__lib_str_operator_ADD:\n" +
+                "        push    r15\n" +
+                "        push    r14\n" +
+                "        mov     r15, rdi\n" +
+                "        push    r13\n" +
+                "        push    r12\n" +
+                "        mov     r13, rsi\n" +
+                "        push    rbp\n" +
+                "        push    rbx\n" +
+                "        sub     rsp, 8\n" +
+                "        movsxd  rbx, dword [rdi-4H]\n" +
+                "        movsxd  r12, dword [rsi-4H]\n" +
+                "        lea     ebp, [rbx+r12]\n" +
+                "        lea     edi, [rbp+1H]\n" +
+                "        movsxd  rdi, edi\n" +
+                "        add     rdi, 4\n" +
+                "        call    malloc\n" +
+                "        test    ebx, ebx\n" +
+                "        mov     dword [rax], ebp\n" +
+                "        mov     r14, rax\n" +
+                "        lea     rbp, [rax+4H]\n" +
+                "        jle     L_001\n" +
+                "        lea     edx, [rbx-1H]\n" +
+                "        mov     rsi, r15\n" +
+                "        mov     rdi, rbp\n" +
+                "        add     rdx, 1\n" +
+                "        call    memcpy\n" +
+                "L_001:  add     rbp, rbx\n" +
+                "        test    r12d, r12d\n" +
+                "        jle     L_002\n" +
+                "        lea     edx, [r12-1H]\n" +
+                "        lea     rdi, [r14+rbx+4H]\n" +
+                "        mov     rsi, r13\n" +
+                "        add     rdx, 1\n" +
+                "        call    memcpy\n" +
+                "L_002:  mov     byte [rbp+r12], 0\n" +
+                "        mov     rax, rbp\n" +
+                "        add     rsp, 8\n" +
+                "        sub     rax, rbx\n" +
+                "        pop     rbx\n" +
+                "        pop     rbp\n" +
+                "        pop     r12\n" +
+                "        pop     r13\n" +
+                "        pop     r14\n" +
+                "        pop     r15\n" +
+                "        ret"  ;
         String s = "\n" + //get it from others . Thanks!
                 "section .data\n" +
                 "intbuffer:\n" +
