@@ -43,7 +43,7 @@ public class IRBuilder extends Visitor {
         Ir.ast = ast;
         for (ClassEntity entity : ast.classEntities()) entity.setOffset();
         for (VariableEntity entity : ast.variableEntities()) {
-            if(entity.type() instanceof StringType) continue;
+            //if(entity.type() instanceof StringType) continue;
             Ir.globalInitializer.add(entity);
             entity.setIsGlobal(true);
             entity.setPos(new GlobalAddr(entity.name() + "__", false));
@@ -362,6 +362,9 @@ public class IRBuilder extends Visitor {
             args.add(exprNode.operand());
         }
         node.setOperand(currentFunction.newReg());
+        if(entity.name().equals("substring") && args.get(0) == null) {
+            int zky = 0;
+        }
         Call call = new Call(entity, args, node.operand());
         currentFunction.addIns(call);
     }
