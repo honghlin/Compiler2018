@@ -298,6 +298,14 @@ public class IRBuilder extends Visitor {
     }
 
     @Override public void visit(LogicalAndNode node) {
+
+        if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
+            long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
+            long value;
+            value = (lvalue != 0 && rvalue != 0) ? 1 : 0;
+            node.setOperand(new Imm(value));
+            return;
+        }
         node.setOperand(currentFunction.newReg());
         visitExpr(node.left());
         Label FaiLabel = new Label();
@@ -312,6 +320,15 @@ public class IRBuilder extends Visitor {
     }
 
     @Override public void visit(LogicalOrNode node) {
+
+
+        if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
+            long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
+            long value;
+            value = (lvalue != 0|| rvalue != 0) ? 1 : 0;
+            node.setOperand(new Imm(value));
+            return;
+        }
         node.setOperand(currentFunction.newReg());
         visitExpr(node.left());
         Label SucLabel = new Label();
