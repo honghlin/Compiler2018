@@ -17,9 +17,9 @@ public class BinaryOpNode extends ExprNode{
         L_AND, L_OR
     }
 
-    private Type type;
-    private BinaryOp operator;
-    private ExprNode left, right;
+    protected Type type;//private
+    protected BinaryOp operator;
+    protected ExprNode left, right;
 
     public BinaryOpNode(BinaryOp op, ExprNode left, ExprNode right) {
 
@@ -91,6 +91,7 @@ public class BinaryOpNode extends ExprNode{
     }
 
     @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
         BinaryOpNode node = new BinaryOpNode(this.operator, this.left, this.right);
         node.left = left.Inline(inlineMap);
         node.right = right.Inline(inlineMap);
