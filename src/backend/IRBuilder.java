@@ -247,6 +247,37 @@ public class IRBuilder extends Visitor {
         node.setOperand(currentFunction.newReg());
         visitExpr(node.left());
         visitExpr(node.right());
+
+
+        if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
+
+            long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
+            long value;
+
+            switch (node.operator()) {
+                case ADD: value = (lvalue + rvalue);break;
+                case SUB: value = (lvalue - rvalue);break;
+                case MUL: value = (lvalue * rvalue);break;
+                case DIV: value = (lvalue / rvalue);break;
+                case MOD: value = (lvalue % rvalue);break;
+                case LSHIFT:  value = (lvalue << rvalue);break;
+                case RSHIFT:  value = (lvalue >> rvalue);break;
+                case B_AND: value = (lvalue & rvalue);break;
+                case B_XOR: value = (lvalue ^ rvalue);break;
+                case B_OR: value = (lvalue | rvalue);break;
+                case GT: value = (lvalue >  rvalue ? 1 : 0);break;
+                case LT: value = (lvalue <  rvalue ? 1 : 0);break;
+                case GE: value = (lvalue >= rvalue ? 1 : 0);break;
+                case LE: value = (lvalue <= rvalue ? 1 : 0);break;
+                case EQ: value = (lvalue == rvalue ? 1 : 0);break;
+                case NE: value = (lvalue != rvalue ? 1 : 0);break;
+                default: throw new Error();
+            }
+
+            node.setOperand(new Imm(value));
+            return;
+        }
+
         if (node.left().type().isString()) {
             List<Operand> args = new ArrayList<Operand>();
             args.add(node.left().operand());
