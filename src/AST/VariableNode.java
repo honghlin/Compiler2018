@@ -88,6 +88,7 @@ public class VariableNode extends LHSNode {
         node.entity = new Entity(entity.location(), entity.type(), entity.name());
         if(inlineMap.containsKey(entity)) {
             node.entity.setPos(inlineMap.get(entity));
+            node.setOperand(inlineMap.get(entity));
             return node;
         }
         if(isMember() && inlineMap.containsKey(thisPointer)) {

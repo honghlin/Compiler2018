@@ -1,6 +1,10 @@
 package AST;
 
+import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
+
+import java.util.HashMap;
 
 public class SuffixOpNode extends UnaryOpNode {
 
@@ -9,10 +13,16 @@ public class SuffixOpNode extends UnaryOpNode {
         super(op, expr);
     }
 
-    @Override
-    public void accept(ASTVisitor visitor) {
+    @Override public void accept(ASTVisitor visitor) {
 
         visitor.visit(this);
+    }
+
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        SuffixOpNode node = new SuffixOpNode(this.operator, this.expr);
+        node.expr = expr.Inline(inlineMap);
+        return node;
     }
 
 }

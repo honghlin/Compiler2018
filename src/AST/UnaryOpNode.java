@@ -14,9 +14,9 @@ public class UnaryOpNode extends ExprNode {
         ADD, MINUS, L_NOT, B_NOT
     }
 
-    private UnaryOp operator;
-    private Type type;
-    private ExprNode expr;
+    protected UnaryOp operator;//private
+    protected Type type;
+    protected ExprNode expr;
 
     public UnaryOpNode(UnaryOp op, ExprNode expr) {
 
