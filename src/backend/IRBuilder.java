@@ -11,6 +11,7 @@ import Type.*;
 
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -392,12 +393,44 @@ public class IRBuilder extends Visitor {
             visitExpr(exprNode);
             args.add(exprNode.operand());
         }
+
+        if(checkInline(node) && entity.body().stmts().get(0) instanceof ReturnNode) {
+            entity.setInlineMode(false);
+            ExprNode r = InlineFunction(node);
+            visitExpr(r);
+            node.setOperand(r.operand());
+            entity.setInlineMode(true);
+            return;
+        }
+
         node.setOperand(currentFunction.newReg());
         if(entity.name().equals("substring") && args.get(0) == null) {
             int zky = 0;
         }
         Call call = new Call(entity, args, node.operand());
         currentFunction.addIns(call);
+    }
+
+
+    boolean checkInline(FuncallNode node) { // able node
+
+        FunctionEntity entity = node.functionType().entity();
+        return !entity.name().equals("main") && currentFunction.numOfVirtualReg() < 200  && entity.inlineMode() && entity.body() != null && entity.body().stmts() != null && entity.body().stmts().size() == 1;
+    }
+
+    private ExprNode InlineFunction(FuncallNode node) {
+
+        FunctionEntity entity = node.functionType().entity();
+        ExprNode returnNode = ((ReturnNode) entity.body().stmts().get(0)).expr();
+        HashMap<Entity, Operand> inlineMap = new HashMap<>();
+        for(int i = 0; i < entity.varList().size(); ++i) {
+            Entity s = entity.varList().get(i);
+            ExprNode t = node.varList().get(i);
+            inlineMap.put(s, t.operand());
+        }
+        ExprNode tmp = returnNode.Inline(inlineMap);
+        return tmp;
+
     }
 
     //void
@@ -495,7 +528,6 @@ public class IRBuilder extends Visitor {
         }
 
     }
-
 
     @Override public void visit(VariableNode node) {
 
