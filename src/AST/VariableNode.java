@@ -4,6 +4,7 @@ import Entity.Entity;
 import FrontEnd.ASTVisitor;
 import IR.Operand.Operand;
 import Type.Type;
+import Entity.VariableEntity;
 
 import java.util.HashMap;
 
@@ -88,6 +89,9 @@ public class VariableNode extends LHSNode {
         if(inlineMap.containsKey(entity)) {
             node.entity.setPos(inlineMap.get(entity));
             return node;
+        }
+        if(isMember() && inlineMap.containsKey(thisPointer)) {
+            thisPointer.setPos(inlineMap.get(thisPointer));// ((VariableEntity)) thisPointer != null &&
         }
         return this;
     }
