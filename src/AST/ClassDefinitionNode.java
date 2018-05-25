@@ -1,7 +1,11 @@
 package AST;
 
 import Entity.ClassEntity;
+import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
+
+import java.util.HashMap;
 
 public class ClassDefinitionNode extends DefinitionNode {
 
@@ -18,10 +22,14 @@ public class ClassDefinitionNode extends DefinitionNode {
         return entity;
     }
 
-    @Override
-    public void accept(ASTVisitor visitor) {
+    @Override public void accept(ASTVisitor visitor) {
 
         visitor.visit(this);
+    }
+
+    @Override public ClassDefinitionNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
     }
 
 }

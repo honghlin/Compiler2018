@@ -1,6 +1,10 @@
 package AST;
 
+import Entity.Entity;
+import IR.Operand.Operand;
 import Type.Type;
+
+import java.util.HashMap;
 
 abstract public class LiteralNode extends ExprNode{
 
@@ -26,5 +30,9 @@ abstract public class LiteralNode extends ExprNode{
         return location;
     }
 
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
+    }
 
 }

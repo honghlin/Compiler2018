@@ -2,6 +2,9 @@ package AST;
 
 import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
+
+import java.util.HashMap;
 
 public class MemberNode extends LHSNode{
 
@@ -53,5 +56,14 @@ public class MemberNode extends LHSNode{
 
         visitor.visit(this);
     }
+
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        MemberNode node = new MemberNode(this.expr, this.member);
+        node.expr = expr.Inline(inlineMap);
+        node.entity = entity;
+        return node;
+    }
+
 
 }

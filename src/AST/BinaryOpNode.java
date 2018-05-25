@@ -1,7 +1,11 @@
 package AST;
 
+import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
 import Type.Type;
+
+import java.util.HashMap;
 
 public class BinaryOpNode extends ExprNode{
 
@@ -84,6 +88,13 @@ public class BinaryOpNode extends ExprNode{
     public void accept(ASTVisitor visitor) {
 
         visitor.visit(this);
+    }
+
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+        BinaryOpNode node = new BinaryOpNode(this.operator, this.left, this.right);
+        node.left = left.Inline(inlineMap);
+        node.left = left.Inline(inlineMap);
+        return node;
     }
 
 }

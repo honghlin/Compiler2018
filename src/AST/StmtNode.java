@@ -1,6 +1,10 @@
 package AST;
 
+import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
+
+import java.util.HashMap;
 
 abstract public class StmtNode extends Node {
 
@@ -18,5 +22,7 @@ abstract public class StmtNode extends Node {
     }
 
     abstract public void accept(ASTVisitor visitor);
+
+    abstract public StmtNode Inline(HashMap<Entity, Operand> inlineMap);
 
 }

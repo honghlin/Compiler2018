@@ -3,6 +3,9 @@ package AST;
 import FrontEnd.ASTVisitor;
 import IR.Operand.Operand;
 import Type.Type;
+import Entity.*;
+
+import java.util.HashMap;
 
 abstract public class ExprNode extends Node{
 
@@ -36,5 +39,7 @@ abstract public class ExprNode extends Node{
     }
 
     abstract public void accept(ASTVisitor visitor);
+
+    abstract public ExprNode Inline(HashMap<Entity, Operand> inlineMap);
 
 }

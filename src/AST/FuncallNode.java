@@ -1,10 +1,14 @@
 package AST;
 
+import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
 import Type.Type;
 import Type.FunctionType;
 import IR.Label;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class FuncallNode extends ExprNode {
@@ -71,5 +75,14 @@ public class FuncallNode extends ExprNode {
 
         return (FunctionType)expr.type();
     }*/
+
+    @Override public FuncallNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        FuncallNode node = new FuncallNode(this.expr, this.varList);
+        node.expr = expr.Inline(inlineMap);
+        node.varList = new ArrayList<>();
+        for(ExprNode item: varList) node.varList.add(item.Inline(inlineMap));
+        return node;
+    }
 
 }

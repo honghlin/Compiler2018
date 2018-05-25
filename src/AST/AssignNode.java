@@ -1,8 +1,13 @@
 package AST;
 
+import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Assign;
+import IR.Operand.Operand;
 import Type.Type;
 import Error.SemanticError;
+
+import java.util.HashMap;
 
 public class AssignNode extends ExprNode{
 
@@ -52,6 +57,13 @@ public class AssignNode extends ExprNode{
     public void accept(ASTVisitor visitor) {
 
         visitor.visit(this);
+    }
+
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+        AssignNode node = new AssignNode(this.lhs, this.rhs);
+        node.lhs = lhs.Inline(inlineMap);
+        node.rhs = rhs.Inline(inlineMap);
+        return node;
     }
 
 }

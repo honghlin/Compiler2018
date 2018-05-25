@@ -1,9 +1,12 @@
 package AST;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
 import Scope.Scope;
 import AST.Location;
 
@@ -47,6 +50,11 @@ public class BlockNode extends StmtNode {
         LinkedList<StmtNode> stmts = new LinkedList<StmtNode>();
         stmts.add(node);
         return new BlockNode(node.location(), stmts);
+    }
+
+    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
     }
 
 }

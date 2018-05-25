@@ -1,8 +1,11 @@
 package AST;
 
+import java.util.HashMap;
 import java.util.List;
 
+import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
 import Type.Type;
 
 public class CreatorNode extends ExprNode {
@@ -18,8 +21,7 @@ public class CreatorNode extends ExprNode {
         this.exprs = exprs;
     }
 
-    @Override
-    public Type type() {
+    @Override public Type type() {
 
         return type;
     }
@@ -34,16 +36,19 @@ public class CreatorNode extends ExprNode {
         this.exprs = exprs;
     }
 
-    @Override
-    public Location location() {
+    @Override public Location location() {
 
         return location;
     }
 
-    @Override
-    public void accept(ASTVisitor visitor) {
+    @Override public void accept(ASTVisitor visitor) {
 
         visitor.visit(this);
+    }
+
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return new CreatorNode(this.location, this.type, this.exprs);
     }
 
 }

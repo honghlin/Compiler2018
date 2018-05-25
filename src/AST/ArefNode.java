@@ -1,7 +1,11 @@
 package AST;
 
+import Entity.Entity;
+import IR.Operand.Operand;
 import Type.Type;
 import FrontEnd.ASTVisitor;
+
+import java.util.HashMap;
 
 public class ArefNode extends LHSNode {
 
@@ -37,7 +41,16 @@ public class ArefNode extends LHSNode {
 
     public void accept(ASTVisitor visitor) {
 
+        //if(expr == null) System.out.println(111);
+        //if(index == null) System.out.println(111);
         visitor.visit(this);
+    }
+
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+        ArefNode node = new ArefNode(this.expr, this.index);
+        node.expr = expr.Inline(inlineMap);
+        node.index = expr.Inline(inlineMap);
+        return node;
     }
 
 }

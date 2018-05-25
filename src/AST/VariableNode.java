@@ -2,7 +2,10 @@ package AST;
 
 import Entity.Entity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
 import Type.Type;
+
+import java.util.HashMap;
 
 public class VariableNode extends LHSNode {
 
@@ -76,6 +79,17 @@ public class VariableNode extends LHSNode {
     public void accept(ASTVisitor visitor) {
 
         visitor.visit(this);
+    }
+
+    public VariableNode Inline(HashMap<Entity, Operand> inlineMap){
+
+        VariableNode node = new VariableNode(entity);
+        node.entity = new Entity(entity.location(), entity.type(), entity.name());
+        if(inlineMap.containsKey(entity)) {
+            node.entity.setPos(inlineMap.get(entity));
+            return node;
+        }
+        return this;
     }
 
 }
