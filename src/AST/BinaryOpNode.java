@@ -93,7 +93,7 @@ public class BinaryOpNode extends ExprNode{
     @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
         BinaryOpNode node = new BinaryOpNode(this.operator, this.left, this.right);
         node.left = left.Inline(inlineMap);
-        node.left = left.Inline(inlineMap);
+        node.right = right.Inline(inlineMap);
         return node;
     }
 
