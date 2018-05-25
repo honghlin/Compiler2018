@@ -23,6 +23,7 @@ public class FunctionEntity extends Entity{
     private List<Reg> regList = new ArrayList<>();
     private List<Ins> insList =  new ArrayList<>();
     public int v; // varSize
+    private boolean inlineMode = true;
 
     private boolean isConstructor = false;
 
@@ -127,5 +128,18 @@ public class FunctionEntity extends Entity{
         return insList;
     }
 
+    public int numOfVirtualReg() { // N
 
+        return numOfVirtualReg;
+    }
+
+    public boolean inlineMode() { // is
+
+        return inlineMode;
+    }
+
+    public void setInlineMode(boolean inlineMode) {
+
+        this.inlineMode = inlineMode;
+    }
 }

@@ -43,4 +43,9 @@ public class Entity {
         return pos;
     }
 
+    public void setName(String name) {
+
+        this.name = name;
+    }
+
 }

@@ -8,7 +8,7 @@ import Type.Type;
 
 public class VariableEntity extends Entity {
 
-    private ExprNode Expr;
+    private ExprNode Expr; // public
     private int offset;//just for class
     private Operand pos;
     private boolean IsGlobal = false;
@@ -65,6 +65,11 @@ public class VariableEntity extends Entity {
     public void setIsGlobal(boolean IsGlobal) {
 
         this.IsGlobal = IsGlobal;
+    }
+
+    public void setExpr(ExprNode node) {
+
+        this.Expr = node;
     }
 
 }
