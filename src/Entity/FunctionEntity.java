@@ -24,6 +24,9 @@ public class FunctionEntity extends Entity{
     private List<Ins> insList =  new ArrayList<>();
     public int v; // varSize
     private boolean inlineMode = true;
+    public boolean[] used = null;
+    private boolean optim = false;
+    public int MaxReg = 0;
 
     private boolean isConstructor = false;
 
@@ -141,5 +144,15 @@ public class FunctionEntity extends Entity{
     public void setInlineMode(boolean inlineMode) {
 
         this.inlineMode = inlineMode;
+    }
+
+    public void setOptim(boolean optim) {
+
+        this.optim = optim;
+    }
+
+    public boolean isOptim() {//
+
+        return optim;
     }
 }
