@@ -224,319 +224,271 @@ public class Translator implements IRVisitor {
 
     private void LoadLibrary() {
 
-
-        String a = "ALIGN   16\n" +
-                "__lib_str_operator_ADD:\n" +
-                "        push    r15\n" +
-                "        push    r14\n" +
-                "        mov     r15, rdi\n" +
-                "        push    r13\n" +
-                "        push    r12\n" +
-                "        mov     r13, rsi\n" +
-                "        push    rbp\n" +
-                "        push    rbx\n" +
-                "        sub     rsp, 8\n" +
-                "        movsxd  rbx, dword [rdi-4H]\n" +
-                "        movsxd  r12, dword [rsi-4H]\n" +
-                "        lea     ebp, [rbx+r12]\n" +
-                "        lea     edi, [rbp+1H]\n" +
-                "        movsxd  rdi, edi\n" +
-                "        add     rdi, 4\n" +
-                "        call    malloc\n" +
-                "        test    ebx, ebx\n" +
-                "        mov     dword [rax], ebp\n" +
-                "        mov     r14, rax\n" +
-                "        lea     rbp, [rax+4H]\n" +
-                "        jle     L_001\n" +
-                "        lea     edx, [rbx-1H]\n" +
-                "        mov     rsi, r15\n" +
-                "        mov     rdi, rbp\n" +
-                "        add     rdx, 1\n" +
-                "        call    memcpy\n" +
-                "L_001:  add     rbp, rbx\n" +
-                "        test    r12d, r12d\n" +
-                "        jle     L_002\n" +
-                "        lea     edx, [r12-1H]\n" +
-                "        lea     rdi, [r14+rbx+4H]\n" +
-                "        mov     rsi, r13\n" +
-                "        add     rdx, 1\n" +
-                "        call    memcpy\n" +
-                "L_002:  mov     byte [rbp+r12], 0\n" +
-                "        mov     rax, rbp\n" +
-                "        add     rsp, 8\n" +
-                "        sub     rax, rbx\n" +
-                "        pop     rbx\n" +
-                "        pop     rbp\n" +
-                "        pop     r12\n" +
-                "        pop     r13\n" +
-                "        pop     r14\n" +
-                "        pop     r15\n" +
-                "        ret"  ;
         String s = "\n" + //get it from others . Thanks!
                 "section .data\n" +
                 "intbuffer:\n" +
-                "\tdq 0\n" +
+                "    dq 0\n" +
                 "format1:\n" +
-                "\tdb\"%lld\",0\n" +
+                "    db\"%lld\",0\n" +
                 "format2:\n" +
-                "\tdb\"%lld \",10,0\n" +
+                "    db\"%lld \",10,0\n" +
                 "format3:\n" +
-                "\tdb\"%s\",0\n" +
+                "    db\"%s\",0\n" +
                 "format4:\n" +
-                "\tdb\"%s\",10,0\n" +
+                "    db\"%s\",10,0\n" +
                 "\n" +
                 "section .bss\n" +
                 "stringbuffer:\n" +
-                "\tresb 256\n" +
+                "    resb 256\n" +
                 "\n" +
                 "section .text\n" +
                 "getInt:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tmov rax,0\n" +
-                "\tmov rdi,format1\n" +
-                "\tmov rsi,intbuffer\n" +
-                "\tcall scanf\n" +
-                "\tmov rax,[intbuffer]\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    mov rax,0\n" +
+                "    mov rdi,format1\n" +
+                "    mov rsi,intbuffer\n" +
+                "    call scanf\n" +
+                "    mov rax,[intbuffer]\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "printInt:\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tmov rsi,rdi\n" +
-                "\tmov rax,0\n" +
-                "\tmov rdi,format2\n" +
-                "\tcall printf\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    mov rsi,rdi\n" +
+                "    mov rax,0\n" +
+                "    mov rdi,format2\n" +
+                "    call printf\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "size:\n" +
-                "\tmov rax,[rdi-8]\n" +
-                "\tret\n" +
+                "    mov rax,[rdi-8]\n" +
+                "    ret\n" +
                 "\n" +
                 "print:\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tmov rax,0\n" +
-                "\tmov rsi,rdi\n" +
-                "\tmov rdi,format3\n" +
-                "\tcall printf\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    mov rax,0\n" +
+                "    mov rsi,rdi\n" +
+                "    mov rdi,format3\n" +
+                "    call printf\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "println:\n" +
                 "\n" +
-                "\tcall puts\n" +
-                "\tret\n" +
+                "    call puts\n" +
+                "    ret\n" +
                 "\n" +
                 "\n" +
                 "transtring:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tcall strlen\n" +
-                "\tpush rdi\n" +
-                "\tmov rdi,rax\n" +
-                "\tpush rdi\n" +
-                "\tadd rdi,9\n" +
-                "\tcall malloc\n" +
-                "\tpop rdi\n" +
-                "\tmov [rax],rdi\n" +
-                "\tadd rax,8\n" +
-                "\tmov rdx,rdi\n" +
-                "\tadd rdx,1\n" +
-                "\tmov rdi,rax\n" +
-                "\tpop rsi\n" +
-                "\tsub rsp,8\n" +
-                "\tpush rax\n" +
-                "\tcall memcpy\n" +
-                "\tpop rax\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    call strlen\n" +
+                "    push rdi\n" +
+                "    mov rdi,rax\n" +
+                "    push rdi\n" +
+                "    add rdi,9\n" +
+                "    call malloc\n" +
+                "    pop rdi\n" +
+                "    mov [rax],rdi\n" +
+                "    add rax,8\n" +
+                "    mov rdx,rdi\n" +
+                "    add rdx,1\n" +
+                "    mov rdi,rax\n" +
+                "    pop rsi\n" +
+                "    sub rsp,8\n" +
+                "    push rax\n" +
+                "    call memcpy\n" +
+                "    pop rax\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "getString:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tmov rax,0\n" +
-                "\tmov rdi,format3\n" +
-                "\tmov rsi,stringbuffer\n" +
-                "\tcall scanf\n" +
-                "\tmov rdi,stringbuffer\n" +
-                "\tcall transtring\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    mov rax,0\n" +
+                "    mov rdi,format3\n" +
+                "    mov rsi,stringbuffer\n" +
+                "    call scanf\n" +
+                "    mov rdi,stringbuffer\n" +
+                "    call transtring\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "toString:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tmov rdx,rdi\n" +
-                "\tmov rax,0\n" +
-                "\tmov rdi,stringbuffer\n" +
-                "\tmov rsi,format1\n" +
-                "\tcall sprintf\n" +
-                "\tmov rdi,stringbuffer\n" +
-                "\tcall transtring\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    mov rdx,rdi\n" +
+                "    mov rax,0\n" +
+                "    mov rdi,stringbuffer\n" +
+                "    mov rsi,format1\n" +
+                "    call sprintf\n" +
+                "    mov rdi,stringbuffer\n" +
+                "    call transtring\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "length:\n" +
                 "\n" +
-                "\tmov rax,[rdi-8]\n" +
-                "\tret\n" +
+                "    mov rax,[rdi-8]\n" +
+                "    ret\n" +
                 "\n" +
                 "substring:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tpush rdi\n" +
-                "\tpush rsi\n" +
-                "\tmov rdi,rdx\n" +
-                "\tsub rdi,rsi\n" +
-                "\tadd rdi,1\n" +
-                "\tpush rdi\n" +
-                "\tadd rdi,9\n" +
-                "\tcall malloc\n" +
-                "\tpop rdx\n" +
-                "\tmov [rax],rdx\n" +
-                "\tadd rax,8\n" +
-                "\tpop rsi\n" +
-                "\tpop rdi\n" +
-                "\tadd rsi,rdi\n" +
-                "\tmov rdi,rax\n" +
-                "\tpush rdx\n" +
-                "\tpush rax\n" +
-                "\tcall memcpy\n" +
-                "\tpop rax\n" +
-                "\tpop rdx\n" +
-                "\tmov qword[rax+rdx],0\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    push rdi\n" +
+                "    push rsi\n" +
+                "    mov rdi,rdx\n" +
+                "    sub rdi,rsi\n" +
+                "    add rdi,1\n" +
+                "    push rdi\n" +
+                "    add rdi,9\n" +
+                "    call malloc\n" +
+                "    pop rdx\n" +
+                "    mov [rax],rdx\n" +
+                "    add rax,8\n" +
+                "    pop rsi\n" +
+                "    pop rdi\n" +
+                "    add rsi,rdi\n" +
+                "    mov rdi,rax\n" +
+                "    push rdx\n" +
+                "    push rax\n" +
+                "    call memcpy\n" +
+                "    pop rax\n" +
+                "    pop rdx\n" +
+                "mov qword[rax+rdx],0\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "parseInt:\n" +
                 "\n" +
-                "\tmov rsi,format1\n" +
-                "\tmov rdx,intbuffer\n" +
-                "\tmov rax,0\n" +
-                "\tcall sscanf\n" +
-                "\tmov rax,[intbuffer]\n" +
-                "\tret\n" +
+                "    mov rsi,format1\n" +
+                "    mov rdx,intbuffer\n" +
+                "    mov rax,0\n" +
+                "    call sscanf\n" +
+                "    mov rax,[intbuffer]\n" +
+                "    ret\n" +
                 "\n" +
                 "ord:\n" +
                 "\n" +
-                "\tmov rax,0\n" +
-                "\tmov al,byte[rdi+rsi]\n" +
-                "\tret\n" +
+                "    mov rax,0\n" +
+                "    mov al,byte[rdi+rsi]\n" +
+                "    ret\n" +
                 "\n" +
                 "Str_ADD:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tpush rsi\n" +
-                "\tmov rsi,rdi\n" +
-                "\tmov rdi,stringbuffer\n" +
-                "\tmov rdx,[rsi-8]\n" +
-                "\tpush rdx\n" +
-                "\tcall memcpy\n" +
-                "\tpop rdi\n" +
-                "\tpop rsi\n" +
-                "\tadd rdi,stringbuffer\n" +
-                "\tmov rdx,[rsi-8]\n" +
-                "\tadd rdx,1\n" +
-                "\tcall memcpy\n" +
-                "\tmov rdi,stringbuffer\n" +
-                "\tcall transtring\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    push rsi\n" +
+                "    mov rsi,rdi\n" +
+                "    mov rdi,stringbuffer\n" +
+                "    mov rdx,[rsi-8]\n" +
+                "    push rdx\n" +
+                "    call memcpy\n" +
+                "    pop rdi\n" +
+                "    pop rsi\n" +
+                "    add rdi,stringbuffer\n" +
+                "    mov rdx,[rsi-8]\n" +
+                "    add rdx,1\n" +
+                "    call memcpy\n" +
+                "    mov rdi,stringbuffer\n" +
+                "    call transtring\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "Str_LT:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tcall strcmp\n" +
-                "\tmov rdi,0\n" +
-                "\tcmp rax,0\n" +
-                "\tsetl dil\n" +
-                "\tmov rax,rdi\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    call strcmp\n" +
+                "    mov rdi,0\n" +
+                "    cmp rax,0\n" +
+                "    setl dil\n" +
+                "    mov rax,rdi\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "Str_LE:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tcall strcmp\n" +
-                "\tmov rdi,0\n" +
-                "\tcmp rax,0\n" +
-                "\tsetle dil\n" +
-                "\tmov rax,rdi\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    call strcmp\n" +
+                "    mov rdi,0\n" +
+                "    cmp rax,0\n" +
+                "    setle dil\n" +
+                "    mov rax,rdi\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "Str_GT:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tcall strcmp\n" +
-                "\tmov rdi,0\n" +
-                "\tcmp rax,0\n" +
-                "\tsetg dil\n" +
-                "\tmov rax,rdi\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    call strcmp\n" +
+                "    mov rdi,0\n" +
+                "    cmp rax,0\n" +
+                "    setg dil\n" +
+                "    mov rax,rdi\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "Str_GE:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tcall strcmp\n" +
-                "\tmov rdi,0\n" +
-                "\tcmp rax,0\n" +
-                "\tsetge dil\n" +
-                "\tmov rax,rdi\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    call strcmp\n" +
+                "    mov rdi,0\n" +
+                "    cmp rax,0\n" +
+                "    setge dil\n" +
+                "    mov rax,rdi\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "Str_EQ:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tcall strcmp\n" +
-                "\tmov rdi,0\n" +
-                "\tcmp rax,0\n" +
-                "\tsete dil\n" +
-                "\tmov rax,rdi\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret\n" +
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    call strcmp\n" +
+                "    mov rdi,0\n" +
+                "    cmp rax,0\n" +
+                "    sete dil\n" +
+                "    mov rax,rdi\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret\n" +
                 "\n" +
                 "Str_NE:\n" +
                 "\n" +
-                "\tpush rbp\n" +
-                "\tmov rbp,rsp\n" +
-                "\tcall strcmp\n" +
-                "\tmov rdi,0\n" +
-                "\tcmp rax,0\n" +
-                "\tsetne dil\n" +
-                "\tmov rax,rdi\n" +
-                "\tmov rsp,rbp\n" +
-                "\tpop rbp\n" +
-                "\tret";
+                "    push rbp\n" +
+                "    mov rbp,rsp\n" +
+                "    call strcmp\n" +
+                "    mov rdi,0\n" +
+                "    cmp rax,0\n" +
+                "    setne dil\n" +
+                "    mov rax,rdi\n" +
+                "    mov rsp,rbp\n" +
+                "    pop rbp\n" +
+                "    ret";
 
         add(s);
     }
