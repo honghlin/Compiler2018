@@ -27,4 +27,9 @@ public class IR {
         return new GlobalAddr("string__" + Integer.toString(stringConstants.size() - 1), true);
     }
 
+    public AST ast() {
+
+        return ast;
+    }
+
 }

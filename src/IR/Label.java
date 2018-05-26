@@ -2,10 +2,16 @@ package IR;
 
 import backend.IRVisitor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Label extends Ins {
 
     private String name;
+
     private static int n = 0;
+
+    public List<Ins> prev = new ArrayList<>();
 
     public Label() {
         name = "_Label" + (n++);

@@ -24,6 +24,9 @@ public class Call extends Ins {
             Operand t = params.get(i - 1);
             if(i > 6) INS.add(new Assign(new Mem(PhiReg.rsp, null, 0, (i - 7) * 8), t));
             else INS.add(new Assign(PhiReg.getParameterReg(i - 1), t));
+            if(t == null) {
+                int zky = 0;
+            }
         }
         INS.add(new Funcall(entity, params.size()));
         INS.add(new Assign(dest, PhiReg.rax));

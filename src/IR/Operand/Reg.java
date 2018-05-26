@@ -15,4 +15,8 @@ abstract public class Reg extends Operand {
         return name;
     }
 
+    public void setIndex(int index) {
+
+        this.index = index;
+    }
 }
