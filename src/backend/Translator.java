@@ -34,8 +34,8 @@ public class Translator implements IRVisitor {
 
         add("global main\n\n");
         String s = "extern scanf\n" + "extern printf\n" + "extern puts\n" + "extern strlen\n" + "extern memcpy\n" + "extern sscanf\n" + "extern sprintf\n" + "extern malloc\n" + "extern strcmp\n" + "\n";
-        add("section .data\n");
         add(s);
+        add("section .data\n");
 
         for(VariableEntity entity : ir.globalInitializer) initVariable(entity);
 
@@ -83,6 +83,9 @@ public class Translator implements IRVisitor {
         }
         if(Max % 2 == 1) ++Max;
         entity.v = 8 * Max;
+        if(entity.used != null) {
+            for (int i = 0; i < 11; ++i) if (entity.used[i]) entity.MaxReg += 1;
+        }
         add(entity.name() + ":\n");
         currentFunction = entity;
         enterFun();
@@ -91,16 +94,34 @@ public class Translator implements IRVisitor {
 
     }
 
+    int save;
+
     private void enterFun() {
 
         add("\t" + "push" + "\t" + "rbp" + "\n");
         add("\t" + "mov" + "\t\t" + "rbp, rsp" + "\n") ;
+        save = 0;
+        if(currentFunction.isOptim() && !currentFunction.name().equals("main")) {
+            for (int i = 0; i < 5; ++i) {
+                if(!currentFunction.used[PhiReg.getCallee(i).index()]) continue;
+                add("\t" + "push" + "\t" + PhiReg.getCallee(i).toString() + "\n");
+                ++save;
+            }
+        }
+        if(save != 0) add("\t" + "sub" + "\t\t" + "rbp, " + Integer.toString((8 * save)) + "\n");
         if(currentFunction.v != 0) add("\t" + "sub" + "\t\t" + "rsp, " + Integer.toString((currentFunction.v)) + "\n");
     }
 
     private void exitFun() {
 
         if(currentFunction.v != 0) add("\t" + "add" + "\t\t" + "rsp, " + Integer.toString((currentFunction.v)) + "\n");
+        if(save != 0) add("\t" + "add" + "\t\t" + "rbp, " + Integer.toString((8 * save)) + "\n");
+        if(currentFunction.isOptim() && !currentFunction.name().equals("main")) {
+            for (int i = 4; i >= 0; --i) {
+                if(!currentFunction.used[PhiReg.getCallee(i).index()]) continue;
+                add("\t" + "pop" + "\t\t" + PhiReg.getCallee(i).toString() + "\n");
+            }
+        }
         add("\t" + "mov" + "\t\t" + "rsp, rbp" + "\n");
         add("\t" + "pop" + "\t\t" + "rbp" + "\n");
         add("\t" + "ret" + "\t" + "\n");
@@ -108,7 +129,11 @@ public class Translator implements IRVisitor {
 
     private Operand prepare(PhiReg r, Operand s) {//T t tmp d tr Tran
 
-        if(s instanceof VirReg) return new Mem(rbp, null, 0, -(((VirReg)s).index() - 16 + 1) * 8);
+        if(s instanceof VirReg) {
+            VirReg t = (VirReg)s;
+            if(t.index() < 16) return PhiReg.ToX86(t.index());
+            return new Mem(rbp, null, 0, -(((VirReg)s).index() - 16 + 1) * 8);
+        }
         if(s instanceof Mem) {
             Mem t = (Mem)s;
             Operand base = prepare(null, t.base());
@@ -201,11 +226,26 @@ public class Translator implements IRVisitor {
         else {
             if (ins.size() > 6) {
                 dis = (ins.size() - 6) * 8;
-                if (ins.size() % 2 == 1) dis += 8;
+                if ((ins.size() +  currentFunction.MaxReg) % 2 == 1) dis += 8;
+            }
+            else if(currentFunction.MaxReg % 2 == 1) dis += 8;
+        }
+        if(currentFunction.isOptim()) {
+            for (int i = 0; i < 6; ++i) {
+                if(!currentFunction.used[PhiReg.getCaller(i).index()]) continue;
+                add("\t" + "push" + "\t" + PhiReg.getCaller(i).toString() + "\n");
             }
         }
         if(dis != 0) add("\t" + "sub" + "\t\t" + "rsp, " + Integer.toString(dis) + "\n");
-        for(Ins item : ins.INS()) visitIns(item);
+        for(Ins item : ins.INS()) {
+            visitIns(item);
+            if(item instanceof Funcall && currentFunction.isOptim()) {
+                for (int i = 5; i >= 0; --i) {
+                    if(!currentFunction.used[PhiReg.getCaller(i).index()]) continue;
+                    add("\t" + "pop" + "\t\t" + PhiReg.getCaller(i).toString() + "\n");
+                }
+            }
+        }
         if(dis != 0) add("\t" + "add" + "\t\t" + "rsp, " + Integer.toString(dis) + "\n");
     }
 
@@ -603,7 +643,7 @@ public class Translator implements IRVisitor {
                     add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
                     ins.left = rdx;
                 }
-                add("\t"+ "add" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t"+ "add" +"\t\t" + "rdx, " + ins.right.toString() + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
                 break;
 
@@ -616,7 +656,7 @@ public class Translator implements IRVisitor {
                     add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
                     ins.left = rdx;
                 }
-                add("\t"+ "sub" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t"+ "sub" +"\t\t" + "rdx, " + ins.right.toString() + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
                 break;
 
@@ -629,7 +669,7 @@ public class Translator implements IRVisitor {
                     add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
                     ins.left = rdx;
                 }
-                add("\t"+ "imul" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t"+ "imul" +"\t\t" + "rdx, " + ins.right.toString() + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
                 break;
 
@@ -642,7 +682,7 @@ public class Translator implements IRVisitor {
                     add("\t" + "mov" + "\t\t" + "rdx, " + ins.left.toString() + "\n");
                     ins.left = rdx;
                 }
-                add("\t"+ "xor" +"\t" + "rdx, " + ins.right.toString() + "\n");
+                add("\t"+ "xor" +"\t\t" + "rdx, " + ins.right.toString() + "\n");
                 add("\t" + "mov" + "\t\t" + ins.dest.toString() + ", rdx\n");
                 break;
 
