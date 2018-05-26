@@ -2,7 +2,9 @@ import FrontEnd.ASTBuilder;
 import FrontEnd.SyntaxErrorListener;
 import FrontEnd.AST;
 import Error.SemanticError;
+import backend.Allocator;
 import backend.IRBuilder;
+import backend.LivenessAnalyzer;
 import backend.Translator;
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -45,6 +47,8 @@ public class Main {
             ast.checkSemantic();
             IRBuilder irBuilder = new IRBuilder(ast);
             irBuilder.generateIR();
+            Allocator allocator = new Allocator();
+            allocator.allocate(irBuilder.Ir());//
             //irBuilder.print();
             Translator translator = new Translator();
             System.out.print(translator.Translate(irBuilder.Ir()));
