@@ -230,13 +230,13 @@ public class Translator implements IRVisitor {
             }
             else if(currentFunction.MaxReg % 2 == 1) dis += 8;
         }
+        if(dis != 0) add("\t" + "sub" + "\t\t" + "rsp, " + Integer.toString(dis) + "\n");
         if(currentFunction.isOptim()) {
             for (int i = 0; i < 6; ++i) {
                 if(!currentFunction.used[PhiReg.getCaller(i).index()]) continue;
                 add("\t" + "push" + "\t" + PhiReg.getCaller(i).toString() + "\n");
             }
         }
-        if(dis != 0) add("\t" + "sub" + "\t\t" + "rsp, " + Integer.toString(dis) + "\n");
         for(Ins item : ins.INS()) {
             visitIns(item);
             if(item instanceof Funcall && currentFunction.isOptim()) {
