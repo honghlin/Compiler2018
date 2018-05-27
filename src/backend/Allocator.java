@@ -35,7 +35,7 @@ public class Allocator {
         System.err.print(entity.name());
         System.err.print(" numOfVirtualReg ");
         System.err.println(entity.numOfVirtualReg());
-        if(entity.numOfVirtualReg() > 700) return;
+        if(entity.numOfVirtualReg() > 801) return;
         init(entity);
         LivenessAnalyzer analyzer = new LivenessAnalyzer();
         for(Ins ins : entity.insList()) analyzer.visitIns(ins);
