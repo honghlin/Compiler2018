@@ -177,8 +177,17 @@ public class Translator implements IRVisitor {
         add("\t" + op + "\t\t" + ins.TrueLabel() + "\n");
     }
 
+    private boolean equal(Operand lhs, Operand rhs) {
+        if(lhs == rhs) return true;
+        if(lhs instanceof VirReg && rhs instanceof VirReg) {
+            if(((VirReg)lhs).index() == ((VirReg)rhs).index()) return true;
+        }
+        return false;
+    }
+
     public void visit(Assign ins) {
 
+        if(equal(ins.lhs(), ins.rhs())) return;//s
         Operand lhs = prepare(rcx, ins.lhs());
         Operand rhs = prepare(rax, ins.rhs()); // rax
         if(!(lhs instanceof Reg) && !(rhs instanceof Reg)) {
