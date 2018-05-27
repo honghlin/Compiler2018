@@ -44,10 +44,11 @@ public class IRBuilder extends Visitor {
         Ir.ast = ast;
         for (ClassEntity entity : ast.classEntities()) entity.setOffset();
         for (VariableEntity entity : ast.variableEntities()) {
-            //if(entity.type() instanceof StringType) continue;
+            if(entity.type() instanceof StringType) continue;
             Ir.globalInitializer.add(entity);
             entity.setIsGlobal(true);
-            entity.setPos(new GlobalAddr(entity.name() + "__", false));
+            if(entity.type() instanceof StringType) entity.setPos(new GlobalAddr(entity.name() + "__", true));
+            else entity.setPos(new GlobalAddr(entity.name() + "__", false));
         }
         for (FunctionEntity entity : ast.functionEntities()) {
             currentFunction = entity;
