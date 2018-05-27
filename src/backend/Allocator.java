@@ -74,8 +74,63 @@ public class Allocator {
         for(int i = 16; i < n; ++i) setColor[i] = -1;
         for(int i = 0; i < n; ++i) useColor[i] = 0;//setColor[i] =
         entity.used = new boolean[16];
+
+        boolean e[][] = new boolean[n][n];
+        boolean d[] = new boolean[n];
+        for(int i = 16; i < n; ++i)
+            for(int j = 16; j < n; ++j)
+                e[i][j] = edge[i][j];
+
+
+        for(int i = 0; i < n; ++i) d[i] = false;
+
+        boolean f = true;
+
+        while(f) {
+
+            f = false;
+            for(int i = 16; i < n; ++i) {
+
+                if(d[i]) continue;
+                int k = 0;
+                for(int j = 16; j < n; ++j) if(e[i][j]) ++k;
+
+                if(k <= 10) {
+                    d[i] = true;
+                    f = true;
+                    for(int j = 16; j < n; ++j) e[i][j] = e[j][i] = false;
+
+                }
+
+            }
+        }
+
         for(int i = 0; i < 16; ++i) entity.used[i] = false;
+
         for(int i = 16; i < n; ++i) {
+
+            if(d[i]) continue;
+
+            for(int j = 0; j < n; ++j) {
+
+                if(e[i][j] && setColor[j] != -1) useColor[setColor[j]] = i;
+
+            }
+
+            for(int j = 0; j <= n; j = (j == 10 ? 16 : j + 1)) { // rax rcx rdx rsp rbp
+
+                if(useColor[j] != i) {
+                    setColor[i] = j;
+                    entity.regList().get(i).setIndex(j);
+                    if(j < 16) entity.used[j] = true;
+                    break;
+                }
+            }
+        }
+
+        for(int i = 16; i < n; ++i) {
+
+                if(!d[i]) continue;
 
             for(int j = 0; j < n; ++j) {
 
@@ -83,8 +138,9 @@ public class Allocator {
 
             }
 
-            for(int j = 0; j <= n; j = (j == 10 ? 16 : j + 1)) { // rax rcx rdx rsp rbp
+            for(int j = 0; j <= n; ++j) { // rax rcx rdx rsp rbp
 
+                if(j == 11) throw new Error();
                 if(useColor[j] != i) {
                     setColor[i] = j;
                     entity.regList().get(i).setIndex(j);
