@@ -47,9 +47,11 @@ public class IRBuilder extends Visitor {
             if(entity.type() instanceof StringType) continue;
             Ir.globalInitializer.add(entity);
             entity.setIsGlobal(true);
-            if(entity.type() instanceof StringType) entity.setPos(new GlobalAddr(entity.name() + "__", true));
-            else entity.setPos(new GlobalAddr(entity.name() + "__", false));
-        }
+            //if(entity.type() instanceof StringType) entity.setPos(new GlobalAddr(entity.name() + "__", true));
+            //else entity.setPos(new GlobalAddr(entity.name() + "__", false));
+            //bugs , but I don't know why
+            entity.setPos(new GlobalAddr(entity.name() + "__", false));
+    }
         for (FunctionEntity entity : ast.functionEntities()) {
             currentFunction = entity;
             compileFunction(entity);
