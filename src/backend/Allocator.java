@@ -34,6 +34,7 @@ public class Allocator {
 
         if(entity.numOfVirtualReg() > 500) return;
         init(entity);
+        System.err.println(entity.name());
         LivenessAnalyzer analyzer = new LivenessAnalyzer();
         for(Ins ins : entity.insList()) analyzer.visitIns(ins);
         iterate();
@@ -99,6 +100,7 @@ public class Allocator {
                     d[i] = true;
                     f = true;
                     for(int j = 16; j < n; ++j) e[i][j] = e[j][i] = false;
+                    System.err.println(i);
 
                 }
 
