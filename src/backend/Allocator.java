@@ -32,9 +32,11 @@ public class Allocator {
 
     private void all(FunctionEntity entity) {
 
-        if(entity.numOfVirtualReg() > 500) return;
+        System.err.print(entity.name());
+        System.err.print(" numOfVirtualReg ");
+        System.err.println(entity.numOfVirtualReg());
+        if(entity.numOfVirtualReg() > 700) return;
         init(entity);
-        System.err.println(entity.name());
         LivenessAnalyzer analyzer = new LivenessAnalyzer();
         for(Ins ins : entity.insList()) analyzer.visitIns(ins);
         iterate();
