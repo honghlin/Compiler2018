@@ -100,6 +100,7 @@ public class Allocator {
                     d[i] = true;
                     f = true;
                     for(int j = 16; j < n; ++j) e[i][j] = e[j][i] = false;
+                    System.err.print("delete ");
                     System.err.println(i);
 
                 }
@@ -151,6 +152,16 @@ public class Allocator {
                 }
             }
         }
+
+        for(int i = 16; i < n; ++i) {
+
+            System.err.print("No.");//
+            System.err.print(i);
+            System.err.print(" color ");
+            System.err.print(setColor[i]);
+            System.err.print("\n");
+        }
+
     }
 
     private void iterate() {
