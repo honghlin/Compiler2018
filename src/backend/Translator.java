@@ -194,6 +194,7 @@ public class Translator implements IRVisitor {
             add("\t" + "mov" + "\t\t" + "rax, " + rhs.toString() + "\n");
             rhs = rax;
         }
+        if(lhs.toString().equals(rhs.toString())) return;
         if(lhs == null || rhs == null) {
             int zky = 0;
         }
