@@ -122,8 +122,9 @@ public class Translator implements IRVisitor {
                 add("\t" + "pop" + "\t\t" + PhiReg.getCallee(i).toString() + "\n");
             }
         }
-        add("\t" + "mov" + "\t\t" + "rsp, rbp" + "\n");
-        add("\t" + "pop" + "\t\t" + "rbp" + "\n");
+        //dd("\t" + "mov" + "\t\t" + "rsp, rbp" + "\n");
+        //add("\t" + "pop" + "\t\t" + "rbp" + "\n");
+        add("\t" + "leave" + "\t" + "\n");
         add("\t" + "ret" + "\t" + "\n");
     }
 
