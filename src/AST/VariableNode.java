@@ -99,7 +99,8 @@ public class VariableNode extends LHSNode {
 
     @Override public String hash() {
 
-        String t = "(" + name + '(' + ((VariableEntity)entity).now() + ')' + ")"; // ]
+        //if(entity instanceof VariableEntity)
+        String t = "(" + name + '(' + (entity).now() + ')' + ")"; // ]//(VariableEntity)
         return t;
     }
 
