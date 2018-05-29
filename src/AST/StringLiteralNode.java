@@ -1,8 +1,12 @@
 package AST;
 
+import Entity.Entity;
 import Entity.StringConstantEntity;
 import FrontEnd.ASTVisitor;
+import IR.Operand.Operand;
 import Type.StringType;
+
+import java.util.HashMap;
 
 public class StringLiteralNode extends LiteralNode{
 
@@ -33,6 +37,17 @@ public class StringLiteralNode extends LiteralNode{
     public void accept(ASTVisitor visitor) {
 
         visitor.visit(this);
+    }
+
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
+    }
+
+    @Override public String hash() {
+
+        String t = value;
+        return t;
     }
 
 }

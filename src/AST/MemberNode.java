@@ -65,5 +65,10 @@ public class MemberNode extends LHSNode{
         return node;
     }
 
+    @Override public String hash() {
+
+        String t = "(" + expr.hash() + "." + member + ")"; // '"' + expr.hash() + '[' + index.hash() + ']' + '"'
+        return t;
+    }
 
 }

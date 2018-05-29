@@ -85,4 +85,10 @@ public class FuncallNode extends ExprNode {
         return node;
     }
 
+    @Override public String hash() {
+
+        String t = "";
+        return t;
+    }
+
 }

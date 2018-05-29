@@ -64,4 +64,10 @@ public class UnaryOpNode extends ExprNode {
         return node;
     }
 
+    @Override public String hash() {
+
+        String t = "(" + operator + expr.hash() + ")";
+        return t;
+    }
+
 }

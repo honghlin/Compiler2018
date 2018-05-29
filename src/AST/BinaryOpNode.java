@@ -98,4 +98,10 @@ public class BinaryOpNode extends ExprNode{
         return node;
     }
 
+    @Override public String hash() {
+
+        String t = "(" + left.hash() + operator + right.hash() + ")";
+        return t;
+    }
+
 }

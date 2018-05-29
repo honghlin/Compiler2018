@@ -23,4 +23,10 @@ public class IntegerLiteralNode extends LiteralNode{
         return value;
     }
 
+    @Override public String hash() {
+
+        String t = Long.toString(value);
+        return t;
+    }
+
 }

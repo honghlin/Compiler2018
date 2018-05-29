@@ -66,4 +66,10 @@ public class AssignNode extends ExprNode{
         return node;
     }
 
+    @Override public String hash() {
+
+        String t = ""; // '"' + expr.hash() + '[' + index.hash() + ']' + '"'
+        return t;
+    }
+
 }

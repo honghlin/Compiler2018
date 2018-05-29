@@ -53,4 +53,10 @@ public class ArefNode extends LHSNode {
         return node;
     }
 
+    @Override public String hash() {
+
+        String t = "(" + expr.hash() + '[' + index.hash() + ']' + ")"; // '"' + expr.hash() + '[' + index.hash() + ']' + '"'
+        return t;
+    }
+
 }

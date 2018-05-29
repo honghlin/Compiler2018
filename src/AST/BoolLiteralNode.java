@@ -3,6 +3,7 @@ package AST;
 import FrontEnd.ASTVisitor;
 import Type.BoolType;
 import Entity.BoolConstantEntity;
+//import com.sun.org.apache.xpath.internal.operations.Bool;
 
 public class BoolLiteralNode extends LiteralNode {
 
@@ -34,6 +35,12 @@ public class BoolLiteralNode extends LiteralNode {
     public void accept(ASTVisitor visitor) {
 
         visitor.visit(this);
+    }
+
+    @Override public String hash() {
+
+        String t = Boolean.toString(value);
+        return t;
     }
 
 }

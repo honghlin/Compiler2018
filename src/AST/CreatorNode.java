@@ -51,4 +51,10 @@ public class CreatorNode extends ExprNode {
         return new CreatorNode(this.location, this.type, this.exprs);
     }
 
+    @Override public String hash() {
+
+        String t = "";
+        return t;
+    }
+
 }

@@ -42,4 +42,5 @@ abstract public class ExprNode extends Node{
 
     abstract public ExprNode Inline(HashMap<Entity, Operand> inlineMap);
 
+    abstract public String hash();
 }
