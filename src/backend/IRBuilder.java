@@ -23,7 +23,7 @@ public class IRBuilder extends Visitor {
     private IR Ir = new IR();
     private FunctionEntity currentFunction = null;
     private Label continueLabel, breakLabel, returnLabel;
-    private HashMap<String, Operand> history = null;
+    private HashMap<String, Operand> history = new HashMap<>();
     private boolean setMode = false;
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
@@ -152,7 +152,7 @@ public class IRBuilder extends Visitor {
         visitExpr(node.rhs());
         if(node.lhs() instanceof VariableNode) {
 
-            ((VariableEntity)((VariableNode)node.lhs()).entity()).setValue();
+            (((VariableNode)node.lhs()).entity()).setValue();//(VariableEntity)
         }
         else clear();
     //    if(node.lhs().operand() == null){
