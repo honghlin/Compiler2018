@@ -333,7 +333,7 @@ public class IRBuilder extends Visitor {
             }
         }
         else currentFunction.addIns(new Binary(node.operand(), op, node.left().operand(), node.right().operand()));
-        history.put(node.hash(), node.operand());
+        if(!setMode) history.put(node.hash(), node.operand());
     }
 
     @Override public void visit(LogicalAndNode node) {
@@ -353,12 +353,14 @@ public class IRBuilder extends Visitor {
         currentFunction.addIns(new Assign(node.operand(), new Imm(0)));
         currentFunction.addIns(new Jump(OutLabel));
         currentFunction.addIns(FaiLabel);
+        setMode = true;
         visitExpr(node.right());
-        clear();
+        setMode = false;
+        //clear();
         //if(history != null) history.remove(node.right().hash());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(OutLabel);
-        history.put(node.hash(), node.operand());
+        if(!setMode) history.put(node.hash(), node.operand());
     }
 
     @Override public void visit(LogicalOrNode node) {
@@ -376,16 +378,17 @@ public class IRBuilder extends Visitor {
         Label SucLabel = new Label();
         Label OutLabel = new Label();
         currentFunction.addIns(new Cjump(node.left().operand(), new Imm(1), Cjump.Type.GE, SucLabel));
+        setMode = true;
         visitExpr(node.right());
-        clear();
+        setMode = false;
+        //clear();
         //if(history != null) history.remove(node.right().hash());
-        if(history != null) history.remove(node.right().hash());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(new Jump(OutLabel));
         currentFunction.addIns(SucLabel);
         currentFunction.addIns(new Assign(node.operand(), new Imm(1)));
         currentFunction.addIns(OutLabel);
-        history.put(node.hash(), node.operand());
+        if(!setMode) history.put(node.hash(), node.operand());
     }
 
 
