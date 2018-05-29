@@ -23,6 +23,8 @@ public class IRBuilder extends Visitor {
     private IR Ir = new IR();
     private FunctionEntity currentFunction = null;
     private Label continueLabel, breakLabel, returnLabel;
+    private HashMap<String, Operand> history = null;
+    private boolean setMode = false;
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
 
@@ -51,7 +53,7 @@ public class IRBuilder extends Visitor {
             //else entity.setPos(new GlobalAddr(entity.name() + "__", false));
             //bugs , but I don't know why
             entity.setPos(new GlobalAddr(entity.name() + "__", false));
-    }
+        }
         for (FunctionEntity entity : ast.functionEntities()) {
             currentFunction = entity;
             compileFunction(entity);
@@ -96,6 +98,27 @@ public class IRBuilder extends Visitor {
             currentFunction.addIns(new Jump(end));
         }
         currentFunction.addIns(end);
+        clear();
+    }
+
+    public void visitStmt(StmtNode s) {
+
+        clear();//
+        s.accept(this);
+    }
+
+    public void visitExpr(ExprNode e) {
+
+        if(e instanceof BinaryOpNode || e instanceof LogicalAndNode || e instanceof LogicalOrNode) { //  &&    ||e instanceof  VariableDefinitionNode
+
+            if(history.containsKey(e.hash())) { // history != null && // e.accept(this); return;
+
+                e.setOperand(history.get(e.hash()));
+                return;
+            }
+        }
+
+        e.accept(this);
     }
 
     @Override public void visit(VariableDefinitionNode node) {
@@ -123,13 +146,21 @@ public class IRBuilder extends Visitor {
 
     public void visit(AssignNode node) {
 
+        //setMode = true;
         visitExpr(node.lhs());
+        //setMode = false;
         visitExpr(node.rhs());
+        if(node.lhs() instanceof VariableNode) {
+
+            ((VariableEntity)((VariableNode)node.lhs()).entity()).setValue();
+        }
+        else clear();
     //    if(node.lhs().operand() == null){
     //        int a = 1 + 1;
     //    }
         currentFunction.addIns(new Assign(node.lhs().operand(), node.rhs().operand()));
         node.setOperand(null);
+        //node.lhs().entity().setNow();
     }
 
     @Override public void visit(IfNode node) {
@@ -249,6 +280,7 @@ public class IRBuilder extends Visitor {
             default: throw new Error();
         }
         node.setOperand(currentFunction.newReg());
+
         visitExpr(node.left());
         visitExpr(node.right());
 
@@ -298,6 +330,7 @@ public class IRBuilder extends Visitor {
             }
         }
         else currentFunction.addIns(new Binary(node.operand(), op, node.left().operand(), node.right().operand()));
+        history.put(node.hash(), node.operand());
     }
 
     @Override public void visit(LogicalAndNode node) {
@@ -320,6 +353,7 @@ public class IRBuilder extends Visitor {
         visitExpr(node.right());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(OutLabel);
+        history.put(node.hash(), node.operand());
     }
 
     @Override public void visit(LogicalOrNode node) {
@@ -343,6 +377,7 @@ public class IRBuilder extends Visitor {
         currentFunction.addIns(SucLabel);
         currentFunction.addIns(new Assign(node.operand(), new Imm(1)));
         currentFunction.addIns(OutLabel);
+        history.put(node.hash(), node.operand());
     }
 
 
@@ -350,6 +385,7 @@ public class IRBuilder extends Visitor {
 
         visitExpr(node.expr());
         node.setOperand(node.expr().operand());
+        clear();
         switch (node.operator()) {
             case PRE_DEC :
                 currentFunction.addIns(new Binary(node.operand(), Binary.BinaryOp.SUB, node.operand(), new Imm(1)));
@@ -392,6 +428,8 @@ public class IRBuilder extends Visitor {
             case L_NOT : op = Unary.UnaryOp.L_NOT; break;
             default : throw new Error();
         }
+        //setMode = true;
+        //setMode = false;
         node.setOperand(currentFunction.newReg());
         currentFunction.addIns(new Assign(node.operand(), node.expr().operand()));
         currentFunction.addIns(new Unary(node.operand(), op));
@@ -415,6 +453,7 @@ public class IRBuilder extends Visitor {
         }
 
         if(checkInline(node) && entity.body().stmts().get(0) instanceof ReturnNode) {
+            clear();
             entity.setInlineMode(false);
             ExprNode r = InlineFunction(node);
             visitExpr(r);
@@ -429,6 +468,7 @@ public class IRBuilder extends Visitor {
         }
         Call call = new Call(entity, args, node.operand());
         currentFunction.addIns(call);
+        clear();
     }
 
 
@@ -560,11 +600,18 @@ public class IRBuilder extends Visitor {
             node.setOperand(node.getThisPointer().pos());
         } && node.getThisPointer() instanceof  ClassEntity*/
         else node.setOperand((node.entity()).pos());
+        //if(setMode) ((VariableEntity)node.entity()).setValue();
     }
 
     public IR Ir() {
 
         return Ir;
+    }
+
+    private void clear() {
+
+        history = null;
+        history = new HashMap<>();
     }
 
 }
