@@ -5,11 +5,13 @@ import AST.*;
 import Entity.*;
 import FrontEnd.Visitor;
 import IR.*;
+import IR.Label;
 import IR.Operand.*;
 import Type.*;
 //import org.graalvm.compiler.lir.Variable;
 
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -114,6 +116,7 @@ public class IRBuilder extends Visitor {
             if(history.containsKey(e.hash())) { // history != null && // e.accept(this); return;
 
                 e.setOperand(history.get(e.hash()));
+                System.err.println(e.hash());
                 return;
             }
         }
@@ -351,6 +354,7 @@ public class IRBuilder extends Visitor {
         currentFunction.addIns(new Jump(OutLabel));
         currentFunction.addIns(FaiLabel);
         visitExpr(node.right());
+        if(history != null) history.remove(node.right().hash());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(OutLabel);
         history.put(node.hash(), node.operand());
@@ -372,6 +376,7 @@ public class IRBuilder extends Visitor {
         Label OutLabel = new Label();
         currentFunction.addIns(new Cjump(node.left().operand(), new Imm(1), Cjump.Type.GE, SucLabel));
         visitExpr(node.right());
+        if(history != null) history.remove(node.right().hash());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(new Jump(OutLabel));
         currentFunction.addIns(SucLabel);
@@ -405,6 +410,7 @@ public class IRBuilder extends Visitor {
 
         visitExpr(node.expr());
         node.setOperand(currentFunction.newReg());
+        clear();
         currentFunction.addIns(new Assign(node.operand(), node.expr().operand()));
         switch (node.operator()) {
             case SUF_DEC :
@@ -421,6 +427,7 @@ public class IRBuilder extends Visitor {
 
         Unary.UnaryOp op;
 
+        //clear();
         switch (node.operator()) {
 
             case MINUS : op = Unary.UnaryOp.MINUS; break;
