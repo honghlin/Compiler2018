@@ -158,9 +158,9 @@ public class IRBuilder extends Visitor {
             (((VariableNode)node.lhs()).entity()).setValue();//(VariableEntity)
         }
         else clear();
-    //    if(node.lhs().operand() == null){
-    //        int a = 1 + 1;
-    //    }
+        //    if(node.lhs().operand() == null){
+        //        int a = 1 + 1;
+        //    }
         currentFunction.addIns(new Assign(node.lhs().operand(), node.rhs().operand()));
         node.setOperand(null);
         //node.lhs().entity().setNow();
@@ -354,7 +354,8 @@ public class IRBuilder extends Visitor {
         currentFunction.addIns(new Jump(OutLabel));
         currentFunction.addIns(FaiLabel);
         visitExpr(node.right());
-        if(history != null) history.remove(node.right().hash());
+        clear();
+        //if(history != null) history.remove(node.right().hash());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(OutLabel);
         history.put(node.hash(), node.operand());
@@ -376,6 +377,8 @@ public class IRBuilder extends Visitor {
         Label OutLabel = new Label();
         currentFunction.addIns(new Cjump(node.left().operand(), new Imm(1), Cjump.Type.GE, SucLabel));
         visitExpr(node.right());
+        clear();
+        //if(history != null) history.remove(node.right().hash());
         if(history != null) history.remove(node.right().hash());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(new Jump(OutLabel));
@@ -622,3 +625,4 @@ public class IRBuilder extends Visitor {
     }
 
 }
+
