@@ -12,7 +12,6 @@ public class VariableEntity extends Entity {
     private int offset;//just for class
     private Operand pos;
     private boolean IsGlobal = false;
-    int now = 0;
 
     public VariableEntity(Location loc, Type type, String name, ExprNode expr) {
 
@@ -71,16 +70,6 @@ public class VariableEntity extends Entity {
     public void setExpr(ExprNode node) {
 
         this.Expr = node;
-    }
-
-    public void setValue() {
-
-        ++now;
-    }
-
-    public int now() {
-
-        return now;
     }
 
 }

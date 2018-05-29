@@ -10,6 +10,7 @@ public class Entity {
     protected String name;
     protected Type type;
     private Operand pos;
+    int now = 0;
 
     public Entity(Location loc, Type type, String name) {
 
@@ -47,5 +48,17 @@ public class Entity {
 
         this.name = name;
     }
+
+
+    public void setValue() {
+
+        ++now;
+    }
+
+    public int now() {
+
+        return now;
+    }
+
 
 }
