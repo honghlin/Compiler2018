@@ -12,4 +12,4 @@ cat > program.txt   # save everything in stdin to program.txt
 
 $CCHK
 
-
+cat result.nasm
