@@ -49,7 +49,7 @@ public class Main {
             allocator.allocate(irBuilder.Ir());
             //irBuilder.print();
             Translator translator = new Translator();
-             fout = new FileOutputStream(new File("result.nasm"));
+            FileOutputStream fout = new FileOutputStream(new File("result.nasm"));
             PrintWriter out = new PrintWriter(fout);
             out.println(translator.Translate(irBuilder.Ir()));
             //System.out.print(translator.Translate(irBuilder.Ir()));
