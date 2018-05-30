@@ -7,6 +7,7 @@ import FrontEnd.Visitor;
 import IR.*;
 import IR.Label;
 import IR.Operand.*;
+import Optim.FunctionRecorder;
 import Type.*;
 //import org.graalvm.compiler.lir.Variable;
 
@@ -27,6 +28,7 @@ public class IRBuilder extends Visitor {
     private Label continueLabel, breakLabel, returnLabel;
     private HashMap<String, Operand> history = new HashMap<>();
     private boolean setMode = false;
+    private List<FunctionEntity> Record = new ArrayList<>();
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
 
@@ -56,6 +58,16 @@ public class IRBuilder extends Visitor {
             //bugs , but I don't know why
             entity.setPos(new GlobalAddr(entity.name() + "__", false));
         }
+
+        for (FunctionEntity entity : ast.functionEntities()) {
+
+            FunctionRecorder recorder = new FunctionRecorder(entity);
+            boolean f = recorder.check();
+            entity.Rec = f;
+            if(f) Record.add(entity);
+
+        }
+
         for (FunctionEntity entity : ast.functionEntities()) {
             currentFunction = entity;
             compileFunction(entity);
@@ -115,9 +127,9 @@ public class IRBuilder extends Visitor {
 
             if(history.containsKey(e.hash())) { // history != null && // e.accept(this); return;
 
-                e.setOperand(history.get(e.hash()));
-                System.err.println(e.hash());
-                return;
+                e.setOperand(history.get(e.hash()));//
+                System.err.println(e.hash());//
+                return;//
             }
         }
 
@@ -315,7 +327,7 @@ public class IRBuilder extends Visitor {
 
             node.setOperand(new Imm(value));
             return;
-        }
+        }/**/
 
         if (node.left().type().isString()) {
             List<Operand> args = new ArrayList<Operand>();
@@ -333,7 +345,7 @@ public class IRBuilder extends Visitor {
             }
         }
         else currentFunction.addIns(new Binary(node.operand(), op, node.left().operand(), node.right().operand()));
-        if(!setMode) history.put(node.hash(), node.operand());
+        if(!setMode && !node.left().type().isString()) history.put(node.hash(), node.operand());
     }
 
     @Override public void visit(LogicalAndNode node) {
@@ -473,7 +485,7 @@ public class IRBuilder extends Visitor {
             node.setOperand(r.operand());
             entity.setInlineMode(true);
             return;
-        }
+        }/**/
 
         node.setOperand(currentFunction.newReg());
         if(entity.name().equals("substring") && args.get(0) == null) {
