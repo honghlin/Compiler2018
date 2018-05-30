@@ -4,6 +4,7 @@
 set -e
 cd "$(dirname "$0")"
 mkdir -p bin
+touch empty
 g++ inputbuilder.cpp -o inputbuilder
 g++ -o objconv ./obj/objconv-master/src/*.cpp -std=c++03
 chmod +x c2nasm.sh
