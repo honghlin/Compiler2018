@@ -13,9 +13,7 @@ import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import parser.MsLexer;
 import parser.MsParser;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.*;
 
 public class Main {
 
@@ -48,10 +46,13 @@ public class Main {
             IRBuilder irBuilder = new IRBuilder(ast);
             irBuilder.generateIR();
             Allocator allocator = new Allocator();
-            allocator.allocate(irBuilder.Ir());//
+            allocator.allocate(irBuilder.Ir());
             //irBuilder.print();
             Translator translator = new Translator();
-            System.out.print(translator.Translate(irBuilder.Ir()));
+            FileOutputStream fout = new FileOutputStream(new File("result.nasm"));
+            PrintWriter out = new PrintWriter(fout);
+            out.println(translator.Translate(irBuilder.Ir()));
+            //System.out.print(translator.Translate(irBuilder.Ir()));
             //ProgramAST.print();
         }
         catch (SemanticError e) {
