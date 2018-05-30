@@ -19,10 +19,10 @@ public class FunctionRecorder extends Visitor {
     public boolean check() {
 
         visit(entity.body());
-        if(!(entity.type() instanceof IntType) || !(entity.type() instanceof BoolType)) return false;
+        if(!(entity.returnType() instanceof IntType) && !(entity.returnType() instanceof BoolType)) return false;
         if(entity.varList() == null || entity.varList().size() != 1) return false;
         if(!(entity.varList().get(0).type() instanceof IntType)) return false;
-        return true;
+        return f;
     }
 
     @Override public void visit(VariableNode node) {
@@ -33,7 +33,7 @@ public class FunctionRecorder extends Visitor {
 
     @Override public void visit(FuncallNode node) {
 
-        if(node.functionType().entity().name().equals(entity.name())) f = false;
+        if(!node.functionType().entity().name().equals(entity.name())) f = false;
     }
 
 
