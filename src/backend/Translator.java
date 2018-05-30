@@ -41,6 +41,14 @@ public class Translator implements IRVisitor {
 
         for(StringConstantEntity entity : ir.stringConstants) initString(entity);
 
+        for(FunctionEntity entity : ir.Record) {
+            add("\t" + "dq" + "\t" + "150" + "\n");
+            add(entity.name() + "__" + ":\n");
+            add("\t" + "dq" + "\t");
+            for(int i = 1; i <= 150; ++i) add("0, "); //dq
+            add("0" + "\n");
+        }
+
         add("\n" + "section .text" + "\n");
 
         for(FunctionEntity entity : ir.ast.functionEntities()) {
@@ -122,7 +130,7 @@ public class Translator implements IRVisitor {
                 add("\t" + "pop" + "\t\t" + PhiReg.getCallee(i).toString() + "\n");
             }
         }
-        //dd("\t" + "mov" + "\t\t" + "rsp, rbp" + "\n");
+        //add("\t" + "mov" + "\t\t" + "rsp, rbp" + "\n");
         //add("\t" + "pop" + "\t\t" + "rbp" + "\n");
         add("\t" + "leave" + "\t" + "\n");
         add("\t" + "ret" + "\t" + "\n");
