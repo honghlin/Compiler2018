@@ -156,4 +156,11 @@ public class FunctionEntity extends Entity{
 
         return optim;
     }
+
+    public void remove() { // Ins ins
+
+        //insList.add(ins);
+        insList.remove(insList.size() - 1);
+    }
+
 }
