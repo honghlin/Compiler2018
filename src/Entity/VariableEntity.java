@@ -11,7 +11,6 @@ public class VariableEntity extends Entity {
     private ExprNode Expr; // public
     private int offset;//just for class
     private Operand pos;
-    private boolean IsGlobal = false;
 
     public VariableEntity(Location loc, Type type, String name, ExprNode expr) {
 
@@ -56,15 +55,6 @@ public class VariableEntity extends Entity {
     public Operand pos() {
 
         return pos;
-    }
-
-    public boolean isGlobal() {
-        return IsGlobal;
-    }
-
-    public void setIsGlobal(boolean IsGlobal) {
-
-        this.IsGlobal = IsGlobal;
     }
 
     public void setExpr(ExprNode node) {

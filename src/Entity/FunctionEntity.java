@@ -27,6 +27,7 @@ public class FunctionEntity extends Entity{
     public boolean[] used = null;
     private boolean optim = false;
     public int MaxReg = 0;
+    public boolean Rec = false;
 
     private boolean isConstructor = false;
 

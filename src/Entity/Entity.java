@@ -11,6 +11,7 @@ public class Entity {
     protected Type type;
     private Operand pos;
     int now = 0;
+    private boolean IsGlobal = false;
 
     public Entity(Location loc, Type type, String name) {
 
@@ -58,6 +59,15 @@ public class Entity {
     public int now() {
 
         return now;
+    }
+
+    public boolean isGlobal() {
+        return IsGlobal;
+    }
+
+    public void setIsGlobal(boolean IsGlobal) {
+
+        this.IsGlobal = IsGlobal;
     }
 
 
