@@ -11,7 +11,7 @@ if diff empty hasget >null; then
 	./a.out > ans.out
 	./inputbuilder < ans.out > tmp.c
 	./c2nasm.sh tmp.c 
-	cat tmp.c.nasm
+	cat tmp.asm
 else
 	cat result.nasm 
 fi
