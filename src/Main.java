@@ -49,10 +49,11 @@ public class Main {
             allocator.allocate(irBuilder.Ir());
             //irBuilder.print();
             Translator translator = new Translator();
-            //FileOutputStream fout = new FileOutputStream(new File("result.nasm"));
-            //PrintWriter out = new PrintWriter(fout);
-            //out.println(translator.Translate(irBuilder.Ir()));
-            System.out.print(translator.Translate(irBuilder.Ir()));
+            FileOutputStream fout = new FileOutputStream(new File("result.nasm"));
+            PrintWriter out = new PrintWriter(fout);
+            out.println(translator.Translate(irBuilder.Ir()));
+            out.close();
+            //System.out.print(translator.Translate(irBuilder.Ir()));
             //ProgramAST.print();
         }
         catch (SemanticError e) {
