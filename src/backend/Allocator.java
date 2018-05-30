@@ -34,7 +34,9 @@ public class Allocator {
 
         System.err.print(entity.name());
         System.err.print(" numOfVirtualReg ");
-        System.err.println(entity.numOfVirtualReg());
+        System.err.print(entity.numOfVirtualReg());
+        if(entity.Rec) System.err.println(" can be record");
+        else System.err.println(" can not be record");
         if(entity.numOfVirtualReg() > 801) return;
         init(entity);
         LivenessAnalyzer analyzer = new LivenessAnalyzer();
