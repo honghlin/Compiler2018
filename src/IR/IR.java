@@ -21,6 +21,7 @@ public class IR {
     public AST ast;
     public List<VariableEntity> globalInitializer = new ArrayList<>();
     public List<StringConstantEntity> stringConstants = new ArrayList<>();
+    public List<FunctionEntity> Record = new ArrayList<>();
 
     public GlobalAddr add(StringConstantEntity t) {
         stringConstants.add(t);
