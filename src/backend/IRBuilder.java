@@ -29,6 +29,10 @@ public class IRBuilder extends Visitor {
     private HashMap<String, Operand> history = new HashMap<>();
     private boolean setMode = false;
     private List<FunctionEntity> Record = new ArrayList<>();
+    Operand Rc;
+    Operand Rd;
+    Operand Rs;
+    private boolean isRec = false;
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
 
@@ -43,7 +47,7 @@ public class IRBuilder extends Visitor {
         Str_GT = (FunctionEntity) ast.scope().searchCurrently("Str_GT");
         Str_LE = (FunctionEntity) ast.scope().searchCurrently("Str_LE");
         Str_GE = (FunctionEntity) ast.scope().searchCurrently("Str_GE");
-
+        Ir.Record = Record;
     }
 
     public IR generateIR() {
@@ -56,7 +60,7 @@ public class IRBuilder extends Visitor {
             //if(entity.type() instanceof StringType) entity.setPos(new GlobalAddr(entity.name() + "__", true));
             //else entity.setPos(new GlobalAddr(entity.name() + "__", false));
             //bugs , but I don't know why
-            entity.setPos(new GlobalAddr(entity.name() + "__", false));
+            entity.setPos(new GlobalAddr(entity.name() + "__", false)); // true
         }
 
         for (FunctionEntity entity : ast.functionEntities()) {
@@ -103,14 +107,38 @@ public class IRBuilder extends Visitor {
                 t.setPos(new Mem(PhiReg.rbp, null, 0, 16 + (i - 6) * 8));
             }
         }
+
+        Label R = new Label();
+        Label A = new Label();
+        Rc = currentFunction.newReg();
+        Rd = currentFunction.newReg();
+        Rs = currentFunction.newReg();
+
+        if(entity.Rec) {
+            currentFunction.addIns(new Assign(Rs, PhiReg.getParameterReg(0)));//1
+            currentFunction.addIns(new Assign(Rd, new GlobalAddr(entity.name() + "__", true)));//false
+            currentFunction.addIns(new Assign(Rc, new Mem((Reg)Rd, (Reg)Rs, 8, 0)));
+            currentFunction.addIns(new Cjump(Rc, new Imm(0),  Cjump.Type.GT, R));
+            currentFunction.addIns(new Jump(A));
+            currentFunction.addIns(R);
+            currentFunction.addIns(new Assign(PhiReg.rax, Rc));
+            currentFunction.addIns(new Jump(end));
+            currentFunction.addIns(A);
+        }
+
         if (entity.name().equals("main")) {
             for (DefinitionNode node : ast.definitionNodes()) if (node instanceof VariableDefinitionNode) visit((VariableDefinitionNode) node);
 
         }
+        if(entity.Rec) isRec = true;
         visit(entity.body());
+        if(entity.Rec) isRec = false;
         if (currentFunction.insList().size() == 0 || !(currentFunction.insList().get(currentFunction.insList().size() - 1) instanceof Jump)) {  // add return
             currentFunction.addIns(new Jump(end));
         }
+        //currentFunction.remove();
+        //currentFunction.addIns(new Assign(new Mem((Reg)Rd, (Reg)Rs, 8, 0), PhiReg.rax));
+        //currentFunction.addIns(new Jump(end));
         currentFunction.addIns(end);
         clear();
     }
@@ -245,6 +273,7 @@ public class IRBuilder extends Visitor {
         if(node.expr() != null) {
             visitExpr(node.expr());
             currentFunction.addIns(new Assign(PhiReg.rax, node.expr().operand()));
+            if(isRec) currentFunction.addIns(new Assign(new Mem((Reg)Rd, (Reg)Rs, 8, 0), PhiReg.rax));
         }
         currentFunction.addIns(new Jump(currentFunction.endLabel()));
     }
