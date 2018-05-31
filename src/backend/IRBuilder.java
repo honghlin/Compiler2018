@@ -382,11 +382,11 @@ public class IRBuilder extends Visitor {
 
     @Override public void visit(LogicalAndNode node) {
 
-        LogicalChecker checker = new LogicalChecker();
+        /*LogicalChecker checker = new LogicalChecker();
         if(checker.check(node)) {
             visit((BinaryOpNode) node);
             return;
-        }
+        }*/
 
         if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
             long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
@@ -416,11 +416,11 @@ public class IRBuilder extends Visitor {
     @Override public void visit(LogicalOrNode node) {
 
 
-        LogicalChecker checker = new LogicalChecker();
+        /*LogicalChecker checker = new LogicalChecker();
         if(checker.check(node)) {
             visit((BinaryOpNode) node);
             return;
-        }
+        }*/
 
         if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
             long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
