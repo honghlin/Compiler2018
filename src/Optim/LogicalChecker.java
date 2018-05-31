@@ -3,9 +3,9 @@ package Optim;
 import AST.*;
 import FrontEnd.Visitor;
 
-import static IR.Binary.BinaryOp.*;
-import static IR.Binary.BinaryOp.EQ;
-import static IR.Binary.BinaryOp.NE;
+//import static IR.Binary.BinaryOp.*;
+//import static IR.Binary.BinaryOp.EQ;
+//import static IR.Binary.BinaryOp.NE;
 
 public class LogicalChecker extends Visitor {
 
