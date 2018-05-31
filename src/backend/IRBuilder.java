@@ -3,12 +3,13 @@ package backend;
 import FrontEnd.AST;
 import AST.*;
 import Entity.*;
+import FrontEnd.LogicalChecker;
 import FrontEnd.Visitor;
 import IR.*;
 import IR.Label;
 import IR.Operand.*;
 import Optim.FunctionRecorder;
-import Optim.LogicalChecker;
+//import Optim.LogicalChecker;
 import Type.*;
 //import org.graalvm.compiler.lir.Variable;
 
