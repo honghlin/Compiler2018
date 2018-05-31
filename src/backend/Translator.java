@@ -30,11 +30,11 @@ public class Translator implements IRVisitor {
 
     public void visitIns(Ins ins) {
 
-        if(!ins.sel) {
+        /*if(!ins.sel) {
 
             ++count;
             return;
-        }
+        }*/
         ins.accept(this);
     }
 
