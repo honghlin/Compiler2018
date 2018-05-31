@@ -8,6 +8,7 @@ import IR.*;
 import IR.Label;
 import IR.Operand.*;
 import Optim.FunctionRecorder;
+import Optim.LogicalChecker;
 import Type.*;
 //import org.graalvm.compiler.lir.Variable;
 
@@ -345,6 +346,8 @@ public class IRBuilder extends Visitor {
                 case B_AND: value = (lvalue & rvalue);break;
                 case B_XOR: value = (lvalue ^ rvalue);break;
                 case B_OR: value = (lvalue | rvalue);break;
+                case L_AND: value = (lvalue != 0 && rvalue != 0) ? 1 : 0;break;//op = L_AND;
+                case L_OR:  value = (lvalue != 0 && rvalue != 0) ? 1 : 0;break;//op = L_OR;
                 case GT: value = (lvalue >  rvalue ? 1 : 0);break;
                 case LT: value = (lvalue <  rvalue ? 1 : 0);break;
                 case GE: value = (lvalue >= rvalue ? 1 : 0);break;
@@ -379,6 +382,12 @@ public class IRBuilder extends Visitor {
 
     @Override public void visit(LogicalAndNode node) {
 
+        LogicalChecker checker = new LogicalChecker();
+        if(checker.check(node)) {
+            visit((BinaryOpNode) node);
+            return;
+        }
+
         if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
             long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
             long value;
@@ -406,6 +415,12 @@ public class IRBuilder extends Visitor {
 
     @Override public void visit(LogicalOrNode node) {
 
+
+        LogicalChecker checker = new LogicalChecker();
+        if(checker.check(node)) {
+            visit((BinaryOpNode) node);
+            return;
+        }
 
         if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
             long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
