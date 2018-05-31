@@ -5,6 +5,7 @@ import Entity.ClassEntity;
 import Entity.FunctionEntity;
 import IR.*;
 import IR.Operand.GlobalAddr;
+import IR.Operand.PhiReg;
 import backend.IRVisitor;
 
 public class InsChecker implements IRVisitor {
@@ -18,6 +19,7 @@ public class InsChecker implements IRVisitor {
 
         if(ins.lhs() instanceof GlobalAddr) return;
         if(ins.next == null) return;
+        if(ins.lhs() == PhiReg.rax) return;
         if(!ins.next.in.contains(ins.def)) ins.sel = false;
 
     }
@@ -26,6 +28,7 @@ public class InsChecker implements IRVisitor {
 
         if(ins.dest() instanceof GlobalAddr) return;
         if(ins.next == null) return;
+        if(ins.dest() == PhiReg.rax) return;
         if(!ins.next.in.contains(ins.def)) ins.sel = false;
 
     }
