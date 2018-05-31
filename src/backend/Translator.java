@@ -7,6 +7,7 @@ import Entity.StringConstantEntity;
 import Entity.VariableEntity;
 import IR.*;
 import IR.Operand.*;
+import Optim.InsChecker;
 //import jdk.nashorn.internal.objects.annotations.Function;
 
 public class Translator implements IRVisitor {
@@ -14,6 +15,7 @@ public class Translator implements IRVisitor {
     StringBuffer code = new StringBuffer("");
     FunctionEntity currentFunction;
     private int id = 0;
+    private int count = 0;
 
     PhiReg rax = PhiReg.rax;
     PhiReg rcx = PhiReg.rcx;
@@ -27,10 +29,19 @@ public class Translator implements IRVisitor {
     }
 
     public void visitIns(Ins ins) {
+
+        if(!ins.sel) {
+
+            ++count;
+            return;
+        }
         ins.accept(this);
     }
 
     public StringBuffer Translate(IR ir) {
+
+        InsChecker checker = new InsChecker();
+        checker.check(ir);
 
         add("global main\n\n");
         String s = "extern scanf\n" + "extern printf\n" + "extern puts\n" + "extern strlen\n" + "extern memcpy\n" + "extern sscanf\n" + "extern sprintf\n" + "extern malloc\n" + "extern strcmp\n" + "\n";
@@ -61,6 +72,8 @@ public class Translator implements IRVisitor {
         }
 
         LoadLibrary();
+
+        System.err.println(count);
 
         return code;
     }
