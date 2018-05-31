@@ -14,6 +14,8 @@ abstract public class Ins {
 
     public Ins next;
 
+    public boolean sel = true;   //S
+
     abstract public String toString();
 
     abstract public void accept(IRVisitor visitor);
