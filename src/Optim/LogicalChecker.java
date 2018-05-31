@@ -1,7 +1,7 @@
 package Optim;
 
-import AST.*;
 import FrontEnd.Visitor;
+import AST.*;
 
 //import static IR.Binary.BinaryOp.*;
 //import static IR.Binary.BinaryOp.EQ;
