@@ -9,6 +9,7 @@ public class FunctionRecorder extends Visitor {
 
     FunctionEntity entity;
     boolean f = true;
+    //boolean fin = false;
 
     public FunctionRecorder(FunctionEntity entity) {
 
@@ -22,6 +23,7 @@ public class FunctionRecorder extends Visitor {
         if(!(entity.returnType() instanceof IntType) && !(entity.returnType() instanceof BoolType)) return false;
         if(entity.varList() == null || entity.varList().size() != 1) return false;
         if(!(entity.varList().get(0).type() instanceof IntType)) return false;
+        //fin = f;
         return f;
     }
 
@@ -33,7 +35,9 @@ public class FunctionRecorder extends Visitor {
 
     @Override public void visit(FuncallNode node) {
 
-        if(!node.functionType().entity().name().equals(entity.name())) f = false;
+        FunctionEntity other = node.functionType().entity(); //entity type()
+        if(other.body() != null && other.body().stmts() != null && other.body().stmts().size() == 1 && other.body().stmts().get(0) instanceof ReturnNode);
+        else if(!node.functionType().entity().name().equals(entity.name())) f = false;// && !fin
     }
 
 
