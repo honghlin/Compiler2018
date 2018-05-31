@@ -3,7 +3,6 @@ package backend;
 import FrontEnd.AST;
 import AST.*;
 import Entity.*;
-import FrontEnd.LogicalChecker;
 import FrontEnd.Visitor;
 import IR.*;
 import IR.Label;
