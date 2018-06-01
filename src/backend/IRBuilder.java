@@ -3,6 +3,7 @@ package backend;
 import FrontEnd.AST;
 import AST.*;
 import Entity.*;
+import Optim.LogicalAndChecker;
 import Optim.LogicalChecker;
 import FrontEnd.Visitor;
 import IR.*;
@@ -385,6 +386,15 @@ public class IRBuilder extends Visitor {
 
         LogicalChecker checker = new LogicalChecker();
         if(checker.check(node)) {
+
+            LogicalAndChecker A = new LogicalAndChecker();
+            if(A.check(node)) {
+                List<BinaryOpNode> whole = A.whole(); // new ArrayList<>()
+                setAnd(whole, node);
+                if(!setMode) history.put(node.hash(), node.operand());
+                return;
+            }
+
             visit((BinaryOpNode) node);
             return;
         }
@@ -448,6 +458,28 @@ public class IRBuilder extends Visitor {
         if(!setMode) history.put(node.hash(), node.operand());
     }
 
+
+    private void setAnd(List<BinaryOpNode> whole, LogicalAndNode node) {
+
+        node.setOperand(currentFunction.newReg());
+        int size = whole.size();
+        Label OutLabel = new Label();
+        for(int i = 0; i < size - 1; ++i) {
+
+            Label FaiLabel = new Label();
+            BinaryOpNode t = whole.get(i);
+            visitExpr(t);
+            currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.GE, FaiLabel)); //.left()
+            currentFunction.addIns(new Assign(node.operand(), new Imm(0))); //t
+            currentFunction.addIns(new Jump(OutLabel));
+            currentFunction.addIns(FaiLabel);
+        }
+
+        BinaryOpNode t = whole.get(size - 1);
+        visitExpr(t);
+        currentFunction.addIns(new Assign(node.operand(), t.operand())); //.right()
+        currentFunction.addIns(OutLabel);
+    }
 
     @Override public void visit(PrefixOpNode node) {
 
