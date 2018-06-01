@@ -329,7 +329,9 @@ public class IRBuilder extends Visitor {
         node.setOperand(currentFunction.newReg());
 
         visitExpr(node.left());
+        //setMode = true;
         visitExpr(node.right());
+        //setMode = false;
 
 
         if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
@@ -389,8 +391,10 @@ public class IRBuilder extends Visitor {
 
             LogicalAndChecker A = new LogicalAndChecker();
             if(A.check(node)) {
+                //setMode = true;
                 List<BinaryOpNode> whole = A.whole(); // new ArrayList<>()
                 setAnd(whole, node);
+                //setMode = false;
                 if(!setMode) history.put(node.hash(), node.operand());
                 return;
             }
@@ -468,7 +472,9 @@ public class IRBuilder extends Visitor {
 
             Label FaiLabel = new Label();
             BinaryOpNode t = whole.get(i);
+            setMode = true; // if(i > 0) //
             visitExpr(t);
+            setMode = false; // if(i > 0) //
             currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.GE, FaiLabel)); //.left()
             currentFunction.addIns(new Assign(node.operand(), new Imm(0))); //t
             currentFunction.addIns(new Jump(OutLabel));
@@ -476,7 +482,9 @@ public class IRBuilder extends Visitor {
         }
 
         BinaryOpNode t = whole.get(size - 1);
+        setMode = true; //
         visitExpr(t);
+        setMode = false; //
         currentFunction.addIns(new Assign(node.operand(), t.operand())); //.right()
         currentFunction.addIns(OutLabel);
     }
