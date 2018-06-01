@@ -390,7 +390,7 @@ public class IRBuilder extends Visitor {
         if(checker.check(node)) {
 
             LogicalAndChecker A = new LogicalAndChecker();
-            if(A.check(node)) {
+            if(A.check(node) && A.whole().size() >= 10) { // ||
                 //setMode = true;
                 List<BinaryOpNode> whole = A.whole(); // new ArrayList<>()
                 setAnd(whole, node);
