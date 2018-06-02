@@ -15,8 +15,11 @@ import java.util.List;
 public class IrrelevantMaker extends Visitor {
 
     private boolean setMode = true;
+    private boolean _setMode = true;
 
     private List<Entity> set = new ArrayList<>();
+
+    private List<ExprNode> trueSet = new ArrayList<>();
 
     @Override public void visit(FunctionDefinitionNode node) {
 
@@ -30,21 +33,21 @@ public class IrrelevantMaker extends Visitor {
 
     @Override public void visit(AssignNode node) {
 
-        //setMode = false;
+        setMode = false;//
         visitExpr(node.lhs());
-        //setMode = true;
+        setMode = true;//
         visitExpr(node.rhs());
 
         if(node.rhs() instanceof VariableNode && ((VariableNode) node.rhs()).entity().type() instanceof ArrayType) { ;  // alias ArefNode !()
 
             VariableNode n = deepNode(node.lhs());
-            set.add(n.entity());
+            set.add(n.entity());//
 
         }
         else {
 
             VariableNode n = deepNode(node.lhs());
-            ((VariableNode)n).entity().setIrrelevant(true);
+            //trueSet.add(n.entity()); ((VariableNode)n).entity().setIrrelevant(true);
         }
 
     }
@@ -55,6 +58,7 @@ public class IrrelevantMaker extends Visitor {
         //if(!setMode) setMode = true;
         visitExpr(node.index());
         //setMode = false;
+        trueSet.add(node.index());
     }
     @Override public void visit(BinaryOpNode node) {
 
@@ -123,8 +127,7 @@ public class IrrelevantMaker extends Visitor {
 
     @Override public void visit(VariableNode node) {
 
-        //if(setMode)
-        node.entity().setIrrelevant(false);
+        if(_setMode || setMode) node.entity().setIrrelevant(false);//
         return;
     }
 
@@ -188,7 +191,13 @@ public class IrrelevantMaker extends Visitor {
 
     public void check(AST ast) {
 
+        _setMode = false;
+
         for (FunctionEntity entity : ast.functionEntities()) visit(entity.body());
+
+        _setMode = true;
+
+        for(ExprNode node : trueSet) visitExpr(node);//entity.setIrrelevant(true)
 
         for(Entity entity : set) entity.setIrrelevant(false); // ((VariableNode)n). ()
 
