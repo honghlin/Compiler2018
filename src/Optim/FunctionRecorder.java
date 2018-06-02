@@ -43,9 +43,7 @@ public class FunctionRecorder extends Visitor {
     @Override public void visit(BinaryOpNode node) {
 
         switch(node.operator()) {
-
-            case DIV: f = false; break;
-            case MOD: f = false; break;
+                
             case LSHIFT:  f = false;  break;
             case RSHIFT:  f = false;  break;
             case B_AND: f = false; break;
