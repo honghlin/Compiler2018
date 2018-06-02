@@ -12,6 +12,7 @@ import IR.Operand.*;
 import Optim.FunctionRecorder;
 //import Optim.LogicalChecker;
 import Type.*;
+//import jdk.nashorn.internal.ir.BinaryNode;
 //import org.graalvm.compiler.lir.Variable;
 
 
@@ -210,6 +211,24 @@ public class IRBuilder extends Visitor {
     }
 
     @Override public void visit(IfNode node) {
+
+        if(node.elseBody() == null && node.thenBody() != null && ((BlockNode)node.thenBody()).stmts() != null && ((BlockNode)node.thenBody()).stmts().size() == 1 && ((BlockNode)node.thenBody()).stmts().get(0) instanceof ExprStmtNode && ((ExprStmtNode)((BlockNode)node.thenBody()).stmts().get(0)).expr() instanceof UnaryOpNode) {
+
+            UnaryOpNode u = (UnaryOpNode) (((ExprStmtNode)((BlockNode)node.thenBody()).stmts().get(0)).expr());
+            if(u.operator() == UnaryOpNode.UnaryOp.SUF_INC || u.operator() == UnaryOpNode.UnaryOp.PRE_INC) {
+                BinaryOpNode t = new BinaryOpNode(BinaryOpNode.BinaryOp.ADD, u.expr(), node.cond());
+                AssignNode a = new AssignNode(u.expr(), t);
+                visit(a);//Expr
+                return;
+            }
+            else if(u.operator() == UnaryOpNode.UnaryOp.SUF_DEC || u.operator() == UnaryOpNode.UnaryOp.PRE_DEC) {
+                BinaryOpNode t = new BinaryOpNode(BinaryOpNode.BinaryOp.SUB, u.expr(), node.cond());
+                AssignNode a = new AssignNode(u.expr(), t);
+                visit(a);//Expr
+                return;
+            }
+
+        }//node.cond()
 
         visitExpr(node.cond());
         Label thenLabel = new Label();
