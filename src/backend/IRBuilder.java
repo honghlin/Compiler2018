@@ -16,9 +16,7 @@ import Type.*;
 
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedList;
+import java.util.*;
 import java.util.List;
 
 import static IR.Binary.BinaryOp.*;
@@ -65,6 +63,8 @@ public class IRBuilder extends Visitor {
             //bugs , but I don't know why
             entity.setPos(new GlobalAddr(entity.name() + "__", false)); // true
         }
+
+        for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable();
 
         for (FunctionEntity entity : ast.functionEntities()) {
 
@@ -467,26 +467,32 @@ public class IRBuilder extends Visitor {
 
         node.setOperand(currentFunction.newReg());
         int size = whole.size();
+        //Collections.shuffle(whole);
         Label OutLabel = new Label();
         for(int i = 0; i < size - 1; ++i) {
 
-            Label FaiLabel = new Label();
+            //Label FaiLabel = new Label();
             BinaryOpNode t = whole.get(i);
             setMode = true; // if(i > 0) //
             visitExpr(t);
             setMode = false; // if(i > 0) //
-            currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.GE, FaiLabel)); //.left()
-            currentFunction.addIns(new Assign(node.operand(), new Imm(0))); //t
-            currentFunction.addIns(new Jump(OutLabel));
-            currentFunction.addIns(FaiLabel);
+            currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.LT, OutLabel)); //.left()
+            //currentFunction.addIns(new Assign(node.operand(), new Imm(0))); //t
+            //currentFunction.addIns(new Jump(OutLabel));
+            //currentFunction.addIns(FaiLabel);
         }
 
         BinaryOpNode t = whole.get(size - 1);
         setMode = true; //
         visitExpr(t);
         setMode = false; //
-        currentFunction.addIns(new Assign(node.operand(), t.operand())); //.right()
+        Label FaiLabel = new Label();
+        currentFunction.addIns(new Assign(node.operand(), t.operand()));
+        currentFunction.addIns(new Jump(FaiLabel));//.right()
         currentFunction.addIns(OutLabel);
+        currentFunction.addIns(new Assign(node.operand(), new Imm(0)));
+        currentFunction.addIns(FaiLabel);
+
     }
 
     @Override public void visit(PrefixOpNode node) {
@@ -723,5 +729,6 @@ public class IRBuilder extends Visitor {
         history = null;
         history = new HashMap<>();
     }
+
 
 }
