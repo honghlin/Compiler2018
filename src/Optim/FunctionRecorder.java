@@ -47,7 +47,6 @@ public class FunctionRecorder extends Visitor {
             case LSHIFT:  f = false;  break;
             case RSHIFT:  f = false;  break;
             case B_AND: f = false; break;
-            case B_XOR: f = false; break;
             case B_OR:  f = false;  break;
             //default: throw new Error();
         }
