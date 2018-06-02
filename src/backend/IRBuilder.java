@@ -119,7 +119,7 @@ public class IRBuilder extends Visitor {
         Rs = currentFunction.newReg();
 
         if(entity.Rec) {
-            currentFunction.addIns(new Cjump(PhiReg.getParameterReg(0), new Imm(0),  Cjump.Type.LE, A));
+            currentFunction.addIns(new Cjump(PhiReg.getParameterReg(0), new Imm(0),  Cjump.Type.LT, A));// LE
             currentFunction.addIns(new Cjump(PhiReg.getParameterReg(0), new Imm(150),  Cjump.Type.GE, A));// le LE LT // GT
             currentFunction.addIns(new Assign(Rs, PhiReg.getParameterReg(0)));//1
             currentFunction.addIns(new Assign(Rd, new GlobalAddr(entity.name() + "__", true)));//false
@@ -136,9 +136,9 @@ public class IRBuilder extends Visitor {
             for (DefinitionNode node : ast.definitionNodes()) if (node instanceof VariableDefinitionNode) visit((VariableDefinitionNode) node);
 
         }
-        //if(entity.Rec) isRec = true;
+        if(entity.Rec) isRec = true;//
         visit(entity.body());
-        //if(entity.Rec) isRec = false;
+        if(entity.Rec) isRec = false;//
         if (currentFunction.insList().size() == 0 || !(currentFunction.insList().get(currentFunction.insList().size() - 1) instanceof Jump)) {  // add return
             currentFunction.addIns(new Jump(end));
         }
@@ -299,7 +299,7 @@ public class IRBuilder extends Visitor {
             currentFunction.addIns(new Assign(PhiReg.rax, node.expr().operand()));
             if(isRec) {
                 Label A = new Label();
-                currentFunction.addIns(new Cjump(Rs, new Imm(0),  Cjump.Type.LE, A));
+                currentFunction.addIns(new Cjump(Rs, new Imm(0),  Cjump.Type.LT, A)); //LE
                 currentFunction.addIns(new Cjump(Rs, new Imm(150),  Cjump.Type.GE, A));
                 currentFunction.addIns(new Assign(new Mem((Reg)Rd, (Reg)Rs, 8, 0), PhiReg.rax));
                 currentFunction.addIns(A);
