@@ -10,6 +10,7 @@ import IR.*;
 import Type.ArrayType;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class IrrelevantMaker extends Visitor {
@@ -19,7 +20,7 @@ public class IrrelevantMaker extends Visitor {
 
     private List<Entity> set = new ArrayList<>();
 
-    private List<ExprNode> trueSet = new ArrayList<>();
+    private List<ExprNode> trueSet = new ArrayList<>(); //LinkedList
 
     @Override public void visit(FunctionDefinitionNode node) {
 
@@ -197,7 +198,15 @@ public class IrrelevantMaker extends Visitor {
 
         _setMode = true;
 
-        for(ExprNode node : trueSet) visitExpr(node);//entity.setIrrelevant(true)
+        // for(ExprNode node : trueSet) visitExpr(node);//entity.setIrrelevant(true)
+
+        int size = trueSet.size();
+
+        for(int i = 0; i <= size - 1; ++i) {
+
+            ExprNode node = trueSet.get(i);
+            visitExpr(node);
+        }
 
         for(Entity entity : set) entity.setIrrelevant(false); // ((VariableNode)n). ()
 
