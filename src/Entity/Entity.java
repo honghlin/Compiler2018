@@ -12,6 +12,7 @@ public class Entity {
     private Operand pos;
     int now = 0;
     private boolean IsGlobal = false;
+    private boolean irrelevant = true; // false
 
     public Entity(Location loc, Type type, String name) {
 
@@ -70,5 +71,13 @@ public class Entity {
         this.IsGlobal = IsGlobal;
     }
 
+    public boolean isIrrelevant() {
 
+        return irrelevant;
+    }
+
+    public void setIrrelevant(boolean irrelevant) {
+
+        this.irrelevant = irrelevant;
+    }
 }
