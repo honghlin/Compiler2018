@@ -64,7 +64,7 @@ public class IRBuilder extends Visitor {
             entity.setPos(new GlobalAddr(entity.name() + "__", false)); // true
         }
 
-        for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable();
+        //for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable();
 
         for (FunctionEntity entity : ast.functionEntities()) {
 
