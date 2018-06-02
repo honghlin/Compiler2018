@@ -1,0 +1,172 @@
+package Optim;
+
+import AST.*;
+import Entity.FunctionEntity;
+import FrontEnd.ASTVisitor;
+import FrontEnd.Visitor;
+import FrontEnd.AST;
+import IR.*;
+
+public class IrrelevantMaker extends Visitor {
+
+    boolean setMode = true;
+
+
+    @Override public void visit(FunctionDefinitionNode node) {
+
+        visitStmt(node.entity().body());
+    }
+
+    @Override public void visit(VariableDefinitionNode node) {
+
+        if (node.entity().Expr() != null)  visitExpr(node.entity().Expr());
+    }
+
+    @Override public void visit(AssignNode node) {
+
+        setMode = false;
+        visitExpr(node.lhs());
+        setMode = true;
+        visitExpr(node.rhs());
+    }
+
+    @Override public void visit(ArefNode node) {
+
+        visitExpr(node.expr());
+        visitExpr(node.index());
+    }
+    @Override public void visit(BinaryOpNode node) {
+
+        //setMode = false;
+        visitExpr(node.left());
+        //setMode = true;
+        visitExpr(node.right());
+    }
+
+    @Override public void visit(BoolLiteralNode node) {
+
+        return;
+    }
+
+    @Override public void visit(CreatorNode node) {
+
+        if (node.exprs() != null) for(ExprNode e: node.exprs()) visitExpr(e);
+    }
+
+    @Override public void visit(FuncallNode node) {
+
+        visitExpr(node.expr());
+        if(node.varList() != null) for(ExprNode e: node.varList()) visitExpr(e);
+    }
+
+    @Override public void visit(IntegerLiteralNode node) {
+
+        return;
+    }
+
+    @Override public void visit(LogicalAndNode node) {
+
+        visitExpr(node.left());
+        visitExpr(node.right());
+    }
+    @Override public void visit(LogicalOrNode node) {
+
+        visitExpr(node.left());
+        visitExpr(node.right());
+    }
+
+    @Override public void visit(MemberNode node) {
+
+        visitExpr(node.expr());
+    }
+
+    @Override public void visit(PrefixOpNode node) {
+
+        visitExpr(node.expr());
+    }
+
+    @Override public void visit(StringLiteralNode node) {
+
+        return;
+    }
+
+    @Override public void visit(SuffixOpNode node) {
+
+        visitExpr(node.expr());
+    }
+
+    @Override public void visit(UnaryOpNode node) {
+
+        visitExpr(node.expr());
+    }
+
+    @Override public void visit(VariableNode node) {
+
+        if(setMode) node.entity().setIrrelevant(false);
+        return;
+    }
+
+    @Override public void visit(BlockNode node) {
+
+        if(node.stmts() != null) for(StmtNode s: node.stmts()) visitStmt(s);
+    }
+    @Override public void visit(BreakNode node) {
+
+        return;
+    }
+    @Override public void visit(ContinueNode node) {
+
+        return;
+    }
+
+    @Override public void visit(ExprStmtNode node) {
+
+        visitExpr(node.expr());
+    }
+
+    @Override public void visit(ForNode node) {
+
+        if (node.init() != null) visitExpr(node.init());
+        if (node.cond() != null) visitExpr(node.cond());
+        if (node.incr() != null) visitExpr(node.incr());
+        if (node.body() != null) visitStmt(node.body());
+    }
+    @Override public void visit(IfNode node) {
+
+        visitExpr(node.cond());
+        if (node.thenBody() != null) visitStmt(node.thenBody());
+        if (node.elseBody() != null) visitStmt(node.elseBody());
+    }
+
+    @Override public void visit(ReturnNode node) {
+
+        if (node.expr() != null) visitExpr(node.expr());
+    }
+
+    @Override public void visit(WhileNode node) {
+
+        visitExpr(node.cond());
+        if (node.body() != null) visitStmt(node.body());
+    }
+
+    public void visitStmt(StmtNode s) {
+
+        s.accept(this);
+    }
+
+    public void visitExpr(ExprNode e) {
+
+        e.accept(this);
+    }
+
+    public void visitDefinition(DefinitionNode def) {
+
+        def.accept(this);
+    }
+
+    public void check(AST ast) {
+
+        for (FunctionEntity entity : ast.functionEntities()) visit(entity.body());
+
+    }
+}
