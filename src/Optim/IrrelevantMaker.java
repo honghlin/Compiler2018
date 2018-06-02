@@ -1,16 +1,22 @@
 package Optim;
 
 import AST.*;
+import Entity.Entity;
 import Entity.FunctionEntity;
 import FrontEnd.ASTVisitor;
 import FrontEnd.Visitor;
 import FrontEnd.AST;
 import IR.*;
+import Type.ArrayType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class IrrelevantMaker extends Visitor {
 
-    boolean setMode = true;
+    private boolean setMode = true;
 
+    private List<Entity> set = new ArrayList<>();
 
     @Override public void visit(FunctionDefinitionNode node) {
 
@@ -24,16 +30,31 @@ public class IrrelevantMaker extends Visitor {
 
     @Override public void visit(AssignNode node) {
 
-        setMode = false;
+        //setMode = false;
         visitExpr(node.lhs());
-        setMode = true;
+        //setMode = true;
         visitExpr(node.rhs());
+
+        if(node.rhs() instanceof VariableNode && ((VariableNode) node.rhs()).entity().type() instanceof ArrayType) { ;  // alias ArefNode !()
+
+            VariableNode n = deepNode(node.lhs());
+            set.add(n.entity());
+
+        }
+        else {
+
+            VariableNode n = deepNode(node.lhs());
+            ((VariableNode)n).entity().setIrrelevant(true);
+        }
+
     }
 
     @Override public void visit(ArefNode node) {
 
         visitExpr(node.expr());
+        //if(!setMode) setMode = true;
         visitExpr(node.index());
+        //setMode = false;
     }
     @Override public void visit(BinaryOpNode node) {
 
@@ -102,7 +123,8 @@ public class IrrelevantMaker extends Visitor {
 
     @Override public void visit(VariableNode node) {
 
-        if(setMode) node.entity().setIrrelevant(false);
+        //if(setMode)
+        node.entity().setIrrelevant(false);
         return;
     }
 
@@ -168,5 +190,15 @@ public class IrrelevantMaker extends Visitor {
 
         for (FunctionEntity entity : ast.functionEntities()) visit(entity.body());
 
+        for(Entity entity : set) entity.setIrrelevant(false); // ((VariableNode)n). ()
+
     }
+
+    private VariableNode deepNode(ExprNode node) {
+
+        if(node instanceof VariableNode) return (VariableNode) node;
+        else if(node instanceof ArefNode) return deepNode(((ArefNode)node).expr());
+        else throw new Error();
+    }
+
 }
