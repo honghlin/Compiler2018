@@ -3,6 +3,7 @@ package backend;
 import FrontEnd.AST;
 import AST.*;
 import Entity.*;
+import Optim.IrrelevantMaker;
 import Optim.LogicalAndChecker;
 import Optim.LogicalChecker;
 import FrontEnd.Visitor;
@@ -35,6 +36,7 @@ public class IRBuilder extends Visitor {
     Operand Rd;
     Operand Rs;
     private boolean isRec = false;
+    private boolean isIrr = true;
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
 
@@ -66,6 +68,17 @@ public class IRBuilder extends Visitor {
         }
 
         //for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable();
+
+        if(ast.classEntities().size() > 0) isIrr = false;
+
+        if(ast.variableEntities().size() > 0) isIrr = false;
+
+        if(isIrr) {
+
+            IrrelevantMaker maker = new IrrelevantMaker();
+            maker.check(ast);
+
+        }
 
         for (FunctionEntity entity : ast.functionEntities()) {
 
@@ -194,6 +207,13 @@ public class IRBuilder extends Visitor {
     }
 
     public void visit(AssignNode node) {
+
+        VariableNode n = deepNode(node.lhs());
+        if(n.entity().isIrrelevant()) {
+
+            System.err.println(node.lhs().hash() + " Is Irrevent");
+            return;
+        }
 
         //setMode = true;
         visitExpr(node.lhs());
@@ -757,5 +777,11 @@ public class IRBuilder extends Visitor {
         history = new HashMap<>();
     }
 
+    private VariableNode deepNode(ExprNode node) {
+
+        if(node instanceof VariableNode) return (VariableNode) node;
+        else if(node instanceof ArefNode) return deepNode(((ArefNode)node).expr());
+        else throw new Error();
+    }
 
 }
