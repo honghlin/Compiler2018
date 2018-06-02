@@ -209,7 +209,7 @@ public class IRBuilder extends Visitor {
     public void visit(AssignNode node) {
 
         VariableNode n = deepNode(node.lhs());
-        if(n.entity().isIrrelevant()) {
+        if(isIrr && n.entity().isIrrelevant()) {
 
             System.err.println(node.lhs().hash() + " Is Irrevent");
             return;
