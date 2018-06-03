@@ -1,9 +1,8 @@
 package Entity;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
-import AST.BlockNode;
+import AST.*;//BlockNode
 import IR.Ins;
 import IR.Label;
 import Type.Type;
@@ -28,6 +27,8 @@ public class FunctionEntity extends Entity{
     private boolean optim = false;
     public int MaxReg = 0;
     public boolean Rec = false;
+    private boolean isInlined = false;
+    private Set<FunctionEntity> calls = new HashSet<>();
 
     private boolean isConstructor = false;
 
@@ -163,4 +164,78 @@ public class FunctionEntity extends Entity{
         insList.remove(insList.size() - 1);
     }
 
+
+    public Set<FunctionEntity> calls() {
+
+        return calls;
+    }
+
+    public void addCall(FunctionEntity entity) {
+
+        calls.add(entity);
+    }
+
+    private Map<FunctionEntity, Boolean> visited;//    A
+
+    private int stmtSize;
+
+    public void checkInlinable() {
+
+        if (name.equals("main")) isInlined = false;
+
+        else {
+
+            visited = new Hashtable<>();
+            isInlined = !findcircle(this, this);
+            stmtSize = stmtSize(body);
+            if (stmtSize > 8) isInlined = false;
+            if (isInlined) System.err.println(name() + " is inlined");
+        }
+    }
+
+/*    public boolean canbeSelfInline(int depth) {
+
+        if (depth >= 3) return false;
+        int pow = 1;
+        for (int i = 0; i < depth + 1; ++i) pow *= stmtSize;
+        return pow < 40;
+    }*/
+
+    private int stmtSize(StmtNode node) {
+
+        int count = 0;
+        if (node == null) return 0;
+        if (node instanceof BlockNode) {
+            for (StmtNode stmtNode : ((BlockNode) node).stmts()) {
+                if (stmtNode instanceof  BlockNode) count += stmtSize(stmtNode);
+                else if (stmtNode instanceof ForNode) count += 3 + stmtSize(((ForNode) stmtNode).body());
+                else if (stmtNode instanceof IfNode) count += 1 + stmtSize(((IfNode) stmtNode).elseBody()) + stmtSize(((IfNode) stmtNode).thenBody());
+                else ++count;
+            }
+        }
+        else return 1;
+
+        return count;
+    }
+
+    private boolean findcircle(FunctionEntity current, FunctionEntity called) {
+
+        if (visited.containsKey(called)) return called == current;
+        visited.put(called, true);
+        for (FunctionEntity function : called.calls()) {
+
+            if (findcircle(current, function)) return true;
+        }
+        return false;
+    }
+
+    public boolean isInlined() {
+
+        return isInlined;
+    }
+
+    public void setInsList(List<Ins> insList) {
+
+        this.insList = insList;
+    }
 }
