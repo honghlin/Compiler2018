@@ -440,7 +440,7 @@ public class IRBuilder extends Visitor {
         if(checker.check(node)) {
 
             LogicalAndChecker A = new LogicalAndChecker();
-            if(A.check(node) && A.whole().size() >= 10) { // ||
+            if(A.check(node) && A.whole().size() >= 3) { // ||10
                 //setMode = true;
                 List<BinaryOpNode> whole = A.whole(); // new ArrayList<>()
                 setAnd(whole, node);
@@ -543,12 +543,12 @@ public class IRBuilder extends Visitor {
 
             currentFunction.addIns(new Cjump(t.left().operand(), t.right().operand(), op, OutLabel));
             }
-            else {
+            else {/**/
                 setMode = true; // if(i > 0) //
                 visitExpr(t);
                 setMode = false; // if(i > 0) //
                 currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.LT, OutLabel)); //.left()
-            }
+            }//
             //currentFunction.addIns(new Assign(node.operand(), new Imm(0))); //t
             //currentFunction.addIns(new Jump(OutLabel));
             //currentFunction.addIns(FaiLabel);
