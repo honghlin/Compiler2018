@@ -523,10 +523,32 @@ public class IRBuilder extends Visitor {
 
             //Label FaiLabel = new Label();
             BinaryOpNode t = whole.get(i);
-            setMode = true; // if(i > 0) //
-            visitExpr(t);
-            setMode = false; // if(i > 0) //
-            currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.LT, OutLabel)); //.left()
+            if(t.left() instanceof VariableNode && t.right() instanceof VariableNode) {
+
+                visitExpr(t.left());
+                visitExpr(t.right());
+
+                Cjump.Type op;
+
+                switch (t.operator()) {
+
+                    case LT: op = Cjump.Type.GE; break;
+                    case LE: op = Cjump.Type.GT; break;
+                    case GT: op = Cjump.Type.LE; break;
+                    case GE: op = Cjump.Type.LT; break;
+                    case EQ: op = Cjump.Type.NE; break;
+                    case NE: op = Cjump.Type.EQ; break;
+                    default: throw new Error();
+                }
+
+            currentFunction.addIns(new Cjump(t.left().operand(), t.right().operand(), op, OutLabel));
+            }
+            else {
+                setMode = true; // if(i > 0) //
+                visitExpr(t);
+                setMode = false; // if(i > 0) //
+                currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.LT, OutLabel)); //.left()
+            }
             //currentFunction.addIns(new Assign(node.operand(), new Imm(0))); //t
             //currentFunction.addIns(new Jump(OutLabel));
             //currentFunction.addIns(FaiLabel);
