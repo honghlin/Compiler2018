@@ -121,7 +121,7 @@ public class InsChecker implements IRVisitor {
                         //default: throw new Error();
                     }
 
-                    if(op != null) { // && (sec.Op() == Cjump.Type.EQ || sec.Op() == Cjump.Type.LE)
+                    if(op != null && (sec.Op() == Cjump.Type.EQ || sec.Op() == Cjump.Type.LE)) { //
 
                         f = true;
                         ++i;
@@ -134,7 +134,7 @@ public class InsChecker implements IRVisitor {
             if(i == now.size() - 1) newIns.add(now.get(i));
         }
 
-        entity.setInsList(newIns);
+        entity.setInsList(newIns);/**/
     }
 
 }
