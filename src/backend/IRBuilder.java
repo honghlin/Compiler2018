@@ -633,16 +633,6 @@ public class IRBuilder extends Visitor {
             args.add(exprNode.operand());
         }
 
-        /*if(checkInline(node) && entity.body().stmts().get(0) instanceof ReturnNode) {
-            clear();
-            entity.setInlineMode(false);
-            ExprNode r = InlineFunction(node);
-            visitExpr(r);
-            node.setOperand(r.operand());
-            entity.setInlineMode(true);
-            return;
-        }*/
-
         boolean f = true;
 
         for (ExprNode exprNode : node.varList()) {
@@ -652,7 +642,16 @@ public class IRBuilder extends Visitor {
 
         if(checkInline(node)) f = true;
 
-        if ((f && entity.isInlined() && entity.inlineMode())  || (entity == currentFunction && entity.canbeSelfInline(inlineMode)) && entity.check()) { //||!entity.Rec && // && (!(entity.returnType() instanceof StringType)) Inlinable;
+        if(checkInline(node) && entity.body().stmts().get(0) instanceof ReturnNode) {
+            clear();
+            entity.setInlineMode(false);
+            ExprNode r = InlineFunction(node);
+            visitExpr(r);
+            node.setOperand(r.operand());
+            entity.setInlineMode(true);
+            return;
+        }/**/
+        else if ((f && entity.isInlined() && entity.inlineMode())  || (entity == currentFunction && entity.canbeSelfInline(inlineMode)) && entity.check()) { //||!entity.Rec && // && (!(entity.returnType() instanceof StringType)) Inlinable;
 
             entity.setInlineMode(false);
             if (entity == currentFunction) System.err.println(entity.name() + " is self expanded");
@@ -675,7 +674,7 @@ public class IRBuilder extends Visitor {
         return !entity.name().equals("main") && currentFunction.numOfVirtualReg() < 200  && entity.inlineMode() && entity.body() != null && entity.body().stmts() != null && entity.body().stmts().size() == 1;
     }
 
-    /*private ExprNode InlineFunction(FuncallNode node) {
+    private ExprNode InlineFunction(FuncallNode node) {
 
         FunctionEntity entity = node.functionType().entity();
         ExprNode returnNode = ((ReturnNode) entity.body().stmts().get(0)).expr();
@@ -688,7 +687,7 @@ public class IRBuilder extends Visitor {
         ExprNode tmp = returnNode.Inline(inlineMap);
         return tmp;
 
-    }*/
+    }/**/
 
     @Override public void visit(CreatorNode node) {
         if (node.type() instanceof ArrayType) node.setOperand(newArray(node, 0));
