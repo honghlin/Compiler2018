@@ -196,7 +196,7 @@ public class FunctionEntity extends Entity{
             visited = new Hashtable<>();
             isInlined = !findcircle(this, this);
             stmtSize = stmtSize(body);
-            if (stmtSize >  8) isInlined = false; //  10
+            if (stmtSize >  2) isInlined = false; //  10 8
             if (isInlined) System.err.println(name() + " is inlined");
         }
     }
