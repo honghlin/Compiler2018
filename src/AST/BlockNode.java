@@ -52,9 +52,15 @@ public class BlockNode extends StmtNode {
         return new BlockNode(node.location(), stmts);
     }
 
-    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
 
-        return this;
+    @Override public BlockNode copy() {
+
+        List<StmtNode> s = new LinkedList<>();
+        BlockNode node = new BlockNode(this.location, s);
+        for (StmtNode stmt : stmts()) s.add(stmt.copy());
+        node.scope = scope;
+        return node;
     }
+
 
 }

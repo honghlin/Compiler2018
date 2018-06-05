@@ -30,7 +30,7 @@ abstract public class LiteralNode extends ExprNode{
         return location;
     }
 
-    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public ExprNode copy() {
 
         return this;
     }

@@ -57,10 +57,11 @@ public class UnaryOpNode extends ExprNode {
         visitor.visit(this);
     }
 
-    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public ExprNode copy() {
 
         UnaryOpNode node = new UnaryOpNode(this.operator, this.expr);
-        node.expr = expr.Inline(inlineMap);
+        node.expr = expr.copy();
+        node.type = type;
         return node;
     }
 

@@ -18,10 +18,11 @@ public class PrefixOpNode extends UnaryOpNode {
         visitor.visit(this);
     }
 
-    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public ExprNode copy() {
 
         PrefixOpNode node = new PrefixOpNode(this.operator, this.expr);
-        node.expr = expr.Inline(inlineMap);
+        node.expr = expr.copy();
+        node.type = type;
         return node;
     }
 

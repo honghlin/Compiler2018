@@ -45,9 +45,14 @@ public class ForNode extends StmtNode{
         visitor.visit(this);
     }
 
-    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public StmtNode copy() {
 
-        return this;
+        ForNode node = new ForNode(this.location, this.init, this.cond, this.incr, this.body);
+        if(init != null) node.init = init.copy();
+        if(cond != null) node.cond = cond.copy();
+        if(incr != null) node.incr = incr.copy();
+        if(body != null) node.body = body.copy();
+        return node;
     }
 
 }

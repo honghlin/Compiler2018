@@ -59,10 +59,10 @@ public class AssignNode extends ExprNode{
         visitor.visit(this);
     }
 
-    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public ExprNode copy() {
         AssignNode node = new AssignNode(this.lhs, this.rhs);
-        node.lhs = lhs.Inline(inlineMap);
-        node.rhs = rhs.Inline(inlineMap);
+        node.lhs = lhs.copy();
+        node.rhs = rhs.copy();
         return node;
     }
 

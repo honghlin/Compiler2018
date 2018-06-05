@@ -38,9 +38,13 @@ public class IfNode extends StmtNode {
         visitor.visit(this);
     }
 
-    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public IfNode copy() {
 
-        return this;
+        IfNode node = new IfNode(this.location, this.cond, this.thenBody, this.elseBody);
+        node.cond = cond.copy();
+        node.thenBody = thenBody.copy();
+        if(elseBody != null) node.elseBody = elseBody.copy();
+        return node;
     }
 
 }

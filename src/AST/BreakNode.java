@@ -18,7 +18,7 @@ public class BreakNode extends StmtNode {
         visitor.visit(this);
     }
 
-    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public StmtNode copy() {
 
         return this;
     }

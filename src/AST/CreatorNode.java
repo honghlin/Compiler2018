@@ -46,7 +46,7 @@ public class CreatorNode extends ExprNode {
         visitor.visit(this);
     }
 
-    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public ExprNode copy() {
 
         return new CreatorNode(this.location, this.type, this.exprs);
     }

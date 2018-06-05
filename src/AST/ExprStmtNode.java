@@ -32,9 +32,9 @@ public class ExprStmtNode extends StmtNode {
         visitor.visit(this);
     }
 
-    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public StmtNode copy() {
         ExprStmtNode node = new ExprStmtNode(this.location, this.expr);
-        node.expr = expr.Inline(inlineMap);
+        node.expr = expr.copy();
         return node;
     }
 

@@ -37,10 +37,10 @@ public class ReturnNode extends StmtNode {
         visitor.visit(this);
     }
 
-    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public StmtNode copy() {
 
         ReturnNode s = new ReturnNode(null);
-        s.expr = expr.Inline(inlineMap);
+        if(expr != null) s.expr = expr.copy(); // =
         return s;
     }
 

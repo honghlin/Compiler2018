@@ -46,10 +46,11 @@ public class ArefNode extends LHSNode {
         visitor.visit(this);
     }
 
-    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public ExprNode copy() {
         ArefNode node = new ArefNode(this.expr, this.index);
-        node.expr = expr.Inline(inlineMap);
-        node.index = expr.Inline(inlineMap);
+        node.expr = expr.copy();
+        node.index = index.copy(); // expr
+        node.type = type;
         return node;
     }
 

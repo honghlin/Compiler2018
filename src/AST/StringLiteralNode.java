@@ -12,6 +12,7 @@ public class StringLiteralNode extends LiteralNode{
 
     private String value;
     private StringConstantEntity entity;
+    //int r = 0;
 
     public StringLiteralNode(Location loc, String value) {
         super(loc, new StringType());
@@ -39,7 +40,7 @@ public class StringLiteralNode extends LiteralNode{
         visitor.visit(this);
     }
 
-    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public ExprNode copy() {
 
         return this;
     }
@@ -47,6 +48,9 @@ public class StringLiteralNode extends LiteralNode{
     @Override public String hash() {
 
         String t = value;
+        //t += Integer.toString(++r);
+        //t += Integer.toString(++r);
+        //t += Integer.toString(++r);
         return t;
     }
 

@@ -28,7 +28,7 @@ public class FunctionDefinitionNode extends DefinitionNode {
         visitor.visit(this);
     }
 
-    @Override public FunctionDefinitionNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public FunctionDefinitionNode copy() {
 
         return null;
     }

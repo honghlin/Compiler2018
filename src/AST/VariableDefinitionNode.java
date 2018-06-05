@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 public class VariableDefinitionNode extends DefinitionNode {
 
-    private VariableEntity entity;
+    public VariableEntity entity; // private
 
     public VariableDefinitionNode(VariableEntity entity) {
 
@@ -28,12 +28,12 @@ public class VariableDefinitionNode extends DefinitionNode {
         visitor.visit(this);
     }
 
-    @Override public VariableDefinitionNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public VariableDefinitionNode copy() {
 
-        VariableEntity t = new VariableEntity(entity);
-        t.setName("inline__" + t.name());
-        if(entity.Expr() != null) t.setExpr(entity.Expr().Inline(inlineMap));
-        VariableDefinitionNode node = new VariableDefinitionNode(t);
+        //VariableEntity t = new VariableEntity(entity);
+        //t.setName("inline__" + t.name());
+        //if(entity.Expr() != null) t.setExpr(entity.Expr().Inline(inlineMap));
+        VariableDefinitionNode node = new VariableDefinitionNode(entity); // t
         return node;
     }
 

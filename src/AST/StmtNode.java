@@ -23,6 +23,6 @@ abstract public class StmtNode extends Node {
 
     abstract public void accept(ASTVisitor visitor);
 
-    abstract public StmtNode Inline(HashMap<Entity, Operand> inlineMap);
+    abstract public StmtNode copy();
 
 }

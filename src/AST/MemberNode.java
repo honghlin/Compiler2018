@@ -57,11 +57,12 @@ public class MemberNode extends LHSNode{
         visitor.visit(this);
     }
 
-    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public ExprNode copy() {
 
         MemberNode node = new MemberNode(this.expr, this.member);
-        node.expr = expr.Inline(inlineMap);
+        node.expr = expr.copy();
         node.entity = entity;
+        node.type = type;//
         return node;
     }
 

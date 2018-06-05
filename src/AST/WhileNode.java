@@ -34,9 +34,12 @@ public class WhileNode extends StmtNode {
         visitor.visit(this);
     }
 
-    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+    @Override public WhileNode copy() {
 
-        return this;
+        WhileNode node = new WhileNode(this.location, this.cond, this.body);
+        if(cond != null) node.cond = cond.copy();
+        if(body != null) node.body = body.copy();
+        return node;
     }
 
 }
