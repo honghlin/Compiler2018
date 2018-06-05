@@ -5,7 +5,7 @@ import java.util.*;
 import AST.*;//BlockNode
 import IR.Ins;
 import IR.Label;
-import Type.Type;
+import Type.*;
 import Type.FunctionType;
 import AST.Location;
 import Scope.Scope;
@@ -133,12 +133,12 @@ public class FunctionEntity extends Entity{
         return insList;
     }
 
-    public int numOfVirtualReg() { // N
+    public int numOfVirtualReg() {
 
         return numOfVirtualReg;
     }
 
-    public boolean inlineMode() { // is
+    public boolean inlineMode() {
 
         return inlineMode;
     }
@@ -153,16 +153,15 @@ public class FunctionEntity extends Entity{
         this.optim = optim;
     }
 
-    public boolean isOptim() {//
+    public boolean isOptim() {
 
         return optim;
     }
 
-    public void remove() { // Ins ins
+    /*public void remove() {
 
-        //insList.add(ins);
         insList.remove(insList.size() - 1);
-    }
+    }*/
 
 
     public Set<FunctionEntity> calls() {
@@ -175,7 +174,7 @@ public class FunctionEntity extends Entity{
         calls.add(entity);
     }
 
-    private Map<FunctionEntity, Boolean> visited;//    A
+    private Map<FunctionEntity, Boolean> visited;
 
     private int stmtSize;
 
@@ -188,18 +187,11 @@ public class FunctionEntity extends Entity{
             visited = new Hashtable<>();
             isInlined = !findcircle(this, this);
             stmtSize = stmtSize(body);
-            if (stmtSize > 8) isInlined = false;
+            if (stmtSize >  10) isInlined = false; // 8
             if (isInlined) System.err.println(name() + " is inlined");
         }
     }
 
-/*    public boolean canbeSelfInline(int depth) {
-
-        if (depth >= 3) return false;
-        int pow = 1;
-        for (int i = 0; i < depth + 1; ++i) pow *= stmtSize;
-        return pow < 40;
-    }*/
 
     private int stmtSize(StmtNode node) {
 
@@ -210,6 +202,7 @@ public class FunctionEntity extends Entity{
                 if (stmtNode instanceof  BlockNode) count += stmtSize(stmtNode);
                 else if (stmtNode instanceof ForNode) count += 3 + stmtSize(((ForNode) stmtNode).body());
                 else if (stmtNode instanceof IfNode) count += 1 + stmtSize(((IfNode) stmtNode).elseBody()) + stmtSize(((IfNode) stmtNode).thenBody());
+                else if (stmtNode instanceof WhileNode) count += 1 + stmtSize(((WhileNode) stmtNode).body());
                 else ++count;
             }
         }
@@ -238,4 +231,18 @@ public class FunctionEntity extends Entity{
 
         this.insList = insList;
     }
+
+    public boolean canbeSelfInline(int depth) {
+
+        if (depth >= 3) return false;// 2  1    5 4
+        int pow = 1;
+        for (int i = 0; i < depth + 1; i++) pow *= stmtSize;
+        return pow < 371; // 40 50 60 75 101
+    }
+
+    public boolean check() {
+
+        return stmtSize(body) <= 10; //true
+    }
+
 }
