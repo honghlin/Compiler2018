@@ -390,7 +390,7 @@ public class IRBuilder extends Visitor {
         visitExpr(node.left());
         visitExpr(node.right());
 
-        if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) { // (inlineMode == 0 || (nowInline.body().stmts().size() == 1 && node.operator() != BinaryOpNode.BinaryOp.DIV)) &&  && ((node.operator() != BinaryOpNode.BinaryOp.MOD && node.operator() != BinaryOpNode.BinaryOp.DIV) || ((Imm)node.right().operand()).value() != 0)
+        if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm && (((Imm)node.right().operand()).value() != 0)) { // (inlineMode == 0 || (nowInline.body().stmts().size() == 1 && node.operator() != BinaryOpNode.BinaryOp.DIV)) &&  && ((node.operator() != BinaryOpNode.BinaryOp.MOD && node.operator() != BinaryOpNode.BinaryOp.DIV) || ((Imm)node.right().operand()).value() != 0)
 
             long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
             long value;
@@ -643,7 +643,16 @@ public class IRBuilder extends Visitor {
             return;
         }*/
 
-        if ((entity.isInlined() && entity.inlineMode()) || (entity == currentFunction && entity.canbeSelfInline(inlineMode)) && entity.check() ) { //||!entity.Rec && // && (!(entity.returnType() instanceof StringType)) Inlinable;
+        boolean f = true;
+
+        for (ExprNode exprNode : node.varList()) {
+
+            if(exprNode.operand() instanceof Imm) f = false;
+        }
+
+        if(checkInline(node)) f = true;
+
+        if ((f && entity.isInlined() && entity.inlineMode())  || (entity == currentFunction && entity.canbeSelfInline(inlineMode)) && entity.check()) { //||!entity.Rec && // && (!(entity.returnType() instanceof StringType)) Inlinable;
 
             entity.setInlineMode(false);
             if (entity == currentFunction) System.err.println(entity.name() + " is self expanded");
@@ -660,13 +669,13 @@ public class IRBuilder extends Visitor {
     }
 
 
-    /*boolean checkInline(FuncallNode node) {
+    boolean checkInline(FuncallNode node) {
 
         FunctionEntity entity = node.functionType().entity();
         return !entity.name().equals("main") && currentFunction.numOfVirtualReg() < 200  && entity.inlineMode() && entity.body() != null && entity.body().stmts() != null && entity.body().stmts().size() == 1;
     }
 
-    private ExprNode InlineFunction(FuncallNode node) {
+    /*private ExprNode InlineFunction(FuncallNode node) {
 
         FunctionEntity entity = node.functionType().entity();
         ExprNode returnNode = ((ReturnNode) entity.body().stmts().get(0)).expr();
