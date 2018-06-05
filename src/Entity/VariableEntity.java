@@ -62,4 +62,10 @@ public class VariableEntity extends Entity {
         this.Expr = node;
     }
 
+    public VariableEntity copy() {
+
+        VariableEntity a = new VariableEntity(location(), type(), name(), Expr());
+        return a;
+    }
+
 }
