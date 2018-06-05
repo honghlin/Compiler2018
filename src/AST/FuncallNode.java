@@ -76,6 +76,15 @@ public class FuncallNode extends ExprNode {
         return (FunctionType)expr.type();
     }*/
 
+    @Override public FuncallNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        FuncallNode node = new FuncallNode(this.expr, this.varList);
+        node.expr = expr.Inline(inlineMap);
+        node.varList = new ArrayList<>();
+        for(ExprNode item: varList) node.varList.add(item.Inline(inlineMap));
+        return node;
+    }
+
     @Override public FuncallNode copy() {
 
         FuncallNode node = new FuncallNode(this.expr, this.varList);

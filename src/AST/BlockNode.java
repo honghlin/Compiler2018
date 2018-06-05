@@ -53,6 +53,12 @@ public class BlockNode extends StmtNode {
     }
 
 
+    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
+    }
+
+
     @Override public BlockNode copy() {
 
         List<StmtNode> s = new LinkedList<>();

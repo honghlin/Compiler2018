@@ -19,6 +19,14 @@ public class LogicalOrNode extends BinaryOpNode {
         visitor.visit(this);
     }
 
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        LogicalOrNode node = new LogicalOrNode(this.left, this.right);
+        node.left = left.Inline(inlineMap);
+        node.right = right.Inline(inlineMap);
+        return node;
+    }
+
     @Override public ExprNode copy() {
 
         LogicalOrNode node = new LogicalOrNode(this.left, this.right);

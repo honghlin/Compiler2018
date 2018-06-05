@@ -35,4 +35,9 @@ abstract public class LiteralNode extends ExprNode{
         return this;
     }
 
+
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
+    }
 }

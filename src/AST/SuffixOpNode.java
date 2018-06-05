@@ -18,6 +18,13 @@ public class SuffixOpNode extends UnaryOpNode {
         visitor.visit(this);
     }
 
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        SuffixOpNode node = new SuffixOpNode(this.operator, this.expr);
+        node.expr = expr.Inline(inlineMap);
+        return node;
+    }
+
     @Override public ExprNode copy() {
 
         SuffixOpNode node = new SuffixOpNode(this.operator, this.expr);

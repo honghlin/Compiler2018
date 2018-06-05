@@ -18,6 +18,11 @@ public class ContinueNode extends StmtNode {
        visitor.visit(this);
    }
 
+    @Override public StmtNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
+    }
+
     @Override public StmtNode copy() {
 
         return this;

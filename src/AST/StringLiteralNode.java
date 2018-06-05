@@ -40,6 +40,11 @@ public class StringLiteralNode extends LiteralNode{
         visitor.visit(this);
     }
 
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
+    }
+
     @Override public ExprNode copy() {
 
         return this;

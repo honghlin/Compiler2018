@@ -28,6 +28,15 @@ public class VariableDefinitionNode extends DefinitionNode {
         visitor.visit(this);
     }
 
+    @Override public VariableDefinitionNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        VariableEntity t = new VariableEntity(entity);
+        t.setName("inline__" + t.name());
+        if(entity.Expr() != null) t.setExpr(entity.Expr().Inline(inlineMap));
+        VariableDefinitionNode node = new VariableDefinitionNode(t);
+        return node;
+    }
+
     @Override public VariableDefinitionNode copy() {
 
         //VariableEntity t = new VariableEntity(entity);

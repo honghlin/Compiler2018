@@ -27,6 +27,11 @@ public class ClassDefinitionNode extends DefinitionNode {
         visitor.visit(this);
     }
 
+    @Override public ClassDefinitionNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return this;
+    }
+
     @Override public ClassDefinitionNode copy() {
 
         ClassDefinitionNode node = new ClassDefinitionNode(entity);

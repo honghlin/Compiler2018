@@ -90,6 +90,14 @@ public class BinaryOpNode extends ExprNode{
         visitor.visit(this);
     }
 
+    @Override public ExprNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        BinaryOpNode node = new BinaryOpNode(this.operator, this.left, this.right);
+        node.left = left.Inline(inlineMap);
+        node.right = right.Inline(inlineMap);
+        return node;
+    }
+
     @Override public ExprNode copy() {
 
         BinaryOpNode node = new BinaryOpNode(this.operator, this.left, this.right);

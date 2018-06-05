@@ -82,6 +82,20 @@ public class VariableNode extends LHSNode {
         visitor.visit(this);
     }
 
+    public VariableNode Inline(HashMap<Entity, Operand> inlineMap){
+
+        VariableNode node = new VariableNode(entity);
+        node.entity = new Entity(entity.location(), entity.type(), entity.name());
+        if(inlineMap.containsKey(entity)) {
+            node.entity.setPos(inlineMap.get(entity));
+            node.setOperand(inlineMap.get(entity));
+            return node;
+        }
+        if(isMember() && inlineMap.containsKey(thisPointer)) {
+            thisPointer.setPos(inlineMap.get(thisPointer));// ((VariableEntity)) thisPointer != null &&
+        }
+        return this;
+    }
     public VariableNode copy() {
 
         VariableNode node = new VariableNode(entity);

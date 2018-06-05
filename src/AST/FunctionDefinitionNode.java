@@ -28,6 +28,11 @@ public class FunctionDefinitionNode extends DefinitionNode {
         visitor.visit(this);
     }
 
+    @Override public FunctionDefinitionNode Inline(HashMap<Entity, Operand> inlineMap) {
+
+        return null;
+    }
+
     @Override public FunctionDefinitionNode copy() {
 
         return null;

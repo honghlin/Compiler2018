@@ -40,6 +40,8 @@ abstract public class ExprNode extends Node{
 
     abstract public void accept(ASTVisitor visitor);
 
+    abstract public ExprNode Inline(HashMap<Entity, Operand> inlineMap);
+
     abstract public ExprNode copy();
 
     abstract public String hash();
