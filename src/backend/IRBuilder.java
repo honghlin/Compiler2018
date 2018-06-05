@@ -11,13 +11,9 @@ import IR.*;
 import IR.Label;
 import IR.Operand.*;
 import Optim.FunctionRecorder;
-//import Optim.LogicalChecker;
 import Type.*;
-//import jdk.nashorn.internal.ir.BinaryNode;
-//import org.graalvm.compiler.lir.Variable;
 
 
-import java.awt.*;
 import java.util.*;
 import java.util.List;
 
@@ -37,6 +33,7 @@ public class IRBuilder extends Visitor {
     Operand Rs;
     private boolean isRec = false;
     private boolean isIrr = true;
+    private FunctionEntity nowInline;
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
 
@@ -67,7 +64,7 @@ public class IRBuilder extends Visitor {
             entity.setPos(new GlobalAddr(entity.name() + "__", false)); // true
         }
 
-        //for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable();
+        for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable();//
 
         if(ast.classEntities().size() > 0) isIrr = false;
 
@@ -114,9 +111,7 @@ public class IRBuilder extends Visitor {
             Operand s;
             if(i < 6) {
                 Entity t = (Entity)entity.varList().get(i);
-                //visit(t);
                 t.setPos(currentFunction.newReg());
-                //f(t.type() instanceof ArrayType || t.type() instanceof ClassType) currentFunction.addIns(new Assign(t.pos(), new Imm(0)));
                 s = PhiReg.getParameterReg(i);
                 currentFunction.addIns(new Assign(t.pos(), s));
             } else {
@@ -155,9 +150,6 @@ public class IRBuilder extends Visitor {
         if (currentFunction.insList().size() == 0 || !(currentFunction.insList().get(currentFunction.insList().size() - 1) instanceof Jump)) {  // add return
             currentFunction.addIns(new Jump(end));
         }
-        //currentFunction.remove();
-        //currentFunction.addIns(new Assign(new Mem((Reg)Rd, (Reg)Rs, 8, 0), PhiReg.rax));
-        //currentFunction.addIns(new Jump(end));
         currentFunction.addIns(end);
         clear();
     }
@@ -170,9 +162,9 @@ public class IRBuilder extends Visitor {
 
     public void visitExpr(ExprNode e) {
 
-        if(e instanceof BinaryOpNode || e instanceof LogicalAndNode || e instanceof LogicalOrNode) { //  &&    ||e instanceof  VariableDefinitionNode
+        if(e instanceof BinaryOpNode || e instanceof LogicalAndNode || e instanceof LogicalOrNode) {
 
-            if(history.containsKey(e.hash())) { // history != null && // e.accept(this); return;
+            if(inlineMode == 0 && history.containsKey(e.hash())) {
 
                 e.setOperand(history.get(e.hash()));//
                 System.err.println(e.hash());//
@@ -185,10 +177,13 @@ public class IRBuilder extends Visitor {
 
     @Override public void visit(VariableDefinitionNode node) {
 
+        if(inlineMode > 0) {
+            VariableEntity entity = (VariableEntity) inlineMap.peek().get(node.entity());
+            entity = entity == null ? node.entity() : entity;
+            node.entity = entity;
+        }/**/
         ExprNode init = node.entity().Expr();
         if (init != null) {
-            //ExprStmtNode assign = new ExprStmtNode(node.location(), new AssignNode(new VariableNode(node.entity(), node.location()), init));
-            //visit(assign);
             visitExpr(init);
         }
         VariableEntity t = node.entity();
@@ -203,13 +198,24 @@ public class IRBuilder extends Visitor {
 
     public void visit(BlockNode node) {
 
+        if (inlineMode > 0) {
+
+            Map<Entity, Entity> map = inlineMap.peek();
+
+            for (Entity entity : node.scope().entities().values()) {
+                if (entity instanceof VariableEntity) {
+                    VariableEntity clone = ((VariableEntity) entity).copy();
+                    map.put(entity, clone);
+                }
+            }
+        }
         for (StmtNode stmt : node.stmts()) stmt.accept(this);
     }
 
     public void visit(AssignNode node) {
 
 
-        if(isIrr) { // &&
+        if(isIrr && (inlineMode == 0)) {
 
             VariableNode n = deepNode(node.lhs());
             if(n.entity().isIrrelevant()){
@@ -218,21 +224,15 @@ public class IRBuilder extends Visitor {
             }
         }
 
-        //setMode = true;
         visitExpr(node.lhs());
-        //setMode = false;
         visitExpr(node.rhs());
         if(node.lhs() instanceof VariableNode) {
 
             (((VariableNode)node.lhs()).entity()).setValue();//(VariableEntity)
         }
         else clear();
-        //    if(node.lhs().operand() == null){
-        //        int a = 1 + 1;
-        //    }
         currentFunction.addIns(new Assign(node.lhs().operand(), node.rhs().operand()));
         node.setOperand(null);
-        //node.lhs().entity().setNow();
     }
 
     @Override public void visit(IfNode node) {
@@ -243,17 +243,17 @@ public class IRBuilder extends Visitor {
             if(u.operator() == UnaryOpNode.UnaryOp.SUF_INC || u.operator() == UnaryOpNode.UnaryOp.PRE_INC) {
                 BinaryOpNode t = new BinaryOpNode(BinaryOpNode.BinaryOp.ADD, u.expr(), node.cond());
                 AssignNode a = new AssignNode(u.expr(), t);
-                visit(a);//Expr
+                visit(a);
                 return;
             }
             else if(u.operator() == UnaryOpNode.UnaryOp.SUF_DEC || u.operator() == UnaryOpNode.UnaryOp.PRE_DEC) {
                 BinaryOpNode t = new BinaryOpNode(BinaryOpNode.BinaryOp.SUB, u.expr(), node.cond());
                 AssignNode a = new AssignNode(u.expr(), t);
-                visit(a);//Expr
+                visit(a);
                 return;
             }
 
-        }//node.cond()
+        }
 
         visitExpr(node.cond());
         Label thenLabel = new Label();
@@ -317,12 +317,21 @@ public class IRBuilder extends Visitor {
 
     @Override public void visit(ReturnNode node) {
 
+        if (inlineMode > 0) {
+            if(node.expr() != null) {
+                visitExpr(node.expr());
+                currentFunction.addIns(new Assign(inlineReturnPos.peek(), node.expr().operand()));
+            }
+            currentFunction.addIns(new Jump(inlineReturnLabel.peek()));
+            return;
+        }
+
         if(node.expr() != null) {
             visitExpr(node.expr());
             currentFunction.addIns(new Assign(PhiReg.rax, node.expr().operand()));
             if(isRec) {
                 Label A = new Label();
-                currentFunction.addIns(new Cjump(Rs, new Imm(0),  Cjump.Type.LT, A)); //LE
+                currentFunction.addIns(new Cjump(Rs, new Imm(0),  Cjump.Type.LT, A));
                 currentFunction.addIns(new Cjump(Rs, new Imm(150),  Cjump.Type.GE, A));
                 currentFunction.addIns(new Assign(new Mem((Reg)Rd, (Reg)Rs, 8, 0), PhiReg.rax));
                 currentFunction.addIns(A);
@@ -379,12 +388,9 @@ public class IRBuilder extends Visitor {
         node.setOperand(currentFunction.newReg());
 
         visitExpr(node.left());
-        //setMode = true;
         visitExpr(node.right());
-        //setMode = false;
 
-
-        if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) {
+        if (node.left().operand() instanceof Imm && node.right().operand() instanceof Imm) { // (inlineMode == 0 || (nowInline.body().stmts().size() == 1 && node.operator() != BinaryOpNode.BinaryOp.DIV)) &&  && ((node.operator() != BinaryOpNode.BinaryOp.MOD && node.operator() != BinaryOpNode.BinaryOp.DIV) || ((Imm)node.right().operand()).value() != 0)
 
             long lvalue = (((Imm)(node.left().operand())).value()), rvalue = ((Imm)node.right().operand()).value();
             long value;
@@ -440,9 +446,9 @@ public class IRBuilder extends Visitor {
         if(checker.check(node)) {
 
             LogicalAndChecker A = new LogicalAndChecker();
-            if(A.check(node) && A.whole().size() >= 3) { // ||10
+            if(A.check(node) && A.whole().size() >= 3) {
                 //setMode = true;
-                List<BinaryOpNode> whole = A.whole(); // new ArrayList<>()
+                List<BinaryOpNode> whole = A.whole();
                 setAnd(whole, node);
                 //setMode = false;
                 if(!setMode) history.put(node.hash(), node.operand());
@@ -471,8 +477,6 @@ public class IRBuilder extends Visitor {
         setMode = true;
         visitExpr(node.right());
         setMode = false;
-        //clear();
-        //if(history != null) history.remove(node.right().hash());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(OutLabel);
         if(!setMode) history.put(node.hash(), node.operand());
@@ -502,8 +506,6 @@ public class IRBuilder extends Visitor {
         setMode = true;
         visitExpr(node.right());
         setMode = false;
-        //clear();
-        //if(history != null) history.remove(node.right().hash());
         currentFunction.addIns(new Assign(node.operand(), node.right().operand()));
         currentFunction.addIns(new Jump(OutLabel));
         currentFunction.addIns(SucLabel);
@@ -517,11 +519,9 @@ public class IRBuilder extends Visitor {
 
         node.setOperand(currentFunction.newReg());
         int size = whole.size();
-        //Collections.shuffle(whole);
         Label OutLabel = new Label();
         for(int i = 0; i < size - 1; ++i) {
 
-            //Label FaiLabel = new Label();
             BinaryOpNode t = whole.get(i);
             if(t.left() instanceof VariableNode && t.right() instanceof VariableNode) {
 
@@ -542,16 +542,13 @@ public class IRBuilder extends Visitor {
                 }
 
             currentFunction.addIns(new Cjump(t.left().operand(), t.right().operand(), op, OutLabel));
-            }
-            else {/**/
-                setMode = true; // if(i > 0) //
+            }/**/
+            else {
+                setMode = true;
                 visitExpr(t);
-                setMode = false; // if(i > 0) //
-                currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.LT, OutLabel)); //.left()
-            }//
-            //currentFunction.addIns(new Assign(node.operand(), new Imm(0))); //t
-            //currentFunction.addIns(new Jump(OutLabel));
-            //currentFunction.addIns(FaiLabel);
+                setMode = false;
+                currentFunction.addIns(new Cjump(t.operand(), new Imm(1), Cjump.Type.LT, OutLabel));
+            }
         }
 
         BinaryOpNode t = whole.get(size - 1);
@@ -608,7 +605,6 @@ public class IRBuilder extends Visitor {
 
         Unary.UnaryOp op;
 
-        //clear();
         switch (node.operator()) {
 
             case MINUS : op = Unary.UnaryOp.MINUS; break;
@@ -616,8 +612,6 @@ public class IRBuilder extends Visitor {
             case L_NOT : op = Unary.UnaryOp.L_NOT; break;
             default : throw new Error();
         }
-        //setMode = true;
-        //setMode = false;
         node.setOperand(currentFunction.newReg());
         currentFunction.addIns(new Assign(node.operand(), node.expr().operand()));
         currentFunction.addIns(new Unary(node.operand(), op));
@@ -633,14 +627,13 @@ public class IRBuilder extends Visitor {
             return ;
         }
         node.setLabel(new Label(entity.name()));
-        //currentFunction = entity;
         List<Operand> args = new ArrayList<>();
         for (ExprNode exprNode : node.varList()) {
             visitExpr(exprNode);
             args.add(exprNode.operand());
         }
 
-        if(checkInline(node) && entity.body().stmts().get(0) instanceof ReturnNode) {
+        /*if(checkInline(node) && entity.body().stmts().get(0) instanceof ReturnNode) {
             clear();
             entity.setInlineMode(false);
             ExprNode r = InlineFunction(node);
@@ -648,19 +641,26 @@ public class IRBuilder extends Visitor {
             node.setOperand(r.operand());
             entity.setInlineMode(true);
             return;
+        }*/
+
+        if ((entity.isInlined() && entity.inlineMode()) || (entity == currentFunction && entity.canbeSelfInline(inlineMode)) && entity.check() ) { //||!entity.Rec && // && (!(entity.returnType() instanceof StringType)) Inlinable;
+
+            entity.setInlineMode(false);
+            if (entity == currentFunction) System.err.println(entity.name() + " is self expanded");
+            inlineFunction(node);
+            entity.setInlineMode(true);
+            return;
+
         }/**/
 
         node.setOperand(currentFunction.newReg());
-        if(entity.name().equals("substring") && args.get(0) == null) {
-            int zky = 0;
-        }
         Call call = new Call(entity, args, node.operand());
         currentFunction.addIns(call);
         clear();
     }
 
 
-    boolean checkInline(FuncallNode node) { // able node
+    /*boolean checkInline(FuncallNode node) {
 
         FunctionEntity entity = node.functionType().entity();
         return !entity.name().equals("main") && currentFunction.numOfVirtualReg() < 200  && entity.inlineMode() && entity.body() != null && entity.body().stmts() != null && entity.body().stmts().size() == 1;
@@ -679,9 +679,7 @@ public class IRBuilder extends Visitor {
         ExprNode tmp = returnNode.Inline(inlineMap);
         return tmp;
 
-    }
-
-    //void
+    }*/
 
     @Override public void visit(CreatorNode node) {
         if (node.type() instanceof ArrayType) node.setOperand(newArray(node, 0));
@@ -769,7 +767,6 @@ public class IRBuilder extends Visitor {
 
         for (ClassEntity entity : ast.classEntities()) {
             for (FunctionDefinitionNode node : entity.memberFuncs()) {
-                //currentFunction = node.entity();
                 System.out.println("\n" + node.entity().name() + " in Class:" + entity.name() + "\n");
                 for(Ins item : node.entity().insList()) System.out.print(item.toString());
             }
@@ -784,11 +781,14 @@ public class IRBuilder extends Visitor {
             int offset = ((VariableEntity)node.entity()).Offset();
             node.setOperand(new Mem(base, null, 0, offset));
         }
-     /*   else if(node.isMember()) {
-            node.setOperand(node.getThisPointer().pos());
-        } && node.getThisPointer() instanceof  ClassEntity*/
-        else node.setOperand((node.entity()).pos());
-        //if(setMode) ((VariableEntity)node.entity()).setValue();
+        else {
+            if (inlineMode > 0) {
+                Entity entity = inlineMap.peek().get(node.entity());
+                entity = entity == null ? node.entity() : entity;
+                node.setOperand(entity.pos());
+            }
+            else node.setOperand((node.entity()).pos());
+        }
     }
 
     public IR Ir() {
@@ -807,6 +807,46 @@ public class IRBuilder extends Visitor {
         if(node instanceof VariableNode) return (VariableNode) node;
         else if(node instanceof ArefNode) return deepNode(((ArefNode)node).expr());
         else throw new Error();
+    }
+
+    private int inlineCt = 0;
+    private int inlineMode = 0;
+    private Stack<Map <Entity, Entity> > inlineMap = new Stack<>();
+    private Stack<Label> inlineReturnLabel = new Stack<>();
+    private Stack<Operand> inlineReturnPos = new Stack<>();
+
+    private void inlineFunction(FuncallNode node) {
+
+        FunctionEntity entity = node.functionType().entity();
+
+        Label returnLable = new Label();
+
+        Map<Entity, Entity> map = new HashMap<>();
+
+        node.setOperand(currentFunction.newReg());
+
+        inlineMap.push(map);
+        inlineReturnLabel.push(returnLable);
+        inlineReturnPos.push(node.operand());
+
+        for(int i = 0; i < entity.varList().size(); ++i) {
+
+            Entity par = entity.varList().get(i);
+            ExprNode t = node.varList().get(i);
+            VariableEntity clone = new VariableEntity(par.location(), par.type(), par.name() + "_inline_" + inlineCt++, null);
+            map.put(par, clone);
+            clone.setPos(t.operand());
+        }
+
+        ++inlineMode;
+        nowInline = entity;
+        visit(entity.body().copy());
+        currentFunction.addIns(returnLable);
+        --inlineMode;
+
+        inlineMap.pop();
+        inlineReturnLabel.pop();
+        inlineReturnPos.pop();
     }
 
 }
