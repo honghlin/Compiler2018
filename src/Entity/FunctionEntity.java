@@ -5,6 +5,7 @@ import java.util.*;
 import AST.*;//BlockNode
 import IR.Ins;
 import IR.Label;
+import Optim.InlineChecker;
 import Type.*;
 import Type.FunctionType;
 import AST.Location;
@@ -180,7 +181,15 @@ public class FunctionEntity extends Entity{
 
     public void checkInlinable() {
 
-        if (name.equals("main")) isInlined = false;
+        InlineChecker checker = new InlineChecker(this);
+
+        if(!checker.check()) isInlined = false;
+
+        else if (name.equals("main")) isInlined = false;
+
+            //else if (name.equals("origin")) isInlined = false;
+
+            //else if (name.equals("printF")) isInlined = false;
 
         else {
 
@@ -202,8 +211,23 @@ public class FunctionEntity extends Entity{
                 if (stmtNode instanceof  BlockNode) count += stmtSize(stmtNode);
                 else if (stmtNode instanceof ForNode) count += 3 + stmtSize(((ForNode) stmtNode).body());
                 else if (stmtNode instanceof IfNode) count += 1 + stmtSize(((IfNode) stmtNode).elseBody()) + stmtSize(((IfNode) stmtNode).thenBody());
-                else if (stmtNode instanceof WhileNode) count += 1 + stmtSize(((WhileNode) stmtNode).body());
+                else if (stmtNode instanceof WhileNode) count += 100 + stmtSize(((WhileNode) stmtNode).body()); // 1
                 else ++count;
+            }
+        }
+        else return 1;
+
+        return count;
+    }
+
+    private int ifSize(StmtNode node) {
+
+        int count = 0;
+        if (node == null) return 0;
+        if (node instanceof BlockNode) {
+            for (StmtNode stmtNode : ((BlockNode) node).stmts()) {
+                if (stmtNode instanceof  BlockNode) count += ifSize(stmtNode);
+                if (stmtNode instanceof IfNode) count += 1 + ifSize(((IfNode) stmtNode).thenBody());
             }
         }
         else return 1;
@@ -233,6 +257,15 @@ public class FunctionEntity extends Entity{
     }
 
     public boolean canbeSelfInline(int depth) {
+
+        /*int count = 0;
+
+        for (StmtNode stmtNode : body.stmts()) {
+
+            if (stmtNode instanceof IfNode) count += 1;
+        } count */
+
+        if(ifSize(body) >= 4) return false;
 
         if (depth >= 3) return false;// 2  1    5 4
         int pow = 1;
