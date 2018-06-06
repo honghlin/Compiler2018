@@ -145,7 +145,7 @@ public class Allocator {
 
             }
 
-            for(int j = 0; j <= n; j = (j == 10 ? 16 : j + 1)) { // rax rcx rdx rsp rbp
+            for(int j = 0; j <= n; ++j) { // rax rcx rdx rsp rbp j = (j == 10 ? 16 : j + 1)
 
                 if(j == 11) throw new Error(); //
                 if(useColor[j] != i) {
