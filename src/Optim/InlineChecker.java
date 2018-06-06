@@ -27,7 +27,8 @@ public class InlineChecker extends Visitor {
 
     @Override public void visit(IfNode node) {
 
-        f = false;
+        //f = false;
+        entity.containIf = true;
     }
 
     @Override public void visit(FuncallNode node) {
