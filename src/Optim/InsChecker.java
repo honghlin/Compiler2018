@@ -9,8 +9,7 @@ import IR.Operand.Imm;
 import IR.Operand.PhiReg;
 import backend.IRVisitor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class InsChecker implements IRVisitor {
 
@@ -75,6 +74,7 @@ public class InsChecker implements IRVisitor {
         for (FunctionEntity entity : ir.ast().functionEntities()) {
 
             init(entity);
+            init_0(entity);
             init_1(entity);
             select(entity);
         }
@@ -83,6 +83,7 @@ public class InsChecker implements IRVisitor {
             for (FunctionDefinitionNode node : entity.memberFuncs()) {
 
                 init(node.entity());
+                init_0(node.entity());
                 init_1(node.entity());
                 select(node.entity());
             }
@@ -136,6 +137,52 @@ public class InsChecker implements IRVisitor {
             if(i == now.size() - 1) newIns.add(now.get(i));
         }
 
+        entity.setInsList(newIns);/**/
+    }
+
+    private void init_0(FunctionEntity entity) {
+
+        List<Ins> now = entity.insList();
+        List<Ins> newIns = new ArrayList<>();//N
+
+        Set<Label> useLabel = new HashSet<>();
+        HashMap<Label, Label> labelMap = new HashMap<>();
+        for(Ins ins : now) {
+            if(ins instanceof Label) labelMap.put((Label)ins, (Label)ins);
+            if(ins instanceof Jump) useLabel.add(((Jump)ins).Label());
+            if(ins instanceof Cjump) useLabel.add(((Cjump)ins).TrueLabel());
+        }
+        Ins pre = null;
+        for(int i = 0; i < now.size(); ++i){
+
+            Ins item = now.get(i);
+
+            if(item instanceof Label && !useLabel.contains(item)) continue;
+            if(pre instanceof Jump) {
+                if(!(item instanceof Label)) continue;
+            }
+            if(pre instanceof Label) {
+                if(item instanceof Label) {
+                    labelMap.put((Label)item,(Label)pre);
+                    continue;
+                }
+            }
+            if(pre != null) newIns.add(pre);
+            pre = item;
+        }
+        if(pre != null) newIns.add(pre);
+        for(Ins item : newIns) {
+            if(item instanceof Jump) {
+                Label tmp = ((Jump) item).Label();
+                for(Label next = labelMap.get(tmp); next != tmp; tmp = next, next = labelMap.get(tmp)) ;
+                ((Jump)item).setLabel(tmp);
+            }
+            if(item instanceof Cjump) {
+                Label tmp = ((Cjump)item).TrueLabel();
+                for(Label next = labelMap.get(tmp); next != tmp; tmp = next, next = labelMap.get(tmp));
+                ((Cjump)item).setTrueLabel(tmp);
+            }
+        }
         entity.setInsList(newIns);/**/
     }
 
