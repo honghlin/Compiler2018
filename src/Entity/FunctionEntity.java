@@ -270,7 +270,7 @@ public class FunctionEntity extends Entity{
         else if (depth >= 5) return false;
         int pow = 1;
         for (int i = 0; i < depth + 1; i++) pow *= stmtSize;
-        return pow < 371; // 40 50 60 75 101 371
+        return pow < 3371; // 40 50 60 75 101 371
     }
 
     public boolean check() {
