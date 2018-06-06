@@ -196,7 +196,7 @@ public class FunctionEntity extends Entity{
             visited = new Hashtable<>();
             isInlined = !findcircle(this, this);
             stmtSize = stmtSize(body);
-            if (stmtSize >  4) isInlined = false; //  10 8  4 8 2
+            if (stmtSize >  4) isInlined = false; //  10   3    6   4 2 3  1  4 2 8
             if (isInlined) System.err.println(name() + " is inlined");
         }
     }
@@ -210,7 +210,7 @@ public class FunctionEntity extends Entity{
             for (StmtNode stmtNode : ((BlockNode) node).stmts()) {
                 if (stmtNode instanceof  BlockNode) count += stmtSize(stmtNode);
                 else if (stmtNode instanceof ForNode) count += 3 + stmtSize(((ForNode) stmtNode).body());
-                else if (stmtNode instanceof IfNode) count += 1 + stmtSize(((IfNode) stmtNode).elseBody()) + stmtSize(((IfNode) stmtNode).thenBody());
+                else if (stmtNode instanceof IfNode) count += 1 + stmtSize(((IfNode) stmtNode).elseBody()) + stmtSize(((IfNode) stmtNode).thenBody()); // 100
                 else if (stmtNode instanceof WhileNode) count += 100 + stmtSize(((WhileNode) stmtNode).body()); // 1
                 else ++count;
             }
@@ -267,10 +267,10 @@ public class FunctionEntity extends Entity{
 
         if(ifSize(body) >= 4) return false;
 
-        if (depth >= 3) return false;// 2  1    5 4
+        if (depth >= 5) return false;// 2  1    5 4 3
         int pow = 1;
         for (int i = 0; i < depth + 1; i++) pow *= stmtSize;
-        return pow < 371; // 40 50 60 75 101
+        return pow < 1371; // 40 50 60 75 101 371
     }
 
     public boolean check() {
