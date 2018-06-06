@@ -74,7 +74,7 @@ public class IRBuilder extends Visitor {
 
         }
 
-        if(ast.functionEntities().size() >= 9) inlineSize = 2;
+        if(ast.functionEntities().size() >= 10) inlineSize = 2;
         else inlineSize = 8;
 
         for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable(inlineSize);//
