@@ -34,6 +34,7 @@ public class IRBuilder extends Visitor {
     private boolean isRec = false;
     private boolean isIrr = true;
     private FunctionEntity nowInline;
+    private int inlineSize;
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
 
@@ -64,7 +65,10 @@ public class IRBuilder extends Visitor {
             entity.setPos(new GlobalAddr(entity.name() + "__", false)); // true
         }
 
-        for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable();//
+        if(ast.functionEntities().size() >= 9) inlineSize = 2;
+        else inlineSize = 8;
+
+        for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable(inlineSize);//
 
         if(ast.classEntities().size() > 0) isIrr = false;
 
@@ -835,7 +839,7 @@ public class IRBuilder extends Visitor {
         node.setOperand(currentFunction.newReg());
 
         inlineMap.push(map);
-        if(entity.isInlined()) inlineReturnLabel.push(null);
+        if(!entity.containIf) inlineReturnLabel.push(null);
         else inlineReturnLabel.push(returnLable);
         inlineReturnPos.push(node.operand());
 
@@ -851,7 +855,7 @@ public class IRBuilder extends Visitor {
         ++inlineMode;
         nowInline = entity;
         visit(entity.body().copy());
-        if(!entity.isInlined()) currentFunction.addIns(returnLable);
+        if(entity.containIf) currentFunction.addIns(returnLable);
         --inlineMode;
 
         inlineMap.pop();
