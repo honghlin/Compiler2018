@@ -41,6 +41,11 @@ public class Cjump extends Ins {
         return TrueLabel;
     }
 
+    public void setTrueLabel(Label trueLabel) {
+
+        TrueLabel = trueLabel;
+    }
+
     @Override public String toString() {
         String t = "Cjump ";
         t += (left.toString() + " " + op + " " + right.toString() + " ");

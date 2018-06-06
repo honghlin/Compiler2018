@@ -18,6 +18,12 @@ public class Jump extends Ins {
         String t = "Jump " + Label.toString();
         return t;
     }
+
+    public void setLabel(Label label) {
+
+        Label = label;
+    }
+
     @Override public void accept(IRVisitor visitor) {
 
         visitor.visit(this);
