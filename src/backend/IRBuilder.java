@@ -302,6 +302,7 @@ public class IRBuilder extends Visitor {
 
     @Override public void visit(ForNode node) {
 
+        if(node.body() == null || node.body().stmts().size() == 0) return; // .stmts()
         visitLoop(node.init(), node.cond(), node.incr(), node.body());
     }
 
