@@ -267,7 +267,7 @@ public class FunctionEntity extends Entity{
 
         if(ifSize(body) >= 4) return false;
 
-        if (depth >= 5) return false;// 2  1    5 4 3
+        if (depth >= 4) return false;// 2  1    5 4 3 5
         int pow = 1;
         for (int i = 0; i < depth + 1; i++) pow *= stmtSize;
         return pow < 1371; // 40 50 60 75 101 371
