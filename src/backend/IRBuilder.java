@@ -323,7 +323,7 @@ public class IRBuilder extends Visitor {
                 visitExpr(node.expr());
                 currentFunction.addIns(new Assign(inlineReturnPos.peek(), node.expr().operand()));
             }
-            currentFunction.addIns(new Jump(inlineReturnLabel.peek()));
+            //currentFunction.addIns(new Jump(inlineReturnLabel.peek()));
             return;
         }
 
