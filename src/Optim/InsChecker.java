@@ -75,6 +75,7 @@ public class InsChecker implements IRVisitor {
         for (FunctionEntity entity : ir.ast().functionEntities()) {
 
             init(entity);
+            init_1(entity);
             select(entity);
         }
 
@@ -82,6 +83,7 @@ public class InsChecker implements IRVisitor {
             for (FunctionDefinitionNode node : entity.memberFuncs()) {
 
                 init(node.entity());
+                init_1(node.entity());
                 select(node.entity());
             }
         }
@@ -132,6 +134,31 @@ public class InsChecker implements IRVisitor {
             if(f) continue;
             newIns.add(now.get(i - 1));
             if(i == now.size() - 1) newIns.add(now.get(i));
+        }
+
+        entity.setInsList(newIns);/**/
+    }
+
+    private void init_1(FunctionEntity entity) {
+
+        List<Ins> now = entity.insList();
+        List<Ins> newIns = new ArrayList<>();//N
+
+        for(int i = 0; i < now.size() - 1; ++i) {
+
+            if(now.get(i) instanceof Jump && now.get(i + 1) instanceof Label) { //  &&
+
+                Jump fir =(Jump)now.get(i);
+                Label sec = (Label) now.get(i + 1);
+                if(fir.Label() == sec) {
+                    newIns.add(sec);
+                    ++i;
+                    continue;
+                }
+            }
+
+            newIns.add(now.get(i));
+            if(i == now.size() - 2) newIns.add(now.get(i + 1));
         }
 
         entity.setInsList(newIns);/**/
