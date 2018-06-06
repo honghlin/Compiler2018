@@ -323,7 +323,7 @@ public class IRBuilder extends Visitor {
                 visitExpr(node.expr());
                 currentFunction.addIns(new Assign(inlineReturnPos.peek(), node.expr().operand()));
             }
-            //currentFunction.addIns(new Jump(inlineReturnLabel.peek()));
+            if(inlineReturnLabel.peek() != null) currentFunction.addIns(new Jump(inlineReturnLabel.peek())); //
             return;
         }
 
@@ -835,7 +835,8 @@ public class IRBuilder extends Visitor {
         node.setOperand(currentFunction.newReg());
 
         inlineMap.push(map);
-        inlineReturnLabel.push(returnLable);
+        if(entity.isInlined()) inlineReturnLabel.push(null);
+        else inlineReturnLabel.push(returnLable);
         inlineReturnPos.push(node.operand());
 
         for(int i = 0; i < entity.varList().size(); ++i) {
@@ -850,7 +851,7 @@ public class IRBuilder extends Visitor {
         ++inlineMode;
         nowInline = entity;
         visit(entity.body().copy());
-        currentFunction.addIns(returnLable);
+        if(!entity.isInlined()) currentFunction.addIns(returnLable);
         --inlineMode;
 
         inlineMap.pop();
