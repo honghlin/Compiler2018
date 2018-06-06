@@ -192,6 +192,8 @@ public class FunctionEntity extends Entity{
 
             //else if (name.equals("printF")) isInlined = false;
 
+        else if(containIf && size  == 2) isInlined = false;
+
         else {
 
             visited = new Hashtable<>();
