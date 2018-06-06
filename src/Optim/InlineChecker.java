@@ -25,6 +25,11 @@ public class InlineChecker extends Visitor {
         return f;
     }
 
+    @Override public void visit(IfNode node) {
+
+        f = false;
+    }
+
     @Override public void visit(FuncallNode node) {
 
         FunctionEntity entity = node.functionType().entity();
