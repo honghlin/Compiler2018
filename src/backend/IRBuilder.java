@@ -69,7 +69,7 @@ public class IRBuilder extends Visitor {
         if(ast.variableEntities().size() > 20 && ast.functionEntities().size() == 1) {
 
             for (VariableEntity entity : ast.variableEntities()) {
-                if(entity.Expr() == null && entity.type() instanceof IntType) entity.setIsGlobal(false);
+                if(entity.type() instanceof IntType) entity.setIsGlobal(false); // entity.Expr() == null &&
             }
 
         }
