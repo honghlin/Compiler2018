@@ -3,14 +3,11 @@ package backend;
 import FrontEnd.AST;
 import AST.*;
 import Entity.*;
-import Optim.IrrelevantMaker;
-import Optim.LogicalAndChecker;
-import Optim.LogicalChecker;
+import Optim.*;
 import FrontEnd.Visitor;
 import IR.*;
 import IR.Label;
 import IR.Operand.*;
-import Optim.FunctionRecorder;
 import Type.*;
 
 
@@ -74,7 +71,7 @@ public class IRBuilder extends Visitor {
 
         }
 
-        if(ast.functionEntities().size() >= 10) inlineSize = 2;
+        if(ast.functionEntities().size() >= 9) inlineSize = 2;
         else inlineSize = 8;
 
         for (FunctionEntity entity : ast.functionEntities()) entity.checkInlinable(inlineSize);//
@@ -226,6 +223,28 @@ public class IRBuilder extends Visitor {
     }
 
     public void visit(AssignNode node) {
+
+
+        BinaryChecker checker = new BinaryChecker();
+
+        if(node.rhs() instanceof BinaryOpNode && node.rhs().hash().length() >= 50 && checker.check((BinaryOpNode) node.rhs())) { // 20
+
+            BinaryIniter initer = new BinaryIniter();
+
+            BinaryOpNode rhs = initer.init((BinaryOpNode) node.rhs());
+
+            visitExpr(node.lhs());
+            visitExpr(rhs);
+            if(node.lhs() instanceof VariableNode) {
+
+                (((VariableNode)node.lhs()).entity()).setValue();//(VariableEntity)
+            }
+            else clear();
+            currentFunction.addIns(new Assign(node.lhs().operand(), rhs.operand()));
+            node.setOperand(null);
+            return;
+
+        }
 
 
         if(isIrr && (inlineMode == 0)) {
