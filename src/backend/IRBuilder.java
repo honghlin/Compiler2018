@@ -35,6 +35,7 @@ public class IRBuilder extends Visitor {
     private boolean isIrr = true;
     private FunctionEntity nowInline;
     private int inlineSize;
+    private HashMap<Entity, Entity> Tran = new HashMap<>();
 
     private FunctionEntity malloc, Str_ADD, Str_EQ, Str_NE, Str_LT, Str_GT, Str_LE, Str_GE;
 
@@ -63,6 +64,14 @@ public class IRBuilder extends Visitor {
             //else entity.setPos(new GlobalAddr(entity.name() + "__", false));
             //bugs , but I don't know why
             entity.setPos(new GlobalAddr(entity.name() + "__", false)); // true
+        }
+
+        if(ast.variableEntities().size() > 20 && ast.functionEntities().size() == 1) {
+
+            for (VariableEntity entity : ast.variableEntities()) {
+                if(entity.Expr() == null && entity.type() instanceof IntType) entity.setIsGlobal(false);
+            }
+
         }
 
         if(ast.functionEntities().size() >= 9) inlineSize = 2;
