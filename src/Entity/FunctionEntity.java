@@ -30,6 +30,7 @@ public class FunctionEntity extends Entity{
     public boolean Rec = false;
     private boolean isInlined = false;
     private Set<FunctionEntity> calls = new HashSet<>();
+    public boolean containIf = false;
 
     private boolean isConstructor = false;
 
@@ -179,7 +180,7 @@ public class FunctionEntity extends Entity{
 
     private int stmtSize;
 
-    public void checkInlinable() {
+    public void checkInlinable(int size) {
 
         InlineChecker checker = new InlineChecker(this);
 
@@ -196,7 +197,7 @@ public class FunctionEntity extends Entity{
             visited = new Hashtable<>();
             isInlined = !findcircle(this, this);
             stmtSize = stmtSize(body);
-            if (stmtSize >  4) isInlined = false; //  10   3    6   4 2 3  1  4 2 8
+            if (stmtSize >  size) isInlined = false; //  10   3    6   4 2 3  1  4 2 8 4
             if (isInlined) System.err.println(name() + " is inlined");
         }
     }
@@ -267,10 +268,10 @@ public class FunctionEntity extends Entity{
 
         if(ifSize(body) >= 4) return false;
 
-        if (depth >= 4) return false;// 2  1    5 4 3 5
+        if (depth >= 3) return false;// 2  1    5 4  4  5
         int pow = 1;
         for (int i = 0; i < depth + 1; i++) pow *= stmtSize;
-        return pow < 1371; // 40 50 60 75 101 371
+        return pow < 371; // 40 50 60 75 101 371
     }
 
     public boolean check() {
